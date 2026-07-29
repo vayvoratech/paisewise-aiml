@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from routes import jargon
 from routes import portfolio
+from routes import features
 from services.cache_warming import warm_cache
 load_dotenv()
 
@@ -18,6 +19,7 @@ async def startup_event():
     warm_cache()
 app.include_router(jargon.router)
 app.include_router(portfolio.router)
+app.include_router(features.router)
 @app.get("/")
 def health_check():
     return {"status": "AI service running"}
