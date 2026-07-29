@@ -20,10 +20,25 @@ def test_portfolio_cache_miss():
 
 def test_portfolio_cache_hit():
 
+    cache_key = "portfolio_insight:test_user_1"
+
+    cache_value = "Test cached portfolio insight response"
+
+
+    from services.portfolio_service import cache
+
+    cache.set(
+        cache_key,
+        cache_value,
+        expiry=86400
+    )
+
+
     result = get_portfolio_insight(
         "test_user_1",
         "english"
     )
+
 
     assert "insight" in result
     assert result["source"] == "cache"

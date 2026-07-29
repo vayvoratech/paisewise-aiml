@@ -1,6 +1,11 @@
 from fastapi import APIRouter, HTTPException
 
-from services.feature_service import get_latest_features
+from services.feature_service import (
+    get_latest_features,
+    refresh_features
+)
+
+from models.feature_models import FeatureRefreshRequest
 
 
 router = APIRouter()
@@ -18,3 +23,8 @@ def fetch_features(userId: str):
         )
 
     return result
+
+@router.post("/ai/features/refresh")
+def refresh_user_features(request: FeatureRefreshRequest):
+
+    return refresh_features(request.userId)
