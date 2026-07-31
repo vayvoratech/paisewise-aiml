@@ -6,6 +6,7 @@ from routes import jargon
 from routes import portfolio
 from routes import features
 from services.cache_warming import warm_cache
+from routes import fund_recommend
 load_dotenv()
 
 sentry_sdk.init(
@@ -20,6 +21,7 @@ async def startup_event():
 app.include_router(jargon.router)
 app.include_router(portfolio.router)
 app.include_router(features.router)
+app.include_router(fund_recommend.router)
 @app.get("/")
 def health_check():
     return {"status": "AI service running"}
