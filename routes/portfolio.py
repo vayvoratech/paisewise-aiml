@@ -34,7 +34,7 @@ async def get_portfolio_insight_by_user(user_id: str):
 
     result = get_portfolio_insight(
         user_id,
-        "english"
+        "en"
     )
 
     return result

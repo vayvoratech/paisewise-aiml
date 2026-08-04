@@ -5,21 +5,25 @@ def test_cache_hit():
 
     result = get_jargon(
         "Mutual Fund",
-        "english"
+        "en"
     )
 
     assert result["term"] == "Mutual Fund"
-    assert result["language"] == "english"
+    assert result["language"] == "en"
+
+
 def test_cache_miss():
 
     result = get_jargon(
         "New Term",
-        "english"
+        "en"
     )
 
     assert result["term"] == "New Term"
-    assert result["language"] == "english"
+    assert result["language"] == "en"
     assert "explanation" in result
+
+
 def test_llm_failure_fallback(monkeypatch):
 
     def mock_failure(prompt):
@@ -35,9 +39,21 @@ def test_llm_failure_fallback(monkeypatch):
 
     result = get_jargon(
         "Mutual Fund",
-        "english"
+        "en"
     )
 
 
     assert result["term"] == "Mutual Fund"
+    assert "explanation" in result
+
+
+def test_telugu_language_support():
+
+    result = get_jargon(
+        "Mutual Fund",
+        "te"
+    )
+
+    assert result["term"] == "Mutual Fund"
+    assert result["language"] == "te"
     assert "explanation" in result

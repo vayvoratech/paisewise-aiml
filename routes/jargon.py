@@ -8,7 +8,7 @@ router = APIRouter()
 
 class JargonRequest(BaseModel):
     term: str
-    language: str = "english"
+    language: str = "en"
 
 
 @router.post("/ai/jargon")

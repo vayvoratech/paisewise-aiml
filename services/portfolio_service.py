@@ -3,9 +3,11 @@ from services.context_assembly import assemble_portfolio_context
 from services.llm_client import LLMClient
 
 from prompts.prompt_templates import (
-    ENGLISH_PORTFOLIO_PROMPT,
-    HINDI_PORTFOLIO_PROMPT
+    PORTFOLIO_PROMPT,
+    FINANCIAL_GUARDRAILS
 )
+
+from utils.languages import SUPPORTED_LANGUAGES
 
 from services.portfolio_fallback import get_portfolio_fallback
 
@@ -20,7 +22,13 @@ def validate_insight_quality(response: str):
 
 def get_portfolio_insight(user_id: str, language: str):
 
-    cache_key = f"portfolio_insight:{user_id}"
+    language = language.lower()
+
+    if language not in SUPPORTED_LANGUAGES:
+        language = "en"
+
+
+    cache_key = f"portfolio_insight:{user_id}:{language}"
 
     # Step 1: Check daily cache
     cached_result = cache.get(cache_key)
@@ -38,16 +46,14 @@ def get_portfolio_insight(user_id: str, language: str):
         portfolio_context = assemble_portfolio_context(user_id)
 
 
-        # Step 3: Select language prompt
-        if language.lower() == "hindi":
-            prompt = HINDI_PORTFOLIO_PROMPT.format(
-                portfolio_context=portfolio_context
-            )
+        language_name = SUPPORTED_LANGUAGES[language]
 
-        else:
-            prompt = ENGLISH_PORTFOLIO_PROMPT.format(
-                portfolio_context=portfolio_context
-            )
+
+        prompt = PORTFOLIO_PROMPT.format(
+            portfolio_context=portfolio_context,
+            language_name=language_name,
+            guardrails=FINANCIAL_GUARDRAILS
+        )
 
 
         # Step 4: Call existing LLM wrapper

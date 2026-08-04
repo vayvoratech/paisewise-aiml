@@ -63,3 +63,33 @@ if __name__ == "__main__":
     result = run_feature_monitoring()
     print(result)
 
+def calculate_shift(old_distribution, new_distribution):
+
+    alerts = []
+
+    for feature, old_value in old_distribution.items():
+
+        if feature in new_distribution:
+
+            new_value = new_distribution[feature]
+
+            if old_value == 0:
+                continue
+
+            change = abs(
+                new_value - old_value
+            ) / old_value
+
+
+            if change > 0.20:
+
+                alerts.append(
+                    {
+                        "feature": feature,
+                        "old_value": old_value,
+                        "new_value": new_value,
+                        "change_percentage": round(change * 100, 2)
+                    }
+                )
+
+    return alerts

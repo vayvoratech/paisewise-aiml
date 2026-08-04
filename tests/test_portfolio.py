@@ -6,9 +6,15 @@ from services.portfolio_service import (
 
 def test_portfolio_cache_miss():
 
+    from services.portfolio_service import cache
+
+    cache.delete(
+        "portfolio_insight:550e8400-e29b-41d4-a716-446655440000:en"
+    )
+
     result = get_portfolio_insight(
-        "test_user_1",
-        "english"
+        "550e8400-e29b-41d4-a716-446655440000",
+        "en"
     )
 
     assert "insight" in result
@@ -20,13 +26,13 @@ def test_portfolio_cache_miss():
 
 def test_portfolio_cache_hit():
 
-    cache_key = "portfolio_insight:test_user_1"
+    cache_key = "portfolio_insight:550e8400-e29b-41d4-a716-446655440000:en"
 
     cache_value = "Test cached portfolio insight response"
 
 
     from services.portfolio_service import cache
-
+    cache.delete(cache_key)
     cache.set(
         cache_key,
         cache_value,
@@ -35,8 +41,8 @@ def test_portfolio_cache_hit():
 
 
     result = get_portfolio_insight(
-        "test_user_1",
-        "english"
+        "550e8400-e29b-41d4-a716-446655440000",
+        "en"
     )
 
 
@@ -59,8 +65,8 @@ def test_portfolio_llm_failure_fallback(monkeypatch):
 
 
     result = get_portfolio_insight(
-        "failure_user",
-        "english"
+        "550e8400-e29b-41d4-a716-446655440001",
+        "en"
     )
 
 
@@ -72,8 +78,18 @@ def test_portfolio_llm_failure_fallback(monkeypatch):
 def test_portfolio_hindi_request():
 
     result = get_portfolio_insight(
-        "hindi_user",
-        "hindi"
+        "550e8400-e29b-41d4-a716-446655440002",
+        "hi"
+    )
+
+    assert "insight" in result
+
+
+def test_portfolio_telugu_request():
+
+    result = get_portfolio_insight(
+        "550e8400-e29b-41d4-a716-446655440003",
+        "te"
     )
 
     assert "insight" in result

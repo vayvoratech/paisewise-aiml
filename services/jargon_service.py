@@ -4,10 +4,11 @@ from cache.redis_cache import RedisCache
 from services.llm_client import LLMClient
 from services.fallback_service import get_fallback_definition
 from prompts.prompt_templates import (
-    ENGLISH_JARGON_PROMPT,
-    HINDI_JARGON_PROMPT,
+    JARGON_PROMPT,
     FINANCIAL_GUARDRAILS
 )
+
+from utils.languages import SUPPORTED_LANGUAGES
 from utils.content_filter import check_content
 from utils.logger import log_request
 from utils.cost_tracker import (
@@ -32,20 +33,24 @@ def get_jargon(term, language):
 
     print("CACHE MISS:", cache_key)
 
-    # 2. Build prompt
-    if language.lower() == "english":
+    # 2. Validate language
 
-        prompt = ENGLISH_JARGON_PROMPT.format(
-            term=term,
-            guardrails=FINANCIAL_GUARDRAILS
-        )
+    language = language.lower()
 
-    else:
+    if language not in SUPPORTED_LANGUAGES:
+        language = "en"
 
-        prompt = HINDI_JARGON_PROMPT.format(
-            term=term,
-            guardrails=FINANCIAL_GUARDRAILS
-        )
+
+    language_name = SUPPORTED_LANGUAGES[language]
+
+
+    # Build dynamic prompt
+
+    prompt = JARGON_PROMPT.format(
+        term=term,
+        language_name=language_name,
+        guardrails=FINANCIAL_GUARDRAILS
+    )
 
     try:
 
