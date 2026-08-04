@@ -1,5 +1,2 @@
-from pydantic import BaseModel
 
-
-class FeatureRefreshRequest(BaseModel):
-    userId: str
+# No request models required for feature endpoints.
