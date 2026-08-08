@@ -1,3 +1,6 @@
+import logging
+
+logger = logging.getLogger("ai-service")
 from cache.redis_cache import RedisCache
 from services.context_assembly import assemble_portfolio_context
 from services.llm_client import LLMClient
@@ -18,7 +21,7 @@ def validate_insight_quality(response: str):
 
     word_count = len(response.split())
 
-    return 50 <= word_count <= 200
+    return 20 <= word_count <= 100
 
 def get_portfolio_insight(user_id: str, language: str):
 
@@ -58,7 +61,9 @@ def get_portfolio_insight(user_id: str, language: str):
 
         # Step 4: Call existing LLM wrapper
         response = llm_client.generate_response(prompt)
-
+        print("LANGUAGE REQUESTED:", language)
+        print("GEMINI RESPONSE:", response)
+        print("WORD COUNT:", len(response.split()))
 
         # Step 5: Validate insight quality before storing
         if validate_insight_quality(response):
@@ -72,7 +77,10 @@ def get_portfolio_insight(user_id: str, language: str):
         else:
 
             response = get_portfolio_fallback()
-
+            return {
+                "source": "fallback",
+                "insight": response
+            }
 
         return {
             "source": "llm",
@@ -80,7 +88,11 @@ def get_portfolio_insight(user_id: str, language: str):
         }
 
 
-    except Exception:
+    except Exception as error:
+
+        logger.exception(
+            f"Portfolio insight generation failed: {error}"
+        )
 
         return {
             "source": "fallback",

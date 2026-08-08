@@ -7,6 +7,8 @@ from routes import portfolio
 from routes import features
 from services.cache_warming import warm_cache
 from routes import fund_recommend
+from services.fund_catalogue import load_catalogue
+from services.catalogue_scheduler import start_catalogue_scheduler
 load_dotenv()
 
 sentry_sdk.init(
@@ -17,7 +19,12 @@ sentry_sdk.init(
 app = FastAPI()
 @app.on_event("startup")
 async def startup_event():
+
     warm_cache()
+
+    load_catalogue()
+
+    start_catalogue_scheduler()
 app.include_router(jargon.router)
 app.include_router(portfolio.router)
 app.include_router(features.router)

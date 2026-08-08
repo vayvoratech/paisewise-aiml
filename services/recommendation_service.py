@@ -1,47 +1,24 @@
 from models.recommendation import RecommendationRequest
-
-# Mock fund data
-funds = [
-    {
-        "fundName": "Axis Bluechip Fund",
-        "risk": "Moderate",
-        "returns": 15
-    },
-    {
-        "fundName": "Parag Parikh Flexi Cap",
-        "risk": "Moderate",
-        "returns": 18
-    },
-    {
-        "fundName": "Nippon India Small Cap Fund",
-        "risk": "High",
-        "returns": 24
-    },
-    {
-        "fundName": "HDFC Balanced Advantage Fund",
-        "risk": "Low",
-        "returns": 12
-    },
-    {
-        "fundName": "ICICI Prudential Flexi Cap Fund",
-        "risk": "Moderate",
-        "returns": 16
-    }
-]
-
+from services.fund_catalogue import get_catalogue
+from services.result_formatter import format_recommendations
+from services.explanation_generator import generate_fund_explanation
 
 def recommend_funds(request: RecommendationRequest):
+
+    funds = get_catalogue()
+
     recommendations = []
 
     for fund in funds:
+
         score = 0
 
         # Risk profile match
-        if fund["risk"].lower() == request.riskProfile.lower():
+        if fund.get("risk_level") and fund["risk_level"].lower() == request.riskProfile.lower():
             score += 50
 
         # Historical returns
-        score += fund["returns"]
+        score += float(fund.get("return_1y") or 0)
 
         # Long-term investment bonus
         if request.investmentHorizon >= 5:
@@ -52,15 +29,26 @@ def recommend_funds(request: RecommendationRequest):
             score += 10
 
         recommendations.append({
-            "fundName": fund["fundName"],
+
+            # Store complete fund data for formatter
+            "fund": fund,
+
             "score": score,
-            "reason": f"Suitable for {request.riskProfile.lower()} risk investors"
+
+            "reason": generate_fund_explanation(
+                fund,
+                request.riskProfile
+            )
+
         })
 
     # Sort by score (highest first)
-    recommendations.sort(key=lambda x: x["score"], reverse=True)
+    recommendations.sort(
+        key=lambda x: x["score"],
+        reverse=True
+    )
 
-    # Return top 3 recommendations
-    return {
-        "recommendedFunds": recommendations[:3]
-    }
+    # Return top 3 formatted recommendations
+    return format_recommendations(
+        recommendations[:3]
+    )
