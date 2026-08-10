@@ -1,4 +1,7 @@
 def format_recommendations(recommendations):
+    """
+    Format the top fund recommendations for the API response.
+    """
 
     formatted_results = []
 
@@ -7,7 +10,6 @@ def format_recommendations(recommendations):
         fund = item["fund"]
 
         formatted_results.append({
-
             "fundName": fund["scheme_name"],
 
             "score": item["score"],
@@ -20,11 +22,9 @@ def format_recommendations(recommendations):
                 "return1Y": fund.get("return_1y"),
                 "return3Y": fund.get("return_3y"),
                 "return5Y": fund.get("return_5y"),
-                "sharpeRatio": fund.get("sharpe_ratio"),
                 "expenseRatio": fund.get("expense_ratio"),
-                "aumCrore": fund.get("aum_crore")
+                "aumCrore": fund.get("aum_crore"),
             }
-
         })
 
     return {
