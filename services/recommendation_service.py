@@ -2,8 +2,63 @@ from models.recommendation import RecommendationRequest
 from services.fund_catalogue import get_catalogue
 from services.result_formatter import format_recommendations
 from services.explanation_generator import generate_fund_explanation
+from services.recommendation_ab import assign_recommendation_variant
+from database.database import get_db_connection
+from services.recommendation_cache import (
+    get_cached_recommendation,
+    cache_recommendation,
+)
+def create_recommendation_run(user_id, variant):
+    """
+    Store the A/B variant assigned to the user
+    for this recommendation run.
+    """
+
+    connection = get_db_connection()
+
+    try:
+        cursor = connection.cursor()
+
+        query = """
+            INSERT INTO recommendation_runs (
+                user_id,
+                experiment_name,
+                variant
+            )
+            VALUES (%s, %s, %s)
+            RETURNING id;
+        """
+
+        cursor.execute(
+            query,
+            (
+                str(user_id),
+                "fund_recommendation_v1",
+                variant
+            )
+        )
+
+        run_id = cursor.fetchone()[0]
+
+        connection.commit()
+
+        return run_id
+
+    finally:
+        cursor.close()
+        connection.close()
 
 def recommend_funds(request: RecommendationRequest):
+    cached = get_cached_recommendation(request.userId)
+
+    if cached:
+        return cached
+    variant = assign_recommendation_variant(request.userId)
+
+    run_id = create_recommendation_run(
+        request.userId,
+        variant
+    )
 
     funds = get_catalogue()
 
@@ -49,6 +104,103 @@ def recommend_funds(request: RecommendationRequest):
     )
 
     # Return top 3 formatted recommendations
-    return format_recommendations(
-        recommendations[:3]
+    result = format_recommendations(
+        recommendations[:3],
+        run_id
     )
+
+    cache_recommendation(
+        request.userId,
+        result
+    )
+
+    return result
+
+def record_recommendation_click(
+    user_id,
+    recommendation_run_id,
+    scheme_code
+):
+    """
+    Record a user click on a recommended fund.
+    """
+
+    connection = get_db_connection()
+
+    try:
+        cursor = connection.cursor()
+
+        query = """
+            INSERT INTO recommendation_clicks (
+                recommendation_run_id,
+                user_id,
+                scheme_code
+            )
+            VALUES (%s, %s, %s)
+            RETURNING id;
+        """
+
+        cursor.execute(
+            query,
+            (
+                str(recommendation_run_id),
+                str(user_id),
+                scheme_code
+            )
+        )
+
+        click_id = cursor.fetchone()[0]
+
+        connection.commit()
+
+        return click_id
+
+    finally:
+        cursor.close()
+        connection.close()
+
+def has_recommendation_converted(
+    user_id,
+    recommendation_run_id,
+    scheme_code
+):
+    """
+    Check whether the user eventually invested in the
+    recommended fund after the recommendation was generated.
+    """
+
+    connection = get_db_connection()
+
+    try:
+        cursor = connection.cursor()
+
+        query = """
+            SELECT EXISTS (
+                SELECT 1
+                FROM mf_investments mi
+                JOIN recommendation_runs rr
+                  ON rr.id = %s
+                WHERE mi.user_id = %s
+                  AND mi.scheme_code = %s
+                  AND mi.transaction_type IN ('PURCHASE', 'SIP')
+                  AND mi.status = 'ALLOTTED'
+                  AND mi.allotment_date >= rr.created_at::date
+            );
+        """
+
+        cursor.execute(
+            query,
+            (
+                str(recommendation_run_id),
+                str(user_id),
+                scheme_code
+            )
+        )
+
+        result = cursor.fetchone()[0]
+
+        return result
+
+    finally:
+        cursor.close()
+        connection.close()

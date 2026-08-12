@@ -20,6 +20,7 @@ class FundKeyMetrics(BaseModel):
 
 
 class FundRecommendation(BaseModel):
+    schemeCode: str
     fundName: str
     score: float
     reason: str
@@ -27,4 +28,20 @@ class FundRecommendation(BaseModel):
 
 
 class RecommendationResponse(BaseModel):
+    recommendationRunId: UUID
     recommendedFunds: list[FundRecommendation]
+
+class RecommendationClickRequest(BaseModel):
+    userId: UUID
+    recommendationRunId: UUID
+    schemeCode: str
+
+class RecommendationClickResponse(BaseModel):
+    clickId: UUID
+    status: str
+
+
+class RecommendationRefreshResponse(BaseModel):
+    status: str
+    reason: str
+    userId: UUID

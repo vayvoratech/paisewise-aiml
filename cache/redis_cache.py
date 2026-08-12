@@ -19,7 +19,7 @@ class RedisCache:
 
         return None
     def set(self, key, value, expiry=None):
-        value = json.dumps(value)
+        value = json.dumps(value, default=str)
 
         self.client.set(
             key,

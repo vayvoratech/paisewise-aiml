@@ -1,4 +1,4 @@
-def format_recommendations(recommendations):
+def format_recommendations(recommendations, run_id):
     """
     Format the top fund recommendations for the API response.
     """
@@ -10,6 +10,7 @@ def format_recommendations(recommendations):
         fund = item["fund"]
 
         formatted_results.append({
+            "schemeCode": fund["scheme_code"],
             "fundName": fund["scheme_name"],
 
             "score": item["score"],
@@ -28,5 +29,6 @@ def format_recommendations(recommendations):
         })
 
     return {
+        "recommendationRunId": run_id,
         "recommendedFunds": formatted_results
     }
