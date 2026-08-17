@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+pydantic
+SQLAlchemy
+psycopg2-binary
+python-dotenv
+requests
+pandas
+openpyxl
+google-genai
+mlflow
+pytest
+httpx
+apache-airflow
+pendulum

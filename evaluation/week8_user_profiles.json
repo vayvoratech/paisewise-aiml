@@ -1,0 +1,86 @@
+[
+  {
+    "profile_id": 1,
+    "goal": "house purchase",
+    "risk_profile": "beginner",
+    "investment_horizon": 2,
+    "investment_amount": 15000
+  },
+  {
+    "profile_id": 2,
+    "goal": "house purchase",
+    "risk_profile": "intermediate",
+    "investment_horizon": 3,
+    "investment_amount": 20000
+  },
+  {
+    "profile_id": 3,
+    "goal": "house purchase",
+    "risk_profile": "advanced",
+    "investment_horizon": 5,
+    "investment_amount": 25000
+  },
+  {
+    "profile_id": 4,
+    "goal": "retirement",
+    "risk_profile": "beginner",
+    "investment_horizon": 7,
+    "investment_amount": 30000
+  },
+  {
+    "profile_id": 5,
+    "goal": "retirement",
+    "risk_profile": "intermediate",
+    "investment_horizon": 10,
+    "investment_amount": 35000
+  },
+  {
+    "profile_id": 6,
+    "goal": "retirement",
+    "risk_profile": "advanced",
+    "investment_horizon": 2,
+    "investment_amount": 40000
+  },
+  {
+    "profile_id": 7,
+    "goal": "education",
+    "risk_profile": "beginner",
+    "investment_horizon": 3,
+    "investment_amount": 45000
+  },
+  {
+    "profile_id": 8,
+    "goal": "education",
+    "risk_profile": "intermediate",
+    "investment_horizon": 5,
+    "investment_amount": 50000
+  },
+  {
+    "profile_id": 9,
+    "goal": "education",
+    "risk_profile": "advanced",
+    "investment_horizon": 7,
+    "investment_amount": 55000
+  },
+  {
+    "profile_id": 10,
+    "goal": "no goal",
+    "risk_profile": "beginner",
+    "investment_horizon": 10,
+    "investment_amount": 60000
+  },
+  {
+    "profile_id": 11,
+    "goal": "no goal",
+    "risk_profile": "intermediate",
+    "investment_horizon": 2,
+    "investment_amount": 65000
+  },
+  {
+    "profile_id": 12,
+    "goal": "no goal",
+    "risk_profile": "advanced",
+    "investment_horizon": 3,
+    "investment_amount": 70000
+  }
+]

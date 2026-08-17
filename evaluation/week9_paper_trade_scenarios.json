@@ -1,0 +1,962 @@
+[
+  {
+    "scenario_id": 1,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 101,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Banking",
+      "52_week_high": 131,
+      "52_week_low": 71,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 19,
+      "market_cap": "Large",
+      "sector_change_percent": -1
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": false
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "needs_review",
+    "coach_focus": "Confirm resistance and volume before entry."
+  },
+  {
+    "scenario_id": 2,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 102,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Energy",
+      "52_week_high": 132,
+      "52_week_low": 72,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 20,
+      "market_cap": "Large",
+      "sector_change_percent": 0
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": true
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "good",
+    "coach_focus": "Explain how price level, volume and learning history support the decision."
+  },
+  {
+    "scenario_id": 3,
+    "order": {
+      "symbol": "DEMO",
+      "side": "SELL",
+      "price": 103,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "IT",
+      "52_week_high": 133,
+      "52_week_low": 73,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 21,
+      "market_cap": "Large",
+      "sector_change_percent": 1
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": false
+      },
+      {
+        "lesson_name": "volume",
+        "completed": false
+      }
+    ],
+    "expected_decision": "needs_review",
+    "coach_focus": "Confirm resistance and volume before entry."
+  },
+  {
+    "scenario_id": 4,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 104,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Banking",
+      "52_week_high": 134,
+      "52_week_low": 74,
+      "volume": 500,
+      "average_volume": 900,
+      "relative_volume": 0.56,
+      "pe_ratio": 22,
+      "market_cap": "Large",
+      "sector_change_percent": 2
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": true
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "good",
+    "coach_focus": "Explain how price level, volume and learning history support the decision."
+  },
+  {
+    "scenario_id": 5,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 105,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Energy",
+      "52_week_high": 135,
+      "52_week_low": 75,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 23,
+      "market_cap": "Large",
+      "sector_change_percent": -2
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": false
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "needs_review",
+    "coach_focus": "Confirm resistance and volume before entry."
+  },
+  {
+    "scenario_id": 6,
+    "order": {
+      "symbol": "DEMO",
+      "side": "SELL",
+      "price": 106,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "IT",
+      "52_week_high": 136,
+      "52_week_low": 76,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 24,
+      "market_cap": "Large",
+      "sector_change_percent": -1
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": true
+      },
+      {
+        "lesson_name": "volume",
+        "completed": false
+      }
+    ],
+    "expected_decision": "good",
+    "coach_focus": "Explain how price level, volume and learning history support the decision."
+  },
+  {
+    "scenario_id": 7,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 107,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Banking",
+      "52_week_high": 137,
+      "52_week_low": 77,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 18,
+      "market_cap": "Large",
+      "sector_change_percent": 0
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": false
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "needs_review",
+    "coach_focus": "Confirm resistance and volume before entry."
+  },
+  {
+    "scenario_id": 8,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 108,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Energy",
+      "52_week_high": 138,
+      "52_week_low": 78,
+      "volume": 500,
+      "average_volume": 900,
+      "relative_volume": 0.56,
+      "pe_ratio": 19,
+      "market_cap": "Large",
+      "sector_change_percent": 1
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": true
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "good",
+    "coach_focus": "Explain how price level, volume and learning history support the decision."
+  },
+  {
+    "scenario_id": 9,
+    "order": {
+      "symbol": "DEMO",
+      "side": "SELL",
+      "price": 109,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "IT",
+      "52_week_high": 139,
+      "52_week_low": 79,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 20,
+      "market_cap": "Large",
+      "sector_change_percent": 2
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": false
+      },
+      {
+        "lesson_name": "volume",
+        "completed": false
+      }
+    ],
+    "expected_decision": "needs_review",
+    "coach_focus": "Confirm resistance and volume before entry."
+  },
+  {
+    "scenario_id": 10,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 110,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Banking",
+      "52_week_high": 140,
+      "52_week_low": 80,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 21,
+      "market_cap": "Large",
+      "sector_change_percent": -2
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": true
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "good",
+    "coach_focus": "Explain how price level, volume and learning history support the decision."
+  },
+  {
+    "scenario_id": 11,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 111,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Energy",
+      "52_week_high": 141,
+      "52_week_low": 81,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 22,
+      "market_cap": "Large",
+      "sector_change_percent": -1
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": false
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "needs_review",
+    "coach_focus": "Confirm resistance and volume before entry."
+  },
+  {
+    "scenario_id": 12,
+    "order": {
+      "symbol": "DEMO",
+      "side": "SELL",
+      "price": 112,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "IT",
+      "52_week_high": 142,
+      "52_week_low": 82,
+      "volume": 500,
+      "average_volume": 900,
+      "relative_volume": 0.56,
+      "pe_ratio": 23,
+      "market_cap": "Large",
+      "sector_change_percent": 0
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": true
+      },
+      {
+        "lesson_name": "volume",
+        "completed": false
+      }
+    ],
+    "expected_decision": "good",
+    "coach_focus": "Explain how price level, volume and learning history support the decision."
+  },
+  {
+    "scenario_id": 13,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 113,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Banking",
+      "52_week_high": 143,
+      "52_week_low": 83,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 24,
+      "market_cap": "Large",
+      "sector_change_percent": 1
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": false
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "needs_review",
+    "coach_focus": "Confirm resistance and volume before entry."
+  },
+  {
+    "scenario_id": 14,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 114,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Energy",
+      "52_week_high": 144,
+      "52_week_low": 84,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 18,
+      "market_cap": "Large",
+      "sector_change_percent": 2
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": true
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "good",
+    "coach_focus": "Explain how price level, volume and learning history support the decision."
+  },
+  {
+    "scenario_id": 15,
+    "order": {
+      "symbol": "DEMO",
+      "side": "SELL",
+      "price": 115,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "IT",
+      "52_week_high": 145,
+      "52_week_low": 85,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 19,
+      "market_cap": "Large",
+      "sector_change_percent": -2
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": false
+      },
+      {
+        "lesson_name": "volume",
+        "completed": false
+      }
+    ],
+    "expected_decision": "needs_review",
+    "coach_focus": "Confirm resistance and volume before entry."
+  },
+  {
+    "scenario_id": 16,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 116,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Banking",
+      "52_week_high": 146,
+      "52_week_low": 86,
+      "volume": 500,
+      "average_volume": 900,
+      "relative_volume": 0.56,
+      "pe_ratio": 20,
+      "market_cap": "Large",
+      "sector_change_percent": -1
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": true
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "good",
+    "coach_focus": "Explain how price level, volume and learning history support the decision."
+  },
+  {
+    "scenario_id": 17,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 117,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Energy",
+      "52_week_high": 147,
+      "52_week_low": 87,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 21,
+      "market_cap": "Large",
+      "sector_change_percent": 0
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": false
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "needs_review",
+    "coach_focus": "Confirm resistance and volume before entry."
+  },
+  {
+    "scenario_id": 18,
+    "order": {
+      "symbol": "DEMO",
+      "side": "SELL",
+      "price": 118,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "IT",
+      "52_week_high": 148,
+      "52_week_low": 88,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 22,
+      "market_cap": "Large",
+      "sector_change_percent": 1
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": true
+      },
+      {
+        "lesson_name": "volume",
+        "completed": false
+      }
+    ],
+    "expected_decision": "good",
+    "coach_focus": "Explain how price level, volume and learning history support the decision."
+  },
+  {
+    "scenario_id": 19,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 119,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Banking",
+      "52_week_high": 149,
+      "52_week_low": 89,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 23,
+      "market_cap": "Large",
+      "sector_change_percent": 2
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": false
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "needs_review",
+    "coach_focus": "Confirm resistance and volume before entry."
+  },
+  {
+    "scenario_id": 20,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 120,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Energy",
+      "52_week_high": 150,
+      "52_week_low": 90,
+      "volume": 500,
+      "average_volume": 900,
+      "relative_volume": 0.56,
+      "pe_ratio": 24,
+      "market_cap": "Large",
+      "sector_change_percent": -2
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": true
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "good",
+    "coach_focus": "Explain how price level, volume and learning history support the decision."
+  },
+  {
+    "scenario_id": 21,
+    "order": {
+      "symbol": "DEMO",
+      "side": "SELL",
+      "price": 121,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "IT",
+      "52_week_high": 151,
+      "52_week_low": 91,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 18,
+      "market_cap": "Large",
+      "sector_change_percent": -1
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": false
+      },
+      {
+        "lesson_name": "volume",
+        "completed": false
+      }
+    ],
+    "expected_decision": "needs_review",
+    "coach_focus": "Confirm resistance and volume before entry."
+  },
+  {
+    "scenario_id": 22,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 122,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Banking",
+      "52_week_high": 152,
+      "52_week_low": 92,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 19,
+      "market_cap": "Large",
+      "sector_change_percent": 0
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": true
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "good",
+    "coach_focus": "Explain how price level, volume and learning history support the decision."
+  },
+  {
+    "scenario_id": 23,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 123,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Energy",
+      "52_week_high": 153,
+      "52_week_low": 93,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 20,
+      "market_cap": "Large",
+      "sector_change_percent": 1
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": false
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "needs_review",
+    "coach_focus": "Confirm resistance and volume before entry."
+  },
+  {
+    "scenario_id": 24,
+    "order": {
+      "symbol": "DEMO",
+      "side": "SELL",
+      "price": 124,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "IT",
+      "52_week_high": 154,
+      "52_week_low": 94,
+      "volume": 500,
+      "average_volume": 900,
+      "relative_volume": 0.56,
+      "pe_ratio": 21,
+      "market_cap": "Large",
+      "sector_change_percent": 2
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": true
+      },
+      {
+        "lesson_name": "volume",
+        "completed": false
+      }
+    ],
+    "expected_decision": "good",
+    "coach_focus": "Explain how price level, volume and learning history support the decision."
+  },
+  {
+    "scenario_id": 25,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 125,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Banking",
+      "52_week_high": 155,
+      "52_week_low": 95,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 22,
+      "market_cap": "Large",
+      "sector_change_percent": -2
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": false
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "needs_review",
+    "coach_focus": "Confirm resistance and volume before entry."
+  },
+  {
+    "scenario_id": 26,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 126,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Energy",
+      "52_week_high": 156,
+      "52_week_low": 96,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 23,
+      "market_cap": "Large",
+      "sector_change_percent": -1
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": true
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "good",
+    "coach_focus": "Explain how price level, volume and learning history support the decision."
+  },
+  {
+    "scenario_id": 27,
+    "order": {
+      "symbol": "DEMO",
+      "side": "SELL",
+      "price": 127,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "IT",
+      "52_week_high": 157,
+      "52_week_low": 97,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 24,
+      "market_cap": "Large",
+      "sector_change_percent": 0
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": false
+      },
+      {
+        "lesson_name": "volume",
+        "completed": false
+      }
+    ],
+    "expected_decision": "needs_review",
+    "coach_focus": "Confirm resistance and volume before entry."
+  },
+  {
+    "scenario_id": 28,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 128,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Banking",
+      "52_week_high": 158,
+      "52_week_low": 98,
+      "volume": 500,
+      "average_volume": 900,
+      "relative_volume": 0.56,
+      "pe_ratio": 18,
+      "market_cap": "Large",
+      "sector_change_percent": 1
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": true
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "good",
+    "coach_focus": "Explain how price level, volume and learning history support the decision."
+  },
+  {
+    "scenario_id": 29,
+    "order": {
+      "symbol": "DEMO",
+      "side": "BUY",
+      "price": 129,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "Energy",
+      "52_week_high": 159,
+      "52_week_low": 99,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 19,
+      "market_cap": "Large",
+      "sector_change_percent": 2
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": false
+      },
+      {
+        "lesson_name": "volume",
+        "completed": true
+      }
+    ],
+    "expected_decision": "needs_review",
+    "coach_focus": "Confirm resistance and volume before entry."
+  },
+  {
+    "scenario_id": 30,
+    "order": {
+      "symbol": "DEMO",
+      "side": "SELL",
+      "price": 130,
+      "quantity": 10
+    },
+    "market": {
+      "sector": "IT",
+      "52_week_high": 160,
+      "52_week_low": 100,
+      "volume": 1000,
+      "average_volume": 900,
+      "relative_volume": 1.11,
+      "pe_ratio": 20,
+      "market_cap": "Large",
+      "sector_change_percent": -2
+    },
+    "lesson_history": [
+      {
+        "lesson_name": "resistance",
+        "completed": true
+      },
+      {
+        "lesson_name": "volume",
+        "completed": false
+      }
+    ],
+    "expected_decision": "good",
+    "coach_focus": "Explain how price level, volume and learning history support the decision."
+  }
+]

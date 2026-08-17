@@ -1,0 +1,27 @@
+# Virtual Environments
+.venv/
+venv_mlflow/
+
+# Environment Variables
+.env
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# MLflow
+mlflow.db
+
+# VS Code
+.vscode/
+
+# IntelliJ
+.idea/
+
+# Logs
+*.log
+
+.venv-1/
+.venv_old/
+mlruns/
+mlartifacts/
