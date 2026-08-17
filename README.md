@@ -135,14 +135,3 @@ MARKET_SYMBOLS=...
 source .venv/bin/activate
 uvicorn app.main:app --reload
 ```
-
-## Tests
-
-```bash
-pytest -q
-```
-
-## Important
-
-The repository expects the real company PostgreSQL schema/data to exist.
-Production credentials and production data are not included.
