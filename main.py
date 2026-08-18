@@ -8,8 +8,10 @@ from routes import features
 from services.cache_warming import warm_cache
 from routes import fund_recommend
 from routes import paper_trade_coach
+from routes import fraud_check
 from services.fund_catalogue import load_catalogue
 from services.catalogue_scheduler import start_catalogue_scheduler
+from services.fraud_model import load_fraud_model
 load_dotenv()
 
 sentry_sdk.init(
@@ -25,12 +27,15 @@ async def startup_event():
 
     load_catalogue()
 
+    load_fraud_model()
+
     start_catalogue_scheduler()
 app.include_router(jargon.router)
 app.include_router(portfolio.router)
 app.include_router(features.router)
 app.include_router(fund_recommend.router)
 app.include_router(paper_trade_coach.router)
+app.include_router(fraud_check.router)
 @app.get("/")
 def health_check():
     return {"status": "AI service running"}
