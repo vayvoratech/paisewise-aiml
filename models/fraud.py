@@ -32,3 +32,21 @@ class FraudFeatures(BaseModel):
     price: float | None = None
     isPaper: bool
     placedAt: datetime
+    new_device: bool = False
+    location_changed: bool = False
+
+class FraudCheckRequest(BaseModel):
+    orderId: UUID
+    userId: UUID
+    amount: float | None = None
+    symbol: str
+    exchange: str
+    side: str
+    orderType: str
+    product: str
+    quantity: float
+    price: float | None = None
+    isPaper: bool
+    placedAt: datetime
+    new_device: bool = False
+    location_changed: bool = False
