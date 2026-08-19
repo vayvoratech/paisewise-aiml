@@ -16,12 +16,14 @@ from app.pipelines.fetch_market_data import fetch_market_data
 from app.pipelines.fetch_news import fetch_news
 from app.services.call_ai_service import call_ai
 from app.pipelines.save_portfolio_insight import save_portfolio_insight
+from app.utils.batching import batch_items
 
 from app.services.slack_service import (
-    
-    send_success_message,
+    send_batch_error_message,
     send_failure_message,
 )
+
+BATCH_SIZE = 50
 
 
 def get_users_task():
@@ -57,27 +59,43 @@ def call_ai_task(**context):
     users = ti.xcom_pull(task_ids="get_users")
 
     results = []
+    errors = []
 
-    for user in users:
-        user_id = user["user_id"]
+    # Task 4 in the task list: call the AI service in batches of 50,
+    # not one user at a time. batch_items() splits the user list into
+    # chunks so each chunk can be processed as a batch.
+    for batch_number, batch in enumerate(batch_items(users, BATCH_SIZE), start=1):
+        print(f"Processing batch {batch_number} with {len(batch)} users")
 
-        print(f"Calling AI service for user: {user_id}")
+        for user in batch:
+            user_id = user["user_id"]
 
-        result = call_ai(
-            user_id=user_id,
-            language="English",
-        )
+            try:
+                result = call_ai(
+                    user_id=user_id,
+                    language="English",
+                )
+            except Exception as error:
+                print(f"AI service call failed for user {user_id}: {error}")
+                errors.append({"user_id": user_id, "error": str(error)})
+                continue
 
-        if result:
-            results.append(
-                {
-                    "user_id": user_id,
-                    "language": "English",
-                    "result": result,
-                }
-            )
+            if result:
+                results.append(
+                    {
+                        "user_id": user_id,
+                        "language": "English",
+                        "result": result,
+                    }
+                )
 
     print(f"AI results received: {len(results)}")
+    print(f"AI call errors: {len(errors)}")
+
+    # Task 6 in the task list: only alert Slack if the batch completed
+    # with errors. A fully clean run should stay silent.
+    if errors:
+        send_batch_error_message(errors)
 
     return results
 
@@ -117,10 +135,6 @@ def save_insights_task(**context):
     print(f"Portfolio insights saved: {saved}")
 
 
-def slack_success_callback(context):
-    send_success_message()
-
-
 def slack_failure_callback(context):
     error = context.get("exception")
 
@@ -133,7 +147,6 @@ with DAG(
     schedule="10 16 * * 1-5",
     catchup=False,
     tags=["portfolio"],
-    on_success_callback=slack_success_callback,
     on_failure_callback=slack_failure_callback,
 ) as dag:
 

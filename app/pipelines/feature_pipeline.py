@@ -1,6 +1,8 @@
 from collections import defaultdict
 from datetime import datetime, timedelta
 
+from sqlalchemy import func
+
 from app.db.database import SessionLocal
 from app.db.schema import (
     User,
@@ -11,6 +13,7 @@ from app.db.schema import (
     PaperTrade,
 )
 from app.pipelines.validate_features import validate_feature_ranges
+from app.utils.city_tier import get_city_tier
 
 
 LOOKBACK_DAYS = 90
@@ -104,17 +107,104 @@ def _session_features(sessions):
     }
 
 
-def run_behaviour_feature_pipeline():
+def _get_watermark(db):
+    """Find the last time this pipeline updated any user.
+
+    This is what makes the daily run incremental: instead of touching
+    every single user every day, we only look at users who had new
+    activity after this timestamp.
+    """
+    latest = db.query(func.max(UserFeatures.updated_at)).scalar()
+    return latest
+
+
+def _get_users_needing_update(db, watermark):
+    """Return the User rows that should be recomputed today.
+
+    A user needs an update if either:
+      - they don't have a user_features row yet (first-time run), or
+      - they had new activity (session/lesson/quiz/trade) after the
+        watermark timestamp.
+    If there's no watermark yet (very first run), every user is
+    processed once to build the initial feature table.
+    """
+    if watermark is None:
+        return db.query(User).all()
+
+    active_user_ids = set()
+
+    recent_sessions = db.query(UserSession.user_id).filter(
+        UserSession.login_time > watermark
+    ).distinct()
+    recent_lessons = db.query(LessonProgress.user_id).filter(
+        LessonProgress.completed_at > watermark
+    ).distinct()
+    recent_quizzes = db.query(QuizAttempt.user_id).filter(
+        QuizAttempt.attempted_at > watermark
+    ).distinct()
+    recent_trades = db.query(PaperTrade.user_id).filter(
+        PaperTrade.created_at > watermark
+    ).distinct()
+
+    for query in (recent_sessions, recent_lessons, recent_quizzes, recent_trades):
+        for row in query:
+            active_user_ids.add(row[0])
+
+    new_users = db.query(User.user_id).outerjoin(
+        UserFeatures, User.user_id == UserFeatures.user_id
+    ).filter(UserFeatures.user_id.is_(None))
+
+    for row in new_users:
+        active_user_ids.add(row[0])
+
+    if not active_user_ids:
+        return []
+
+    return db.query(User).filter(User.user_id.in_(active_user_ids)).all()
+
+
+def run_behaviour_feature_pipeline(full_refresh=False):
+    """Update behaviour features for users with new activity.
+
+    By default this is incremental: only users with new activity since
+    the pipeline's last run get recomputed (Week 6 task: "incremental
+    update query, daily update, not full refresh"). Pass
+    full_refresh=True to force recomputing every user, e.g. for a
+    one-off backfill.
+    """
     db = SessionLocal()
 
     try:
-        start_date = datetime.utcnow() - timedelta(days=LOOKBACK_DAYS)
+        watermark = None if full_refresh else _get_watermark(db)
+        users = _get_users_needing_update(db, watermark)
 
-        users = db.query(User).all()
-        sessions = db.query(UserSession).filter(UserSession.login_time >= start_date).all()
-        lessons = db.query(LessonProgress).filter(LessonProgress.completed_at >= start_date).all()
-        quizzes = db.query(QuizAttempt).filter(QuizAttempt.attempted_at >= start_date).all()
-        trades = db.query(PaperTrade).filter(PaperTrade.created_at >= start_date).all()
+        if not users:
+            print("Behaviour feature pipeline: no users had new activity.")
+            return 0
+
+        # The 90-day lookback window is still used to CALCULATE each
+        # stat (completion rate, streak, etc need history, not just
+        # today's rows). What's incremental is WHICH users get
+        # touched, not how far back each user's own stats look.
+        start_date = datetime.utcnow() - timedelta(days=LOOKBACK_DAYS)
+        user_ids = [user.user_id for user in users]
+
+        sessions = db.query(UserSession).filter(
+            UserSession.login_time >= start_date,
+            UserSession.user_id.in_(user_ids),
+        ).all()
+        lessons = db.query(LessonProgress).filter(
+            LessonProgress.completed_at >= start_date,
+            LessonProgress.user_id.in_(user_ids),
+        ).all()
+        quizzes = db.query(QuizAttempt).filter(
+            QuizAttempt.attempted_at >= start_date,
+            QuizAttempt.user_id.in_(user_ids),
+        ).all()
+        trades = db.query(PaperTrade).filter(
+            PaperTrade.created_at >= start_date,
+            PaperTrade.user_id.in_(user_ids),
+        ).all()
 
         grouped = {
             "sessions": defaultdict(list),
@@ -173,7 +263,7 @@ def run_behaviour_feature_pipeline():
                 "preferred_language": selected_language,
                 "onboarding_goal": selected_goal,
                 "age_proxy": user.age,
-                "city_tier": None,
+                "city_tier": get_city_tier(user.kyc_city),
                 "paper_trade_count": len(user_trades),
                 "paper_trade_profit_rate": _trade_profit_rate(user_trades),
                 **session_features,
@@ -205,7 +295,11 @@ def run_behaviour_feature_pipeline():
             updated_users += 1
 
         db.commit()
-        print(f"Behaviour feature pipeline completed. Users updated: {updated_users}")
+        mode = "full refresh" if full_refresh or watermark is None else "incremental"
+        print(
+            f"Behaviour feature pipeline completed ({mode}). "
+            f"Users updated: {updated_users}"
+        )
         return updated_users
 
     except Exception:

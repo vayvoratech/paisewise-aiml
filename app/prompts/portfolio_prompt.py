@@ -36,6 +36,6 @@ Requirements
 - Keep the explanation within 100 words.
 - Do not invent missing market or holding information.
 - Do not give investment advice.
-- - Do not promise future returns.
+- Do not guarantee future returns.
 - Respond only in {language}.
 """.strip()

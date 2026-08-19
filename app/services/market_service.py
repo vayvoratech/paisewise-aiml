@@ -67,32 +67,32 @@ def get_configured_market_movements(limit=5):
 
 
 def get_sector_performance():
-    """Fetch sector performance from Alpha Vantage's sector endpoint."""
-    if not ALPHA_VANTAGE_API_KEY:
-        raise RuntimeError("ALPHA_VANTAGE_API_KEY is not set.")
+    """Fetch NSE sector performance for the day.
 
-    response = requests.get(
-        ALPHA_VANTAGE_URL,
-        params={
-            "function": "SECTOR",
-            "apikey": ALPHA_VANTAGE_API_KEY,
-        },
-        timeout=20,
-    )
-    response.raise_for_status()
-    data = response.json()
+    Note: Alpha Vantage's SECTOR endpoint only covers US market sectors,
+    it has no Indian/NSE sector data. So instead of using that endpoint
+    (which would silently return the wrong country's data), this pulls
+    quotes for a configured list of NSE sector index symbols, the same
+    way get_configured_market_movements() does for broad index symbols.
+
+    Configure real NSE sector index symbols in the NSE_SECTOR_SYMBOLS
+    env var, comma separated, e.g.:
+    NSE_SECTOR_SYMBOLS=NIFTY_BANK.NS,NIFTY_IT.NS,NIFTY_AUTO.NS,NIFTY_FMCG.NS,NIFTY_PHARMA.NS
+    """
+    symbols = [
+        value.strip()
+        for value in os.getenv("NSE_SECTOR_SYMBOLS", "").split(",")
+        if value.strip()
+    ]
 
     performance = []
-    for name, value in data.items():
-        if "real-time performance" not in name.lower():
-            continue
-        if not isinstance(value, dict):
-            continue
-        for sector, change in value.items():
+    for symbol in symbols:
+        quote = get_market(symbol)
+        if quote and quote.get("change_percent") is not None:
             performance.append(
                 {
-                    "sector": sector,
-                    "change_percent": change,
+                    "sector": symbol,
+                    "change_percent": quote.get("change_percent"),
                 }
             )
 

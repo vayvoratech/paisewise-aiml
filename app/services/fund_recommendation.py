@@ -1,5 +1,7 @@
 from typing import Dict, List
 
+from app.config.amc_reputation import get_amc_reputation_score
+
 
 RISK_SCORES = {
     "low": {"low": 100, "moderate": 60, "high": 20},
@@ -72,9 +74,11 @@ def calculate_expense_score(fund: Dict) -> float:
 
 
 def calculate_amc_score(fund: Dict) -> float:
-    # AMC reputation is not present in the current mf_schemes schema.
-    # Keep this neutral instead of inventing reputation data.
-    return 50.0
+    # AMC reputation is not a column in mf_schemes, so this looks it up
+    # from a manual tier list (app/config/amc_reputation.py) based on
+    # the fund's amc_name. Unknown AMCs fall back to a neutral score
+    # instead of guessing.
+    return float(get_amc_reputation_score(fund.get("amc_name")))
 
 
 def calculate_goal_score(fund: Dict, user_goal: str | None) -> float:

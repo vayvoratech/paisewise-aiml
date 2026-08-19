@@ -41,3 +41,52 @@ def test_trade_evaluation_marks_missing_learning_as_needs_review():
 
     assert result["decision"] == "needs_review"
     assert result["score"] < 70
+
+
+def test_sector_studied_check_passes_when_lesson_matches_sector():
+    context = extract_trade_context(
+        {"symbol": "ABC", "side": "BUY", "price": 100, "quantity": 10},
+        {
+            "sector": "Banking",
+            "52_week_high": 120,
+            "52_week_low": 70,
+            "volume": 1000,
+            "average_volume": 900,
+        },
+        [
+            {"lesson_name": "resistance", "completed": True},
+            {"lesson_name": "volume", "completed": True},
+            {"lesson_name": "banking sector basics", "completed": True},
+        ],
+    )
+
+    result = evaluate_trade(context)
+    sector_check = next(
+        item for item in result["checks"] if item["criterion"] == "Sector studied"
+    )
+
+    assert sector_check["passed"] is True
+
+
+def test_sector_studied_check_fails_when_no_matching_lesson():
+    context = extract_trade_context(
+        {"symbol": "ABC", "side": "BUY", "price": 100, "quantity": 10},
+        {
+            "sector": "Pharma",
+            "52_week_high": 120,
+            "52_week_low": 70,
+            "volume": 1000,
+            "average_volume": 900,
+        },
+        [
+            {"lesson_name": "resistance", "completed": True},
+            {"lesson_name": "volume", "completed": True},
+        ],
+    )
+
+    result = evaluate_trade(context)
+    sector_check = next(
+        item for item in result["checks"] if item["criterion"] == "Sector studied"
+    )
+
+    assert sector_check["passed"] is False

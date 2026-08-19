@@ -28,6 +28,7 @@ class User(Base):
     investment_experience_years = Column(SmallInteger)
     sip_count = Column(Integer, default=0)
     kyc_completed = Column(Boolean, default=False)
+    kyc_city = Column(String(100))
 
 
 class UserFeatures(Base):

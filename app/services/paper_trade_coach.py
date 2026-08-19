@@ -97,6 +97,22 @@ def evaluate_trade(context: Dict[str, Any]) -> Dict[str, Any]:
             "detail": "The user has not completed the volume lesson; review volume before evaluating the entry.",
         })
 
+    sector = context.get("sector")
+    if sector:
+        sector_lesson_name = str(sector).strip().lower()
+        studied_sector = any(
+            sector_lesson_name in lesson_name for lesson_name in lessons
+        )
+        checks.append({
+            "criterion": "Sector studied",
+            "passed": studied_sector,
+            "detail": (
+                f"The user has studied the {sector} sector before this trade."
+                if studied_sector
+                else f"The user has not studied the {sector} sector; review sector basics before treating this as a strong decision."
+            ),
+        })
+
     passed = sum(1 for item in checks if item["passed"])
     score = round((passed / len(checks)) * 100, 2) if checks else 0.0
 

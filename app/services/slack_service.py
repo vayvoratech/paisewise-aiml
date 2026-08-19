@@ -9,13 +9,22 @@ load_dotenv()
 SLACK_WEBHOOK = os.getenv("SLACK_WEBHOOK")
 
 
-def send_success_message():
+def send_batch_error_message(errors):
+    """Task 6: alert Slack only when the batch completes with errors.
+
+    A fully successful run should not send anything to Slack.
+    """
     if not SLACK_WEBHOOK:
         print("Slack Webhook not available.")
         return
 
+    failed_user_ids = [str(item["user_id"]) for item in errors]
+
     payload = {
-        "text": "Portfolio Insight DAG completed successfully."
+        "text": (
+            f"Portfolio Insight DAG completed with {len(errors)} error(s).\n"
+            f"Failed user_ids: {', '.join(failed_user_ids)}"
+        )
     }
 
     try:

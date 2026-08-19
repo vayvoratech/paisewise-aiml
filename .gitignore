@@ -25,3 +25,5 @@ mlflow.db
 .venv_old/
 mlruns/
 mlartifacts/
+airflow/airflow.cfg
+airflow/airflow.db

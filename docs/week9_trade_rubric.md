@@ -18,4 +18,8 @@ A paper-trade decision is evaluated for educational quality, not future profit.
 - The user has not studied the concepts needed to understand the trade.
 - The decision is based only on a prediction or guaranteed-return claim.
 
+## Sector-studied check
+
+The rubric checks whether the user has completed a lesson related to the trade's sector (matched against their lesson history). If no matching lesson is found, this check fails and the coach feedback tells the user to review that sector before treating the trade as a strong decision.
+
 The rubric produces a coaching score and feedback. It does not produce a real-money buy/sell instruction.

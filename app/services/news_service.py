@@ -7,11 +7,16 @@ def get_news():
     if not NEWS_API_KEY:
         raise RuntimeError("NEWS_API_KEY is not set.")
 
+    # NOTE: NewsAPI's /top-headlines with country=in reliably returns
+    # zero results on the free tier (a known issue on their side, not
+    # our key). /everything with a search query is more reliable, so
+    # we use that instead and sort by most recent.
     response = requests.get(
-        "https://newsapi.org/v2/top-headlines",
+        "https://newsapi.org/v2/everything",
         params={
-            "category": "business",
-            "country": "in",
+            "q": "India business OR Indian stock market OR NSE OR BSE",
+            "language": "en",
+            "sortBy": "publishedAt",
             "pageSize": 3,
             "apiKey": NEWS_API_KEY,
         },
