@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Environment Variables
 .env
 .env.*
@@ -43,3 +44,22 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+=======
+# Environment variables
+.env
+.env.*
+!.env.example
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+.venv/
+
+# IDE files
+.vscode/
+
+# Logs
+*.log
+>>>>>>> origin/develop
