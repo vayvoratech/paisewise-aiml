@@ -14,3 +14,8 @@ httpx
 apache-airflow
 pendulum
 matplotlib
+scikit-learn
+joblib
+redis
+sentry-sdk
+kafka-python

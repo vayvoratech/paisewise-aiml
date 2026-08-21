@@ -1,9 +1,14 @@
-# Virtual Environments
-.venv/
-venv_mlflow/
-
 # Environment Variables
 .env
+.env.*
+!.env.example
+
+# Virtual Environments
+.venv/
+.venv-1/
+.venv_old/
+venv/
+venv_mlflow/
 
 # Python Cache
 __pycache__/
@@ -11,6 +16,8 @@ __pycache__/
 
 # MLflow
 mlflow.db
+mlruns/
+mlartifacts/
 
 # VS Code
 .vscode/
@@ -21,9 +28,12 @@ mlflow.db
 # Logs
 *.log
 
-.venv-1/
-.venv_old/
-mlruns/
-mlartifacts/
+# Airflow local runtime
 airflow/airflow.cfg
 airflow/airflow.db
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
