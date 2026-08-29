@@ -1,0 +1,260 @@
+SIP: Systematic Investment Plan is a method of investing a fixed amount regularly in a mutual fund.
+NAV: Net Asset Value represents the per-unit value of a mutual fund scheme.
+Expense Ratio: Expense ratio is the percentage of a mutual fund's assets charged annually for managing the fund.
+Equity Fund: Equity Fund is a mutual fund that primarily invests in shares of companies.
+Debt Fund: Debt Fund is a mutual fund that primarily invests in fixed-income securities such as bonds and government securities.
+Mutual Fund: Mutual Fund is an investment vehicle that pools money from multiple investors and invests it in securities.
+Asset: An asset is something that has economic value and may provide future financial benefit.
+Liability: A liability is a financial obligation or amount that a person or organization owes.
+Investment: Investment means putting money into an asset with the expectation of receiving future returns.
+Saving: Saving means setting aside part of income for future needs or goals.
+Return: Return is the gain or loss generated from an investment over a period.
+Risk: Investment risk is the possibility that an investment may lose value or produce an unexpected return.
+Diversification: Diversification means spreading investments across different assets or categories to reduce concentration risk.
+Portfolio: A portfolio is a collection of investments owned by an individual or entity.
+Asset Allocation: Asset allocation is the distribution of investments across asset classes such as equity, debt, gold and cash.
+Risk Tolerance: Risk tolerance is the level of investment uncertainty or loss an investor is willing and able to accept.
+Financial Goal: A financial goal is a specific money-related objective planned for a particular future period.
+Financial Planning: Financial planning is the process of managing income, expenses, savings, investments and goals.
+Emergency Fund: An emergency fund is money set aside to meet unexpected expenses or financial emergencies.
+Budget: A budget is a plan for managing income and expenses over a specific period.
+Income: Income is money received from sources such as salary, business, interest or investments.
+Expense: An expense is money spent to purchase goods, services or meet financial obligations.
+Cash Flow: Cash flow is the movement of money coming into and going out of an individual or organization.
+Net Worth: Net worth is the value of total assets minus total liabilities.
+Principal: Principal is the original amount of money invested or borrowed before interest or returns.
+Interest: Interest is the amount earned on savings or investments or paid on borrowed money.
+Simple Interest: Simple interest is interest calculated only on the original principal amount.
+Compound Interest: Compound interest is interest calculated on the principal and accumulated interest.
+Inflation: Inflation is the general increase in prices that reduces the purchasing power of money over time.
+Purchasing Power: Purchasing power is the amount of goods or services that a unit of money can buy.
+Real Return: Real return is investment return after accounting for the effect of inflation.
+Nominal Return: Nominal return is an investment return measured before adjusting for inflation.
+Capital Gain: Capital gain is the profit resulting from selling an asset for more than its purchase price.
+Capital Loss: Capital loss occurs when an asset is sold for less than its purchase price.
+Dividend: Dividend is a distribution of a company's profits to eligible shareholders.
+Dividend Yield: Dividend yield measures annual dividend income relative to the market price of a share.
+Stock: A stock represents ownership or an ownership interest in a company.
+Share: A share is a unit representing ownership in a company.
+Equity: Equity represents ownership value in a company or an investment in company shares.
+Bond: A bond is a debt instrument through which an issuer borrows money from investors.
+Debenture: A debenture is a debt instrument issued by a company to raise borrowed funds.
+Government Security: A government security is a debt instrument issued by a government to raise funds.
+Treasury Bill: A Treasury Bill is a short-term government security generally issued for a maturity of less than one year.
+Corporate Bond: A corporate bond is a debt security issued by a company to raise funds.
+Sovereign Bond: A sovereign bond is a debt security issued by a national government.
+Gilt Fund: A gilt fund is a mutual fund that invests primarily in government securities.
+Liquid Fund: A liquid fund is a debt mutual fund that invests in short-term money-market and debt instruments.
+Money Market: Money market refers to the market for short-term borrowing and lending instruments.
+Money Market Instrument: A money market instrument is a short-term financial instrument used for borrowing or investing funds.
+Commercial Paper: Commercial Paper is a short-term unsecured debt instrument issued by eligible companies.
+Certificate of Deposit: A Certificate of Deposit is a negotiable money-market instrument issued by eligible financial institutions.
+Fixed Deposit: A fixed deposit is a bank deposit where money is kept for a specified period at an agreed interest rate.
+Recurring Deposit: A recurring deposit allows individuals to deposit a fixed amount regularly for a specified period.
+Savings Account: A savings account is a bank account designed to hold money and generally earn interest.
+Current Account: A current account is a bank account generally used for frequent business transactions.
+Bank Interest Rate: Bank interest rate is the rate at which a bank pays interest on deposits or charges interest on certain loans.
+Repo Rate: Repo rate is the rate at which the Reserve Bank of India lends short-term funds to eligible banks against securities.
+Reverse Repo Rate: Reverse repo rate refers to the rate associated with banks placing funds with the Reserve Bank of India under the relevant monetary policy framework.
+CRR: Cash Reserve Ratio is the portion of certain bank deposits that banks are required to maintain as cash reserves with the Reserve Bank of India.
+SLR: Statutory Liquidity Ratio is the portion of certain liabilities that banks are required to maintain in specified liquid assets.
+RBI: Reserve Bank of India is India's central bank responsible for monetary policy and regulation of specified financial institutions.
+SEBI: Securities and Exchange Board of India is the regulator of India's securities market.
+AMFI: Association of Mutual Funds in India is an industry body representing mutual fund companies in India.
+AMC: Asset Management Company is a company that manages investment funds such as mutual fund schemes.
+Fund Manager: A fund manager is a professional responsible for managing a mutual fund's portfolio according to its investment objective.
+Scheme: An investment scheme is a structured investment product with defined objectives, strategies and characteristics.
+Scheme Information Document: A Scheme Information Document contains important information about a mutual fund scheme.
+KIM: Key Information Memorandum provides key information about a mutual fund scheme in a concise format.
+SID: Scheme Information Document provides detailed information about a mutual fund scheme.
+NFO: New Fund Offer is the initial offer period during which a new mutual fund scheme is offered to investors.
+Open-Ended Fund: An open-ended mutual fund generally allows investors to purchase or redeem units on an ongoing basis.
+Close-Ended Fund: A close-ended mutual fund has a defined maturity period and operates under specific subscription and redemption arrangements.
+ELSS: Equity Linked Savings Scheme is a mutual fund category that invests primarily in equity and provides a tax benefit subject to applicable tax rules.
+Index Fund: An index fund aims to track the performance of a specified market index.
+Large Cap Fund: A large-cap fund primarily invests in large-cap companies according to applicable regulatory classification.
+Mid Cap Fund: A mid-cap fund primarily invests in mid-cap companies according to applicable regulatory classification.
+Small Cap Fund: A small-cap fund primarily invests in small-cap companies according to applicable regulatory classification.
+Multi Cap Fund: A multi-cap fund invests across large-cap, mid-cap and small-cap stocks subject to applicable requirements.
+Flexi Cap Fund: A flexi-cap fund can invest across large-cap, mid-cap and small-cap companies with flexibility in allocation.
+Balanced Advantage Fund: A balanced advantage fund dynamically manages its allocation between equity and debt or related asset classes according to its strategy.
+Hybrid Fund: A hybrid fund invests across more than one asset class, commonly equity and debt.
+Arbitrage Fund: An arbitrage fund seeks to use price differences between related market positions as part of its investment strategy.
+Fund of Funds: A fund of funds invests primarily in other investment funds rather than directly in individual securities.
+International Fund: An international fund invests primarily in securities or funds linked to markets outside the investor's home country.
+Sectoral Fund: A sectoral fund concentrates investments in companies belonging to a particular sector.
+Thematic Fund: A thematic fund invests around a particular theme or broad investment idea.
+Contra Fund: A contra fund follows a strategy that may invest in companies or sectors that the fund manager considers temporarily undervalued.
+Value Fund: A value fund follows a strategy focused on identifying securities that the fund manager believes are undervalued.
+Growth Fund: A growth-oriented fund focuses on companies or securities expected to have potential for growth.
+Direct Plan: A direct mutual fund plan is purchased without distribution commissions being paid to intermediaries.
+Regular Plan: A regular mutual fund plan is purchased through a distributor or intermediary and may include distribution-related expenses.
+Growth Option: Growth option generally retains investment gains within the scheme instead of distributing them as periodic payouts.
+IDCW: Income Distribution cum Capital Withdrawal is an option through which a mutual fund may make distributions subject to applicable rules and availability.
+Redemption: Redemption is the process of selling mutual fund units back to the fund or through the applicable mechanism.
+Switch: A switch is the transfer of an investment from one mutual fund scheme or plan to another according to applicable rules.
+Systematic Transfer Plan: STP is a facility that allows investors to transfer a predetermined amount from one mutual fund scheme to another at regular intervals.
+Systematic Withdrawal Plan: SWP is a facility that allows investors to withdraw a predetermined amount from a mutual fund at regular intervals.
+Lump Sum Investment: Lump sum investment means investing a larger amount at one time rather than through regular installments.
+Unit: A unit represents a proportional interest in a mutual fund scheme.
+Unit Holder: A unit holder is a person or entity that owns units of a mutual fund scheme.
+Benchmark: A benchmark is a reference index used to compare the performance of an investment or fund.
+Tracking Error: Tracking error measures the difference between the performance of a fund and its benchmark.
+Alpha: Alpha measures the excess return of an investment relative to a specified benchmark or expected return under a particular methodology.
+Beta: Beta measures the sensitivity of an investment's returns to movements in a benchmark or market.
+Standard Deviation: Standard deviation measures the dispersion or variability of investment returns.
+Sharpe Ratio: Sharpe ratio measures risk-adjusted return by comparing excess return with the variability of returns.
+Sortino Ratio: Sortino ratio measures risk-adjusted return using downside volatility rather than total volatility.
+Volatility: Volatility refers to the degree to which an asset's price or returns fluctuate over time.
+Liquidity: Liquidity is the ease with which an asset can be converted into cash without a significant price impact.
+Credit Risk: Credit risk is the possibility that a borrower or issuer may fail to meet its financial obligations.
+Interest Rate Risk: Interest rate risk is the possibility that changes in interest rates will affect the value or returns of an investment.
+Market Risk: Market risk is the possibility of losses caused by movements in overall market prices.
+Inflation Risk: Inflation risk is the possibility that rising prices will reduce the real value of investment returns.
+Concentration Risk: Concentration risk arises when too much of a portfolio is exposed to one asset, sector, issuer or category.
+Default Risk: Default risk is the possibility that a borrower will fail to make required payments.
+Reinvestment Risk: Reinvestment risk is the possibility that future cash flows may have to be reinvested at lower rates.
+Currency Risk: Currency risk is the possibility that changes in exchange rates affect the value of an investment.
+Operational Risk: Operational risk is the possibility of losses caused by failures in processes, systems, people or operations.
+Regulatory Risk: Regulatory risk is the possibility that changes in laws or regulations affect an investment or financial activity.
+Systematic Risk: Systematic risk is market-wide risk that cannot generally be eliminated through diversification.
+Unsystematic Risk: Unsystematic risk is company-specific or asset-specific risk that can potentially be reduced through diversification.
+Risk-Return Tradeoff: Risk-return tradeoff describes the relationship between the level of risk taken and the potential return from an investment.
+Time Horizon: Time horizon is the expected period for which money will remain invested before it is needed.
+Short-Term Investment: A short-term investment is an investment intended to be held for a relatively short period.
+Long-Term Investment: A long-term investment is an investment intended to be held for an extended period.
+Goal-Based Investing: Goal-based investing means planning investments around specific financial objectives and timelines.
+Retirement Planning: Retirement planning is the process of preparing financially for expenses and goals after regular employment income reduces or stops.
+Education Planning: Education planning involves setting financial goals and preparing funds for future education expenses.
+Tax Planning: Tax planning involves organizing finances within applicable laws to manage tax obligations efficiently.
+Estate Planning: Estate planning involves planning how assets and financial affairs may be managed or transferred according to applicable laws and wishes.
+Nominee: A nominee is a person designated to receive or claim assets or benefits according to applicable rules after the investor's death.
+KYC: Know Your Customer is the process of verifying a customer's identity and required information under applicable regulations.
+CKYC: Central KYC is a centralized system for storing and accessing KYC records subject to applicable regulations.
+PAN: Permanent Account Number is a unique identification number issued by India's Income Tax Department.
+Aadhaar: Aadhaar is a unique identification number issued by the Unique Identification Authority of India.
+Demat Account: A demat account electronically holds securities such as shares and certain other eligible securities.
+Trading Account: A trading account is used to place buy and sell orders for securities through a broker.
+Broker: A broker is an intermediary that facilitates transactions in securities markets.
+Depository: A depository holds securities in electronic form and provides related services through participants.
+Depository Participant: A Depository Participant is an intermediary through which investors access depository services.
+NSDL: National Securities Depository Limited is an Indian depository that provides electronic securities holding and related services.
+CDSL: Central Depository Services Limited is an Indian depository that provides electronic securities holding and related services.
+NSE: National Stock Exchange of India is a major stock exchange in India.
+BSE: BSE Limited is a major stock exchange in India.
+NIFTY 50: NIFTY 50 is a stock market index representing 50 major companies listed on the National Stock Exchange based on its index methodology.
+SENSEX: SENSEX is a stock market index comprising selected companies listed on BSE according to its index methodology.
+Index: A stock market index tracks the performance of a selected group of securities according to defined rules.
+Market Capitalization: Market capitalization is the total market value of a company's outstanding shares.
+Large Cap: Large-cap companies are companies classified within the largest market-capitalization segment according to applicable classification.
+Mid Cap: Mid-cap companies are companies classified within the middle market-capitalization segment according to applicable classification.
+Small Cap: Small-cap companies are companies classified within the smaller market-capitalization segment according to applicable classification.
+Blue Chip: A blue-chip company is generally a well-established company with a strong market presence and financial history.
+IPO: Initial Public Offering is the process through which a company offers its shares to the public for the first time.
+FPO: Follow-on Public Offer is an additional public offering of shares by a company that is already publicly listed.
+Rights Issue: A rights issue allows existing eligible shareholders to purchase additional shares under specified terms.
+Bonus Shares: Bonus shares are additional shares issued to eligible existing shareholders without a separate payment, subject to applicable rules.
+Stock Split: A stock split divides existing shares into a greater number of shares while proportionately reducing the price per share.
+Buyback: A buyback is a company's purchase of its own shares according to applicable regulations.
+Face Value: Face value is the nominal value assigned to a security by its issuer.
+Market Price: Market price is the current price at which a security trades in the market.
+Book Value: Book value represents the accounting value of a company's net assets attributable to shareholders.
+Price-to-Earnings Ratio: P/E ratio compares a company's share price with its earnings per share.
+Price-to-Book Ratio: P/B ratio compares a company's market price with its book value per share.
+Earnings Per Share: EPS represents a company's profit attributable to each outstanding share under the relevant calculation.
+Dividend Payout Ratio: Dividend payout ratio represents the proportion of earnings distributed as dividends.
+Return on Investment: ROI measures the gain or loss generated relative to the amount invested.
+Return on Equity: ROE measures profit relative to shareholders' equity.
+Return on Assets: ROA measures profit relative to the assets used by a business.
+Gross Profit: Gross profit is revenue minus the direct cost of goods or services sold.
+Operating Profit: Operating profit is profit generated from core business operations after operating expenses.
+Net Profit: Net profit is the amount remaining after deducting applicable expenses, interest, taxes and other costs from revenue.
+Revenue: Revenue is the income generated from a company's normal business activities.
+Earnings: Earnings generally refer to the profit generated by a company over a specified period.
+Balance Sheet: A balance sheet presents a company's assets, liabilities and shareholders' equity at a specific date.
+Income Statement: An income statement reports a company's revenues, expenses and profit or loss over a period.
+Cash Flow Statement: A cash flow statement reports cash inflows and outflows from operating, investing and financing activities.
+Financial Ratio: A financial ratio compares selected financial figures to help analyze a company's financial position or performance.
+Liquidity Ratio: A liquidity ratio measures a company's ability to meet short-term obligations.
+Debt-to-Equity Ratio: Debt-to-equity ratio compares a company's debt with shareholders' equity.
+Current Ratio: Current ratio compares current assets with current liabilities.
+Fiscal Year: A fiscal year is a twelve-month accounting period used for financial reporting.
+Market Order: A market order is an instruction to buy or sell a security at the best available market price.
+Limit Order: A limit order specifies the maximum purchase price or minimum selling price acceptable to the investor.
+Stop-Loss Order: A stop-loss order is an order designed to limit potential loss by triggering a transaction when a specified price condition is reached.
+Bid Price: Bid price is the highest price a buyer is currently willing to pay for a security.
+Ask Price: Ask price is the lowest price at which a seller is currently willing to sell a security.
+Bid-Ask Spread: Bid-ask spread is the difference between the bid price and ask price.
+Market Depth: Market depth shows available buy and sell orders at different price levels.
+Trading Volume: Trading volume is the number of units or shares traded during a specified period.
+Bull Market: A bull market is a period generally characterized by rising market prices and positive market sentiment.
+Bear Market: A bear market is a period generally characterized by falling market prices and negative market sentiment.
+Correction: A market correction is a decline in market price after a period of increase.
+Market Crash: A market crash is a rapid and substantial decline in market prices.
+Rally: A rally is a sustained or notable increase in market prices.
+Market Cycle: A market cycle refers to recurring phases of market expansion, decline and recovery.
+Market Sentiment: Market sentiment represents the overall attitude of investors toward a market or security.
+Primary Market: The primary market is where newly issued securities are offered to investors.
+Secondary Market: The secondary market is where previously issued securities are bought and sold among investors.
+Settlement: Settlement is the process of completing a securities transaction by transferring securities and funds.
+T+1 Settlement: T+1 settlement means eligible securities transactions are generally settled one business day after the trade date, subject to applicable rules.
+Clearing: Clearing is the process of determining obligations between parties after securities transactions.
+Clearing Corporation: A clearing corporation facilitates clearing and settlement of eligible market transactions.
+Margin: Margin is money or collateral required to support certain market transactions or positions.
+Leverage: Leverage means using borrowed funds or financial exposure to increase the size of an investment position.
+Derivative: A derivative is a financial contract whose value is derived from an underlying asset, index or reference.
+Futures: Futures are standardized derivative contracts to buy or sell an underlying asset at a specified future date and price.
+Options: Options are derivative contracts that provide a right, but generally not an obligation, to buy or sell an underlying asset at specified terms.
+Call Option: A call option gives the holder the right, but not the obligation, to buy an underlying asset at a specified strike price.
+Put Option: A put option gives the holder the right, but not the obligation, to sell an underlying asset at a specified strike price.
+Strike Price: Strike price is the specified price at which an option may be exercised.
+Premium: Option premium is the price paid by the buyer to acquire an option.
+Expiry Date: Expiry date is the date on which a derivative contract or option reaches its specified end.
+Underlying Asset: An underlying asset is the asset, index or reference value on which a derivative's value is based.
+Tax: Tax is a compulsory financial charge imposed by a government under applicable law.
+Capital Gains Tax: Capital gains tax is tax applicable to qualifying gains from the transfer of capital assets according to tax law.
+STCG: Short-Term Capital Gain is a capital gain classified as short-term under applicable tax rules.
+LTCG: Long-Term Capital Gain is a capital gain classified as long-term under applicable tax rules.
+Tax Deducted at Source: TDS is tax deducted by the payer from certain specified payments according to applicable tax rules.
+Tax-Saving Investment: A tax-saving investment is an eligible investment that may provide tax benefits under applicable laws.
+Section 80C: Section 80C of India's Income Tax Act provides specified deductions subject to applicable conditions and limits.
+Taxable Income: Taxable income is income on which tax is calculated after applying applicable exemptions, deductions and rules.
+Financial Literacy: Financial literacy is the ability to understand and use financial concepts to make informed financial decisions.
+Financial Awareness: Financial awareness means understanding important financial products, risks, costs, rights and responsibilities.
+Compounding: Compounding occurs when returns or interest generate additional returns over time.
+Power of Compounding: Power of compounding describes how accumulated returns can themselves generate further returns over time.
+Rule of 72: Rule of 72 is a rough estimation method for calculating the time required for money to double at a constant annual return.
+Cost Averaging: Cost averaging means investing at different prices over time, resulting in an average purchase cost.
+Rupee Cost Averaging: Rupee cost averaging is the practice of investing a fixed amount regularly, which can result in purchasing more units when prices are lower and fewer when prices are higher.
+Financial Discipline: Financial discipline means consistently following planned saving, spending and investment habits.
+Spending: Spending means using money to purchase goods, services or meet financial obligations.
+Discretionary Expense: A discretionary expense is a non-essential expense that can generally be reduced or postponed.
+Essential Expense: An essential expense is a necessary expense required for basic living or important obligations.
+Debt: Debt is money borrowed that generally must be repaid according to agreed terms.
+Loan: A loan is money provided by a lender to a borrower with an agreement for repayment.
+Principal Amount: Principal amount is the original amount borrowed under a loan.
+Loan Tenure: Loan tenure is the period over which a loan is scheduled to be repaid.
+EMI: Equated Monthly Instalment is a regular payment made toward repayment of certain loans.
+Interest Rate: Interest rate is the percentage used to calculate interest charged on borrowing or paid on certain deposits.
+Fixed Interest Rate: A fixed interest rate remains unchanged for a specified period or according to the terms of an agreement.
+Floating Interest Rate: A floating interest rate changes according to a specified benchmark or reference rate.
+Credit Score: A credit score is a numerical representation of creditworthiness calculated using relevant credit information.
+Credit Report: A credit report contains information about an individual's credit accounts and repayment history.
+CIBIL Score: CIBIL Score is a credit score provided by TransUnion CIBIL based on its applicable methodology.
+Default: Default occurs when a borrower fails to meet required payment or contractual obligations.
+Insurance: Insurance is a financial arrangement that provides protection against specified risks in exchange for a premium.
+Premium: Insurance premium is the amount paid to an insurer for insurance coverage.
+Policy: An insurance policy is a contract describing the terms, coverage and conditions of insurance.
+Sum Insured: Sum insured is the specified maximum coverage amount under certain insurance policies.
+Life Insurance: Life insurance provides financial protection linked to the life of the insured subject to policy terms.
+Health Insurance: Health insurance provides coverage for specified medical expenses subject to policy terms and conditions.
+Term Insurance: Term insurance is life insurance that generally provides coverage for a specified period.
+Claim: An insurance claim is a request made to an insurer for benefits under an insurance policy.
+Deductible: A deductible is an amount the policyholder may have to pay before an insurer pays eligible expenses, subject to policy terms.
+Premium Payment Term: Premium payment term is the period during which insurance premiums are scheduled to be paid.
+Policy Term: Policy term is the period for which an insurance policy provides coverage under its terms.
+Inflation-Adjusted Goal: An inflation-adjusted goal is a future financial target whose required amount accounts for expected inflation.
+Corpus: Corpus is the accumulated amount of money set aside for a particular purpose.
+Retirement Corpus: Retirement corpus is the accumulated savings and investments intended to support financial needs during retirement.
+Emergency Corpus: Emergency corpus is the amount of money reserved to handle unexpected financial needs.
+Financial Independence: Financial independence generally means having sufficient financial resources to support one's needs without depending entirely on active employment income.
