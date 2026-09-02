@@ -8,5 +8,5 @@ router = APIRouter()
 @router.get("/ai/languages")
 def supported_languages():
     
-    """Return the 22 Indian scheduled languages supported by the AI layer."""
+    """Returns the 22 Indian scheduled languages...."""
     return {"languages": get_languages()}

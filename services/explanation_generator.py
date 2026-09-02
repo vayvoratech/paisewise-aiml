@@ -1,7 +1,8 @@
 import logging
 
 from services.llm_client import LLMClient
-from prompts.prompt_templates import FUND_EXPLANATION_PROMPT
+from prompts.prompt_templates import FUND_EXPLANATION_PROMPT, FINANCIAL_GUARDRAILS
+from utils.content_filter import check_content
 
 logger = logging.getLogger("ai-service")
 
@@ -11,6 +12,7 @@ llm_client = LLMClient()
 def generate_fund_explanation(fund, risk_profile):
 
     prompt = FUND_EXPLANATION_PROMPT.format(
+        guardrails=FINANCIAL_GUARDRAILS,
         risk_profile=risk_profile,
         fund_name=fund.get("scheme_name"),
         category=fund.get("category"),
@@ -23,8 +25,10 @@ def generate_fund_explanation(fund, risk_profile):
 
     try:
         response = llm_client.generate_response(prompt)
-
-        return response.strip()
+        filtered = check_content(response)
+        if filtered["blocked"]:
+            return filtered["message"]
+        return filtered["content"].strip()
 
     except Exception as error:
 

@@ -12,6 +12,7 @@ router = APIRouter()
 class JargonRequest(BaseModel):
     term: str
     language: str = "en"
+    userId: str | None = None
 
 
 class JargonResponse(BaseModel):
@@ -26,9 +27,8 @@ class JargonResponse(BaseModel):
 )
 async def explain_jargon(request: JargonRequest):
 
-    # Temporary identifier.
-    # Replace with authenticated userId when available.
-    user_id = request.term.lower()
+    # Spring Boot should send userId; X-User-Id is also accepted for internal calls.
+    user_id = request.userId or "anonymous"
 
     allowed = check_rate_limit(user_id)
 

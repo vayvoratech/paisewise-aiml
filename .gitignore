@@ -1,65 +1,23 @@
-<<<<<<< HEAD
-# Environment Variables
-.env
-.env.*
-!.env.example
-
-# Virtual Environments
 .venv/
-.venv-1/
-.venv_old/
-venv/
+.venv_new/
 venv_mlflow/
 
-# Python Cache
-__pycache__/
-*.pyc
-
-# MLflow
-mlflow.db
-mlruns/
-mlartifacts/
-
-# VS Code
-.vscode/
-
-# IntelliJ
-.idea/
-
-# Logs
-*.log
-
-# Airflow local runtime
-airflow/airflow.cfg
-airflow/airflow.db
-
-# Python cache
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-
-# Python cache
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-=======
-# Environment variables
 .env
-.env.*
-!.env.example
-# Python cache
+
 __pycache__/
-*.pyc
+*.py[cod]
 
-# Virtual environment
-venv/
-.venv/
+.pytest_cache/
 
-# IDE files
-.vscode/
+airflow/logs/
+airflow/airflow.db
+airflow/simple_auth_manager_passwords.json.generated
 
-# Logs
+mlartifacts/
+mlruns/
+mlflow.db
+
 *.log
->>>>>>> origin/develop
+
+*.backup
+fraud_model_v1.pkl

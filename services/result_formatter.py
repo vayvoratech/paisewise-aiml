@@ -1,8 +1,4 @@
 def format_recommendations(recommendations, run_id):
-    """
-    Format the top fund recommendations for the API response.
-    """
-
     formatted_results = []
 
     for item in recommendations:

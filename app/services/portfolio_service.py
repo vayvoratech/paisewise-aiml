@@ -11,13 +11,6 @@ from app.prompts.portfolio_prompt import create_prompt
 from app.services.llm_service import generate_portfolio_response
 
 
-# MLFLOW_TRACKING_URI can be set in .env to point at a real tracking
-# server (e.g. http://127.0.0.1:5000) once one is actually running.
-# If it's not set, we default to a local file-based store ("file:./mlruns"),
-# which needs no server at all - this is what "Set up experiment
-# tracking with MLflow locally" (Week 1) meant. This stops the whole
-# app from failing to even import just because nothing is listening
-# on port 5000 yet.
 MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "file:./mlruns")
 
 if mlflow is not None:
@@ -47,6 +40,7 @@ def generate_insight(user, holdings, market, language):
         return generate_portfolio_response(prompt)
 
     with mlflow.start_run(run_name="Portfolio Insight"):
+        
         mlflow.log_param("user_id", str(user.get("user_id", "")))
         mlflow.log_param("language", language)
         mlflow.log_param("risk_profile", user.get("risk_profile", ""))

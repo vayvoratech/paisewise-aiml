@@ -1,22 +1,18 @@
 from fastapi import APIRouter
 
 from models.fraud import FraudCheckRequest
+from services.fraud_inference import score_fraud_request
 
 router = APIRouter()
 
 
 @router.post("/ai/fraud-check")
 def fraud_check(request: FraudCheckRequest):
-    """
-    Fraud-check endpoint skeleton.
+    result = score_fraud_request(request.model_dump())
 
-    Receives pre-computed fraud features.
-    Actual fraud decision logic will be added later.
-    """
+    result["features"]["new_device"] = result["features"]["device_changed"]
 
     return {
         "status": "received",
-        "orderId": str(request.orderId),
-        "userId": str(request.userId),
-        "features": request.model_dump(),
+        **result,
     }

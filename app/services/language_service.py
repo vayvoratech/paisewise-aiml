@@ -6,9 +6,7 @@ from typing import Dict, List
 ROOT = Path(__file__).resolve().parents[2]
 LANGUAGE_FILE = ROOT / "data" / "indian_languages.csv"
 
-# The 22 languages below are the languages listed in the Eighth Schedule
-# of the Constitution of India. English is kept as an optional fallback
-# for internal/system use, but is not part of this official list.
+
 DEFAULT_LANGUAGE_CODE = "hi"
 
 SUPPORTED_LANGUAGES: Dict[str, str] = {}
@@ -31,7 +29,7 @@ SUPPORTED_LANGUAGES = _load_languages()
 
 
 def get_languages() -> List[dict]:
-    """Return all 22 supported Indian scheduled languages."""
+    
     return [
         {"code": code, "name": name}
         for code, name in SUPPORTED_LANGUAGES.items()
@@ -39,7 +37,7 @@ def get_languages() -> List[dict]:
 
 
 def get_language_name(language: str) -> str:
-    """Accept a language code or name and return its canonical name."""
+    
     value = (language or "").strip().lower()
 
     if value in SUPPORTED_LANGUAGES:
@@ -58,7 +56,7 @@ def get_language_name(language: str) -> str:
 
 
 def get_language_code(language: str) -> str:
-    """Accept a language code or name and return its canonical code."""
+    
     value = (language or "").strip().lower()
 
     if value in SUPPORTED_LANGUAGES:

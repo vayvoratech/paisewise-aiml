@@ -1,11 +1,3 @@
-"""
-Week 6 task: "Write incremental update query (daily update, not full
-refresh)."
-
-This test builds a small in-memory SQLite database, runs the pipeline
-twice, and checks that the second run only touches the user who had
-new activity - not everyone in the table.
-"""
 
 from datetime import datetime, timedelta
 

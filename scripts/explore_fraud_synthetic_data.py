@@ -1,11 +1,3 @@
-"""
-Week 10 task: "Explore synthetic data: visualise normal vs anomaly
-feature distributions."
-
-Reads data/fraud_synthetic_data.csv and saves one histogram per
-feature to data/fraud_plots/, each comparing the normal group against
-the anomaly group so the difference is easy to see at a glance.
-"""
 
 from pathlib import Path
 

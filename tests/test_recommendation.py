@@ -50,6 +50,13 @@ def setup_catalogue(monkeypatch):
         lambda user_id, variant: "test-run-id"
     )
 
+    # Keep recommendation tests independent of real Redis data.
+    monkeypatch.setattr(
+        recommendation_service,
+        "get_cached_recommendation",
+        lambda user_id: None
+    )
+
 
 def test_high_risk_profile_gets_high_risk_fund(monkeypatch):
 
@@ -176,9 +183,8 @@ def test_no_matching_risk_profile(monkeypatch):
         for fund in result["recommendedFunds"]
     )
 
+
 def test_recommendation_uses_cached_result(monkeypatch):
-    from models.recommendation import RecommendationRequest
-    from services import recommendation_service
 
     cached_result = {
         "recommendationRunId": "cached-run-id",

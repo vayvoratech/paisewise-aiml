@@ -11,6 +11,7 @@ def get_news():
     # zero results on the free tier (a known issue on their side, not
     # our key). /everything with a search query is more reliable, so
     # we use that instead and sort by most recent.
+    
     response = requests.get(
         "https://newsapi.org/v2/everything",
         params={

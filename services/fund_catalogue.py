@@ -5,9 +5,7 @@ fund_catalogue = []
 
 
 def load_catalogue():
-    """
-    Load all active funds from the production database.
-    """
+   
 
     global fund_catalogue
 
@@ -23,7 +21,7 @@ def load_catalogue():
             returns_5y,
             expense_ratio,
             fund_size_cr
-        FROM mf_schemes
+        FROM public.mf_schemes
         WHERE is_active = true;
     """
 
@@ -64,17 +62,9 @@ def load_catalogue():
 
 
 def get_catalogue():
-    """
-    Return loaded funds.
-    """
-
     return fund_catalogue
 
 
 def refresh_catalogue():
-    """
-    Refresh catalogue every 4 hours.
-    """
-
     print("Refreshing fund catalogue...")
     load_catalogue()

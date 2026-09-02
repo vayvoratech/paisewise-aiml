@@ -9,8 +9,7 @@ RISK_SCORES = {
     "high": {"low": 30, "moderate": 70, "high": 100},
 }
 
-# Week 7 task weights. Keep these configurable so Week 8 feedback
-# can update them without changing the scoring code.
+# can update without changing the scoring code.
 RETURN_WEIGHT = 0.4
 RISK_WEIGHT = 0.3
 EXPENSE_WEIGHT = 0.2
@@ -74,6 +73,7 @@ def calculate_expense_score(fund: Dict) -> float:
 
 
 def calculate_amc_score(fund: Dict) -> float:
+
     # AMC reputation is not a column in mf_schemes, so this looks it up
     # from a manual tier list (app/config/amc_reputation.py) based on
     # the fund's amc_name. Unknown AMCs fall back to a neutral score
@@ -227,6 +227,7 @@ def select_diverse_top_three(scored_funds: List[Dict]) -> List[Dict]:
 
     # Second pass: fill remaining slots if the catalogue cannot provide
     # full diversity. Never invent a fund just to satisfy the rule.
+    
     for item in scored_funds:
         if item in selected:
             continue

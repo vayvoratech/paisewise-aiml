@@ -1,16 +1,22 @@
 from sqlalchemy import (
     Boolean,
+    CheckConstraint,
     Column,
     DateTime,
+    Index,
     Integer,
     BigInteger,
+    JSON,
     Numeric,
     SmallInteger,
     String,
     Text,
+    text,
 )
+from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.sql import func
+
 
 Base = declarative_base()
 
@@ -51,7 +57,6 @@ class UserFeatures(Base):
     preferred_language = Column(String(30))
     onboarding_goal = Column(String(100))
 
-
     age_proxy = Column(SmallInteger)
     city_tier = Column(String(20))
     paper_trade_count = Column(Integer, default=0)
@@ -63,7 +68,11 @@ class UserFeatures(Base):
     quizzes_taken = Column(Integer, default=0)
 
     created_at = Column(DateTime, server_default=func.now())
-    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+    updated_at = Column(
+        DateTime,
+        server_default=func.now(),
+        onupdate=func.now()
+    )
 
 
 class JargonTerm(Base):
@@ -82,13 +91,15 @@ class PortfolioInsight(Base):
     user_id = Column(BigInteger, nullable=False)
     insight = Column(Text, nullable=False)
     language = Column(String(30), nullable=False)
-    generated_at = Column(DateTime, server_default=func.now())
+    generated_at = Column(
+        DateTime,
+        server_default=func.now()
+    )
 
 
 class PortfolioHolding(Base):
     __tablename__ = "portfolio_holdings"
 
-    
     id = Column(Integer, primary_key=True)
     user_id = Column(BigInteger, nullable=False)
     symbol = Column(String(20), nullable=False)
@@ -104,7 +115,10 @@ class LessonProgress(Base):
     user_id = Column(BigInteger, nullable=False)
     lesson_name = Column(String(100), nullable=False)
     completed = Column(Boolean, default=False)
-    completed_at = Column(DateTime, server_default=func.now())
+    completed_at = Column(
+        DateTime,
+        server_default=func.now()
+    )
 
 
 class QuizAttempt(Base):
@@ -114,7 +128,10 @@ class QuizAttempt(Base):
     user_id = Column(BigInteger, nullable=False)
     quiz_name = Column(String(100), nullable=False)
     score = Column(Integer, nullable=False)
-    attempted_at = Column(DateTime, server_default=func.now())
+    attempted_at = Column(
+        DateTime,
+        server_default=func.now()
+    )
 
 
 class PaperTrade(Base):
@@ -127,7 +144,10 @@ class PaperTrade(Base):
     sell_price = Column(Numeric(10, 2), nullable=False)
     quantity = Column(Integer, nullable=False)
     profit_percent = Column(Numeric(6, 2), nullable=False)
-    created_at = Column(DateTime, server_default=func.now())
+    created_at = Column(
+        DateTime,
+        server_default=func.now()
+    )
 
 
 class UserSession(Base):
@@ -155,26 +175,167 @@ class MFScheme(Base):
     sub_category = Column(String(50))
     scheme_type = Column(String(20), nullable=False)
     risk_level = Column(String(20), nullable=False)
+
     nav = Column(Numeric(12, 4))
     nav_date = Column(DateTime)
-    min_sip_amount = Column(Numeric(10, 2), nullable=False, default=100)
-    min_lumpsum = Column(Numeric(10, 2), nullable=False, default=1000)
-    sip_multiplier = Column(Numeric(10, 2), nullable=False, default=1)
+
+    min_sip_amount = Column(
+        Numeric(10, 2),
+        nullable=False,
+        default=100
+    )
+    min_lumpsum = Column(
+        Numeric(10, 2),
+        nullable=False,
+        default=1000
+    )
+    sip_multiplier = Column(
+        Numeric(10, 2),
+        nullable=False,
+        default=1
+    )
+
     returns_1y = Column(Numeric(8, 4))
     returns_3y = Column(Numeric(8, 4))
     returns_5y = Column(Numeric(8, 4))
     returns_since_launch = Column(Numeric(8, 4))
+
     benchmark_name = Column(String(100))
     benchmark_returns_1y = Column(Numeric(8, 4))
+
     expense_ratio = Column(Numeric(5, 4))
     fund_manager = Column(String(200))
     fund_size_cr = Column(Numeric(14, 2))
+
     launch_date = Column(DateTime)
-    is_active = Column(Boolean, nullable=False, default=True)
-    is_tax_saver = Column(Boolean, nullable=False, default=False)
-    lock_in_years = Column(Integer, nullable=False, default=0)
-    dividend_option = Column(Boolean, nullable=False, default=False)
-    growth_option = Column(Boolean, nullable=False, default=True)
+
+    is_active = Column(
+        Boolean,
+        nullable=False,
+        default=True
+    )
+    is_tax_saver = Column(
+        Boolean,
+        nullable=False,
+        default=False
+    )
+
+    lock_in_years = Column(
+        Integer,
+        nullable=False,
+        default=0
+    )
+
+    dividend_option = Column(
+        Boolean,
+        nullable=False,
+        default=False
+    )
+    growth_option = Column(
+        Boolean,
+        nullable=False,
+        default=True
+    )
+
     bse_scheme_code = Column(String(20))
     nse_symbol = Column(String(20))
-    updated_at = Column(DateTime, server_default=func.now(), onupdate=func.now())
+
+    updated_at = Column(
+        DateTime,
+        server_default=func.now(),
+        onupdate=func.now()
+    )
+
+
+class RecommendationRun(Base):
+    __tablename__ = "recommendation_runs"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(String(36), nullable=False)
+    experiment_name = Column(String(100), nullable=False)
+    variant = Column(String(50), nullable=False)
+    created_at = Column(
+        DateTime,
+        server_default=func.now()
+    )
+
+
+class RecommendationClick(Base):
+    __tablename__ = "recommendation_clicks"
+
+    id = Column(Integer, primary_key=True)
+    recommendation_run_id = Column(
+        Integer,
+        nullable=False
+    )
+    user_id = Column(String(36), nullable=False)
+    scheme_code = Column(String(20), nullable=False)
+    created_at = Column(
+        DateTime,
+        server_default=func.now()
+    )
+
+
+class AuditLog(Base):
+    __tablename__ = "audit_log"
+
+    id = Column(BigInteger, primary_key=True)
+    user_id = Column(UUID(as_uuid=True), nullable=True)
+    action = Column(String(60), nullable=False)
+    entity_type = Column(String(30), nullable=False)
+    entity_id = Column(UUID(as_uuid=True), nullable=True)
+    old_values = Column(
+        JSONB().with_variant(JSON(), "sqlite"),
+        nullable=True
+    )
+    new_values = Column(
+        JSONB().with_variant(JSON(), "sqlite"),
+        nullable=True
+    )
+    ip_address = Column(String(45), nullable=True)
+    user_agent = Column(Text, nullable=True)
+    device_id = Column(String(200), nullable=True)
+    session_id = Column(String(100), nullable=True)
+    request_id = Column(String(100), nullable=True)
+    result = Column(
+        String(10),
+        nullable=False,
+        server_default=text("'SUCCESS'")
+    )
+    failure_reason = Column(Text, nullable=True)
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        server_default=func.now()
+    )
+
+    __table_args__ = (
+        CheckConstraint(
+            "result IN ('SUCCESS', 'FAILURE')",
+            name="ck_audit_log_result"
+        ),
+        Index(
+            "idx_audit_log_user_id",
+            "user_id",
+            "created_at",
+            postgresql_where=(user_id.isnot(None))
+        ),
+        Index(
+            "idx_audit_log_failures",
+            "action",
+            "result",
+            "created_at",
+            postgresql_where=(result == "FAILURE")
+        ),
+        Index(
+            "idx_audit_log_entity",
+            "entity_type",
+            "entity_id",
+            "created_at",
+            postgresql_where=(entity_id.isnot(None))
+        ),
+        Index(
+            "idx_audit_log_created_at",
+            "created_at"
+        ),
+    )

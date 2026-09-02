@@ -4,13 +4,7 @@ from database.database import get_db_connection
 
 
 def is_new_device(user_id: UUID, device_id: str) -> bool:
-    """
-    Check whether this device has previously been seen for this user.
-
-    Returns:
-        True  -> device has not been seen for this user before
-        False -> device is already known for this user
-    """
+    
 
     connection = get_db_connection()
 
@@ -34,13 +28,7 @@ def is_new_device(user_id: UUID, device_id: str) -> bool:
 
 
 def track_device(user_id: UUID, device_id: str) -> bool:
-    """
-    Track a device for a user.
-
-    Returns:
-        True  -> this was a new device for the user
-        False -> this device was already known
-    """
+    
 
     connection = get_db_connection()
 

@@ -1,35 +1,44 @@
-"""
-Cost tracking utility.
+from datetime import date
+import logging
+import threading
 
-NOTE:
-This implementation uses an estimated token cost because the current
-LLMClient is a placeholder and does not return real token usage.
-
-Replace COST_PER_TOKEN_INR and token usage with actual LLM pricing
-when a production LLM is integrated.
-"""
-
+logger = logging.getLogger("ai-service.cost")
 DAILY_BUDGET_INR = 500.0
-COST_PER_TOKEN_INR = 0.001  # Placeholder value
+# Configure these from the provider pricing before production use.
+INPUT_COST_PER_1K_TOKENS_INR = 0.0
+OUTPUT_COST_PER_1K_TOKENS_INR = 0.0
 
-daily_total_cost = 0.0
+_lock = threading.Lock()
+_day = date.today()
+_daily_total = 0.0
 
 
-def calculate_cost(token_usage: int) -> float:
-    """Calculate estimated cost for one LLM call."""
-    return round(token_usage * COST_PER_TOKEN_INR, 2)
+def calculate_cost(token_usage: int, input_tokens: int | None = None, output_tokens: int | None = None) -> float:
+    if input_tokens is None or output_tokens is None:
+        return round(token_usage / 1000 * INPUT_COST_PER_1K_TOKENS_INR, 4)
+    return round(
+        input_tokens / 1000 * INPUT_COST_PER_1K_TOKENS_INR
+        + output_tokens / 1000 * OUTPUT_COST_PER_1K_TOKENS_INR,
+        4,
+    )
 
 
 def update_daily_cost(cost: float) -> float:
-    """Add cost to today's running total."""
+    global _day, _daily_total
+    with _lock:
+        today = date.today()
+        if today != _day:
+            _day, _daily_total = today, 0.0
+        _daily_total += float(cost)
+        if _daily_total >= DAILY_BUDGET_INR:
+            logger.warning("Daily LLM budget alert: INR %.2f >= INR %.2f", _daily_total, DAILY_BUDGET_INR)
+        return round(_daily_total, 4)
 
-    global daily_total_cost
 
-    daily_total_cost += cost
-
-    if daily_total_cost >= DAILY_BUDGET_INR:
-        print(
-            f"WARNING: Daily LLM budget exceeded! Total: ₹{daily_total_cost:.2f}"
-        )
-
-    return round(daily_total_cost, 2)
+def get_daily_cost() -> float:
+    global _day, _daily_total
+    with _lock:
+        today = date.today()
+        if today != _day:
+            _day, _daily_total = today, 0.0
+        return round(_daily_total, 4)

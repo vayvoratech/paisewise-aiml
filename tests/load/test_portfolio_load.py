@@ -33,6 +33,7 @@ def test_portfolio_batch_load():
 
     # Estimated cost calculation
     # Replace with actual provider token cost after LLM integration
+    
     estimated_cost_per_request = 0.01
 
     total_cost = (

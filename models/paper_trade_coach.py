@@ -3,7 +3,7 @@ from uuid import UUID
 
 
 class PaperTradeCoachRequest(BaseModel):
-    order_id: UUID
+    order_id: int
 
 
 class LessonRecommendation(BaseModel):
@@ -12,6 +12,6 @@ class LessonRecommendation(BaseModel):
 
 
 class PaperTradeCoachResponse(BaseModel):
-    order_id: UUID
+    order_id: int
     learning_point: str
     lesson: LessonRecommendation

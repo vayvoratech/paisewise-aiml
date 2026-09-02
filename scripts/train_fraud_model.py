@@ -1,17 +1,4 @@
-"""
-Week 11 task: train the anomaly detection model on the synthetic
-fraud data from Week 10, evaluate it, tune it, compare it against an
-alternative model, and export the best one.
 
-Steps (matching the task list exactly):
-1. Train IsolationForest(n_estimators=200, contamination=0.05, random_state=42)
-2. Evaluate: precision, recall, F1 on a held-out test set
-3. Tune contamination: 0.01, 0.02, 0.05, 0.10
-4. Train Local Outlier Factor, compare with Isolation Forest
-5. Choose best model, document the decision
-6. Export the chosen model with joblib as fraud_model_v1.pkl
-7. Write a model card
-"""
 
 from pathlib import Path
 

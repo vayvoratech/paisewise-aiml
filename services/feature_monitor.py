@@ -9,11 +9,10 @@ def get_daily_distribution():
 
     query = """
     SELECT
-        quiz_attempts_total,
-        quiz_pass_rate,
-        avg_quiz_score
+        quizzes_taken,
+        quiz_avg_score
     FROM public.user_features
-    WHERE computed_at::date = CURRENT_DATE
+    WHERE updated_at::date = CURRENT_DATE
     """
 
     cursor.execute(query)
@@ -28,15 +27,13 @@ def get_daily_distribution():
     count = len(records)
 
     totals = {
-        "quiz_attempts_total": 0,
-        "quiz_pass_rate": 0,
-        "avg_quiz_score": 0
+        "quizzes_taken": 0,
+        "quiz_avg_score": 0
     }
 
     for record in records:
-        totals["quiz_attempts_total"] += record[0] or 0
-        totals["quiz_pass_rate"] += float(record[1] or 0)
-        totals["avg_quiz_score"] += float(record[2] or 0)
+        totals["quizzes_taken"] += record[0] or 0
+        totals["quiz_avg_score"] += float(record[1] or 0)
 
     distribution = {}
 

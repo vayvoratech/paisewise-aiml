@@ -1,10 +1,3 @@
-# Week 11 task needs a lesson order/prerequisite structure to build a
-# learning path from. There's no lessons table in the schema yet, so
-# this is a simple, manually defined curriculum to work from - a
-# fresher-friendly starting point, not pulled from a database.
-#
-# Each lesson lists which lesson(s) should be completed first.
-
 LESSON_CURRICULUM = [
     {"lesson_name": "resistance", "prerequisites": []},
     {"lesson_name": "volume", "prerequisites": []},

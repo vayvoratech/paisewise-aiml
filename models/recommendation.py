@@ -1,5 +1,6 @@
-from pydantic import BaseModel
 from uuid import UUID
+
+from pydantic import BaseModel
 
 
 class RecommendationRequest(BaseModel):
@@ -28,16 +29,18 @@ class FundRecommendation(BaseModel):
 
 
 class RecommendationResponse(BaseModel):
-    recommendationRunId: UUID
+    recommendationRunId: int
     recommendedFunds: list[FundRecommendation]
+
 
 class RecommendationClickRequest(BaseModel):
     userId: UUID
-    recommendationRunId: UUID
+    recommendationRunId: int
     schemeCode: str
 
+
 class RecommendationClickResponse(BaseModel):
-    clickId: UUID
+    clickId: int
     status: str
 
 

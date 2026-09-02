@@ -1,13 +1,3 @@
-"""
-Bring the application-owned user_features table in line with app/db/schema.py.
-
-This is intentionally additive and idempotent:
-- existing columns are kept
-- only missing Week-6 feature columns are added
-- no application data is deleted
-- nullable fields are used where the pipeline does not have a reliable
-  source value (for example onboarding_goal/city_tier)
-"""
 
 from sqlalchemy import inspect, text
 

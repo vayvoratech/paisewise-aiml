@@ -12,15 +12,7 @@ DEFAULT_WEIGHTS = {
 
 
 def calculate_revised_weights(reviews: List[Dict]) -> Dict[str, float]:
-    """
-    Convert reviewer priorities into normalized weights.
-
-    Each review should contain integer ratings from 1-5 for:
-    return, risk, expense, amc.
-
-    This function deliberately requires real reviewer input. It does not
-    invent internal-team feedback.
-    """
+    
     if not reviews:
         raise ValueError("At least one real reviewer response is required.")
 

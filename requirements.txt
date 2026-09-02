@@ -1,5 +1,4 @@
 fastapi
-<<<<<<< HEAD
 uvicorn[standard]
 pydantic
 SQLAlchemy
@@ -20,11 +19,4 @@ joblib
 redis
 sentry-sdk
 kafka-python
-=======
-uvicorn
-redis
-python-dotenv
-sentry-sdk
-google-genai
-kafka-python
->>>>>>> origin/develop
+apscheduler

@@ -61,9 +61,11 @@ def call_ai_task(**context):
     results = []
     errors = []
 
-    # Task 4 in the task list: call the AI service in batches of 50,
+    # call the AI service in batches of 50,
     # not one user at a time. batch_items() splits the user list into
     # chunks so each chunk can be processed as a batch.
+
+    
     for batch_number, batch in enumerate(batch_items(users, BATCH_SIZE), start=1):
         print(f"Processing batch {batch_number} with {len(batch)} users")
 
@@ -92,8 +94,7 @@ def call_ai_task(**context):
     print(f"AI results received: {len(results)}")
     print(f"AI call errors: {len(errors)}")
 
-    # Task 6 in the task list: only alert Slack if the batch completed
-    # with errors. A fully clean run should stay silent.
+    
     if errors:
         send_batch_error_message(errors)
 

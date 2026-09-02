@@ -15,7 +15,7 @@ def test_record_recommendation_click(monkeypatch):
                 captured["params"] = params
 
             def fetchone(self):
-                return (UUID("33333333-3333-3333-3333-333333333333"),)
+                return (333,)
 
             def close(self):
                 pass
@@ -40,9 +40,7 @@ def test_record_recommendation_click(monkeypatch):
     )
 
     user_id = UUID("11111111-1111-1111-1111-111111111111")
-    recommendation_run_id = UUID(
-        "22222222-2222-2222-2222-222222222222"
-    )
+    recommendation_run_id = 222
     scheme_code = "TEST001"
 
     click_id = recommendation_service.record_recommendation_click(
@@ -51,9 +49,7 @@ def test_record_recommendation_click(monkeypatch):
         scheme_code
     )
 
-    assert click_id == UUID(
-        "33333333-3333-3333-3333-333333333333"
-    )
+    assert click_id == 333
 
     assert captured["params"] == (
         str(recommendation_run_id),
@@ -66,9 +62,7 @@ def test_record_recommendation_click(monkeypatch):
 
 def test_recommendation_click_endpoint(monkeypatch):
 
-    expected_click_id = UUID(
-        "33333333-3333-3333-3333-333333333333"
-    )
+    expected_click_id = 333
 
     def mock_record_click(
         user_id,
@@ -79,9 +73,7 @@ def test_recommendation_click_endpoint(monkeypatch):
             "11111111-1111-1111-1111-111111111111"
         )
 
-        assert recommendation_run_id == UUID(
-            "22222222-2222-2222-2222-222222222222"
-        )
+        assert recommendation_run_id == 222
 
         assert scheme_code == "TEST001"
 
@@ -101,7 +93,7 @@ def test_recommendation_click_endpoint(monkeypatch):
         "/ai/recommendation-click",
         json={
             "userId": "11111111-1111-1111-1111-111111111111",
-            "recommendationRunId": "22222222-2222-2222-2222-222222222222",
+            "recommendationRunId": 222,
             "schemeCode": "TEST001"
         }
     )
@@ -109,6 +101,6 @@ def test_recommendation_click_endpoint(monkeypatch):
     assert response.status_code == 200
 
     assert response.json() == {
-        "clickId": str(expected_click_id),
+        "clickId": expected_click_id,
         "status": "recorded"
     }

@@ -1,10 +1,3 @@
-# Week 7 task: amc_reputation_score is part of the scoring formula.
-# There's no AMC reputation field in mf_schemes, and no reliable public
-# "reputation score" API for AMCs, so this uses a simple manual tier
-# list based on AUM size / how long-established the AMC is. This is a
-# reasonable starting point, not an official rating - it should be
-# reviewed and adjusted by someone with more domain knowledge later.
-
 TOP_TIER_AMCS = {
     "sbi mutual fund",
     "hdfc mutual fund",

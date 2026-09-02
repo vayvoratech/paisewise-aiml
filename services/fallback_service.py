@@ -1,34 +1,50 @@
 from database.database import get_db_connection
 
 
-def get_fallback_definition(term, language="english"):
+def get_fallback_definition(term, language="en"):
+
+    
 
     connection = get_db_connection()
 
-    cursor = connection.cursor()
+    try:
+        cursor = connection.cursor()
 
-    query = """
-        SELECT term, language, definition
-        FROM jargon_terms
-        WHERE LOWER(term) = LOWER(%s)
-        AND language = %s
-    """
+        cursor.execute(
+            """
+            SELECT term, category, difficulty
+            FROM jargon_terms
+            WHERE LOWER(term) = LOWER(%s)
+            LIMIT 1
+            """,
+            (term,),
+        )
 
-    cursor.execute(
-        query,
-        (term, language)
-    )
+        result = cursor.fetchone()
+        cursor.close()
 
-    result = cursor.fetchone()
-
-    cursor.close()
-    connection.close()
+    finally:
+        connection.close()
 
     if result:
+        canonical_term, category, difficulty = result
+
+        explanation = (
+            f"{canonical_term} is a financial term in the "
+            f"{category} category. Its difficulty level is {difficulty}."
+        )
+
         return {
-            "term": result[0],
-            "language": result[1],
-            "explanation": result[2]
+            "term": canonical_term,
+            "language": language,
+            "explanation": explanation,
         }
 
-    return None
+    return {
+        "term": term,
+        "language": language,
+        "explanation": (
+            f"{term} is a financial term. "
+            "A detailed explanation is currently unavailable."
+        ),
+    }

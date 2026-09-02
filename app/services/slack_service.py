@@ -10,10 +10,7 @@ SLACK_WEBHOOK = os.getenv("SLACK_WEBHOOK")
 
 
 def send_batch_error_message(errors):
-    """Task 6: alert Slack only when the batch completes with errors.
-
-    A fully successful run should not send anything to Slack.
-    """
+    
     if not SLACK_WEBHOOK:
         print("Slack Webhook not available.")
         return

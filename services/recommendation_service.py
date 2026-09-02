@@ -8,12 +8,9 @@ from services.recommendation_cache import (
     get_cached_recommendation,
     cache_recommendation,
 )
-def create_recommendation_run(user_id, variant):
-    """
-    Store the A/B variant assigned to the user
-    for this recommendation run.
-    """
 
+
+def create_recommendation_run(user_id, variant):
     connection = get_db_connection()
 
     try:
@@ -48,11 +45,15 @@ def create_recommendation_run(user_id, variant):
         cursor.close()
         connection.close()
 
+
 def recommend_funds(request: RecommendationRequest):
+    # Check whether recommendations are already cached
     cached = get_cached_recommendation(request.userId)
 
     if cached:
         return cached
+
+    # Assign the user to an A/B experiment variant
     variant = assign_recommendation_variant(request.userId)
 
     run_id = create_recommendation_run(
@@ -60,19 +61,24 @@ def recommend_funds(request: RecommendationRequest):
         variant
     )
 
+    # Load the complete fund catalogue
     funds = get_catalogue()
 
     recommendations = []
 
+    # Calculate scores for all funds
     for fund in funds:
 
         score = 0
 
         # Risk profile match
-        if fund.get("risk_level") and fund["risk_level"].lower() == request.riskProfile.lower():
+        if (
+            fund.get("risk_level")
+            and fund["risk_level"].lower() == request.riskProfile.lower()
+        ):
             score += 50
 
-        # Historical returns
+        # Historical one-year return
         score += float(fund.get("return_1y") or 0)
 
         # Long-term investment bonus
@@ -84,17 +90,8 @@ def recommend_funds(request: RecommendationRequest):
             score += 10
 
         recommendations.append({
-
-            # Store complete fund data for formatter
             "fund": fund,
-
-            "score": score,
-
-            "reason": generate_fund_explanation(
-                fund,
-                request.riskProfile
-            )
-
+            "score": score
         })
 
     # Sort by score (highest first)
@@ -103,12 +100,24 @@ def recommend_funds(request: RecommendationRequest):
         reverse=True
     )
 
-    # Return top 3 formatted recommendations
+    # Only take the top 3 before calling the LLM
+    top_recommendations = recommendations[:3]
+
+    # Generate explanations only for the top 3 funds
+    for item in top_recommendations:
+
+        item["reason"] = generate_fund_explanation(
+            item["fund"],
+            request.riskProfile
+        )
+
+    # Format the final API response
     result = format_recommendations(
-        recommendations[:3],
+        top_recommendations,
         run_id
     )
 
+    # Cache the result for future requests
     cache_recommendation(
         request.userId,
         result
@@ -116,14 +125,13 @@ def recommend_funds(request: RecommendationRequest):
 
     return result
 
+
 def record_recommendation_click(
     user_id,
     recommendation_run_id,
     scheme_code
 ):
-    """
-    Record a user click on a recommended fund.
-    """
+    
 
     connection = get_db_connection()
 
@@ -159,16 +167,13 @@ def record_recommendation_click(
         cursor.close()
         connection.close()
 
+
 def has_recommendation_converted(
     user_id,
     recommendation_run_id,
     scheme_code
 ):
-    """
-    Check whether the user eventually invested in the
-    recommended fund after the recommendation was generated.
-    """
-
+    
     connection = get_db_connection()
 
     try:
@@ -177,7 +182,7 @@ def has_recommendation_converted(
         query = """
             SELECT EXISTS (
                 SELECT 1
-                FROM mf_investments mi
+                FROM public.mf_investments mi
                 JOIN recommendation_runs rr
                   ON rr.id = %s
                 WHERE mi.user_id = %s

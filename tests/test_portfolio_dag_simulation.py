@@ -1,14 +1,3 @@
-"""
-Week 5 task: "Test DAG with 10 simulated users. Verify all insights
-generated and stored."
-
-This test does not need a real Airflow scheduler or a real database.
-It calls the same task functions the DAG uses, with the external
-pieces (DB, AI service, Slack) faked out, and checks that:
-  - all 10 simulated users get an AI call
-  - all 10 results get saved
-  - batching of 50 does not break when there are fewer than 50 users
-"""
 
 import importlib.util
 from pathlib import Path
@@ -18,6 +7,8 @@ from pathlib import Path
 # installed Airflow package is also called "airflow". If we import by
 # dotted path, Python gets confused about which "airflow" we mean.
 # Loading by file path sidesteps that name clash completely.
+
+
 _DAG_PATH = (
     Path(__file__).resolve().parents[1]
     / "airflow"

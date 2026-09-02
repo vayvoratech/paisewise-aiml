@@ -5,6 +5,8 @@ from database.database import get_db_connection
 from cache.redis_cache import RedisCache
 from services.llm_client import LLMClient
 
+from utils.content_filter import check_content
+
 from prompts.prompt_templates import (
     PAPER_TRADE_COACH_PROMPT,
     FINANCIAL_GUARDRAILS,
@@ -18,15 +20,7 @@ llm_client = LLMClient()
 
 
 def find_related_lesson(cursor, topic):
-    """
-    Find a lesson related to the coach feedback topic.
-
-    First tries to match the topic directly against lesson content.
-    If no direct match exists, falls back to a lesson related to
-    common paper-trading concepts such as market movement, price
-    movement, and trend.
-    """
-
+   
     # 1. Try direct topic matching
     lesson_query = """
     SELECT
@@ -105,9 +99,7 @@ def get_paper_trade_coach(order_id):
 
     cache_key = f"paper_trade_coach:{order_id}"
 
-    # ---------------------------------------------------------
     # 1. Check Redis cache
-    # ---------------------------------------------------------
 
     cached_result = cache.get(cache_key)
 
@@ -126,32 +118,22 @@ def get_paper_trade_coach(order_id):
 
     try:
 
-        # -----------------------------------------------------
         # 2. Load trade details + market context
-        # -----------------------------------------------------
 
         connection = get_db_connection()
         cursor = connection.cursor()
 
         order_query = """
         SELECT
-            o.id,
-            o.user_id,
-            o.symbol,
-            o.side,
-            o.shares,
-            o.price_per_share,
-            o.total_amount,
-            o.order_type,
-            o.created_at,
-            s.name,
-            s.price,
-            s.change_pct,
-            s.trend_json
-        FROM practice.orders o
-        JOIN practice.stocks s
-            ON o.symbol = s.symbol
-        WHERE o.id = %s
+            id,
+            user_id,
+            symbol,
+            buy_price,
+            sell_price,
+            quantity,
+            created_at
+        FROM public.paper_trades
+        WHERE id = %s
         LIMIT 1
         """
 
@@ -171,27 +153,27 @@ def get_paper_trade_coach(order_id):
             order_id_db,
             user_id,
             symbol,
-            side,
+            buy_price,
+            sell_price,
             shares,
-            price_per_share,
-            total_amount,
-            order_type,
             created_at,
-            stock_name,
-            current_price,
-            change_pct,
-            trend_json,
         ) = order_result
 
-        # -----------------------------------------------------
+        side = "BUY" if buy_price is not None else "SELL"
+        price_per_share = buy_price if buy_price is not None else sell_price
+        total_amount = price_per_share * shares if price_per_share is not None else 0
+        order_type = "PAPER_TRADE"
+        stock_name = symbol
+        current_price = sell_price if sell_price is not None else buy_price
+        change_pct = None
+        trend_json = None
+
         # 3. Load user learning context
-        # -----------------------------------------------------
 
         feature_query = """
         SELECT
-            quiz_attempts_total,
-            quiz_pass_rate,
-            avg_quiz_score
+            quizzes_taken,
+            quiz_avg_score
         FROM public.user_features
         WHERE user_id = %s
         LIMIT 1
@@ -207,20 +189,16 @@ def get_paper_trade_coach(order_id):
         if feature_result:
 
             (
-                quiz_attempts_total,
-                quiz_pass_rate,
-                avg_quiz_score,
+                quizzes_taken,
+                quiz_avg_score,
             ) = feature_result
 
         else:
 
-            quiz_attempts_total = 0
-            quiz_pass_rate = 0
-            avg_quiz_score = 0
+            quizzes_taken = 0
+            quiz_avg_score = 0
 
-        # -----------------------------------------------------
         # 4. Prepare trade context
-        # -----------------------------------------------------
 
         trade_context = f"""
 Order ID: {order_id_db}
@@ -233,9 +211,7 @@ Order Type: {order_type}
 Trade Time: {created_at}
 """
 
-        # -----------------------------------------------------
         # 5. Prepare market context
-        # -----------------------------------------------------
 
         market_context = f"""
 Stock: {stock_name}
@@ -245,19 +221,14 @@ Daily Change: {change_pct}%
 Recent Price Trend: {trend_json}
 """
 
-        # -----------------------------------------------------
         # 6. Prepare user learning context
-        # -----------------------------------------------------
 
         user_learning_context = f"""
-Quiz Attempts: {quiz_attempts_total}
-Quiz Pass Rate: {float(quiz_pass_rate)}
-Average Quiz Score: {float(avg_quiz_score)}
+Quiz Attempts: {quizzes_taken}
+Average Quiz Score: {float(quiz_avg_score)}
 """
 
-        # -----------------------------------------------------
-        # 7. Build educational prompt
-        # -----------------------------------------------------
+   # 7. Build educational prompt
 
         prompt = PAPER_TRADE_COACH_PROMPT.format(
             guardrails=FINANCIAL_GUARDRAILS,
@@ -266,15 +237,18 @@ Average Quiz Score: {float(avg_quiz_score)}
             user_learning_context=user_learning_context,
         )
 
-        # -----------------------------------------------------
+        
         # 8. Generate coach response
-        # -----------------------------------------------------
+        
 
         llm_response = llm_client.generate_response(prompt)
+        filtered = check_content(llm_response)
+        if filtered["blocked"]:
+            raise ValueError("LLM response failed financial content filtering")
 
-        # -----------------------------------------------------
+        
         # 9. Parse LLM JSON
-        # -----------------------------------------------------
+        
 
         try:
 
@@ -307,18 +281,15 @@ Average Quiz Score: {float(avg_quiz_score)}
                 "learning_point or topic."
             )
 
-        # -----------------------------------------------------
         # 10. Find related lesson
-        # -----------------------------------------------------
 
         lesson = find_related_lesson(
             cursor,
             topic
         )
 
-        # -----------------------------------------------------
         # 11. Build final response
-        # -----------------------------------------------------
+        
 
         response = {
             "order_id": str(order_id_db),
@@ -326,9 +297,7 @@ Average Quiz Score: {float(avg_quiz_score)}
             "lesson": lesson,
         }
 
-        # -----------------------------------------------------
         # 12. Cache response by order ID
-        # -----------------------------------------------------
 
         cache.set(
             cache_key,

@@ -43,7 +43,6 @@ def get_market(symbol):
 
 
 def get_configured_market_movements(limit=5):
-    """Fetch the configured NSE/index symbols and return the largest moves."""
     symbols = [
         value.strip()
         for value in os.getenv("MARKET_SYMBOLS", "").split(",")
@@ -67,18 +66,7 @@ def get_configured_market_movements(limit=5):
 
 
 def get_sector_performance():
-    """Fetch NSE sector performance for the day.
-
-    Note: Alpha Vantage's SECTOR endpoint only covers US market sectors,
-    it has no Indian/NSE sector data. So instead of using that endpoint
-    (which would silently return the wrong country's data), this pulls
-    quotes for a configured list of NSE sector index symbols, the same
-    way get_configured_market_movements() does for broad index symbols.
-
-    Configure real NSE sector index symbols in the NSE_SECTOR_SYMBOLS
-    env var, comma separated, e.g.:
-    NSE_SECTOR_SYMBOLS=NIFTY_BANK.NS,NIFTY_IT.NS,NIFTY_AUTO.NS,NIFTY_FMCG.NS,NIFTY_PHARMA.NS
-    """
+    
     symbols = [
         value.strip()
         for value in os.getenv("NSE_SECTOR_SYMBOLS", "").split(",")

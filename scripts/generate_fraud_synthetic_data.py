@@ -1,12 +1,3 @@
-"""
-Week 10 task: "Generate synthetic training data: create 10,000 normal
-transactions and 500 anomaly examples."
-
-Writes data/fraud_synthetic_data.csv with the 7 fraud-model features
-plus a `label` column ("normal" or "anomaly") and a `category` column
-(which of the 5 categories an anomaly belongs to, blank for normal
-rows).
-"""
 
 import csv
 import random

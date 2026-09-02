@@ -1,4 +1,4 @@
-# Week 6 task: city_tier is derived from the user's KYC city.
+#  city_tier is derived from the user's KYC city.
 # This is a simple, common classification used by most Indian fintech
 # apps. It is not official government data, just a practical mapping.
 

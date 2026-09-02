@@ -1,5 +1,3 @@
-
-
 CREATE TABLE IF NOT EXISTS users (
     user_id BIGINT PRIMARY KEY,
     full_name VARCHAR(100) NOT NULL,

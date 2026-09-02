@@ -1,21 +1,10 @@
-"""
-Week 10 task: define fraud/anomaly categories and the feature set for
-PaiseWise, and provide a simple detector built on top of that feature
-set.
-
-This is a rule-based detector, not a trained ML model. The task for
-this week only asks to define the categories, design the feature set,
-and generate + explore synthetic data - training an actual model is
-future work. These rules exist so the synthetic data generator has a
-ground truth to label examples against, and so the feature set can
-already be used for basic detection.
-"""
-
 from typing import Dict, List
 
-# Thresholds used by the rules below. Kept as named constants so they
+# Thresholds used by the rules below.
+#  Kept as named constants so they
 # are easy to find and tune later instead of being buried as magic
 # numbers inside the functions.
+
 LARGE_ORDER_VALUE = 50_000
 NEW_ACCOUNT_DAYS = 7
 VELOCITY_ORDERS_30MIN = 10  # see note in week10_fraud_anomaly_categories.md
@@ -23,13 +12,7 @@ FAILED_MPIN_THRESHOLD = 3
 
 
 def extract_fraud_features(event: Dict) -> Dict:
-    """Pull the 7 fraud-model features out of a raw event dict.
-
-    `event` is expected to already contain these keys (usually built
-    upstream from login/session/order data). This function just makes
-    sure we always return the same 7 keys, with sensible defaults if
-    something is missing.
-    """
+    
     return {
         "device_changed": bool(event.get("device_changed", False)),
         "location_changed": bool(event.get("location_changed", False)),
@@ -42,17 +25,17 @@ def extract_fraud_features(event: Dict) -> Dict:
 
 
 def check_account_takeover(features: Dict) -> bool:
-    """Category 1: new device + large withdrawal same day."""
+    #Category 1: new device + large withdrawal same day.
     return features["device_changed"] and features["order_value"] > LARGE_ORDER_VALUE
 
 
 def check_unusual_trading_velocity(features: Dict) -> bool:
-    """Category 2: too many orders in a short window."""
+    #Category 2: too many orders in a short window.
     return features["orders_last_30min"] >= VELOCITY_ORDERS_30MIN
 
 
 def check_new_account_large_order(features: Dict) -> bool:
-    """Category 3: account under 7 days old placing an order over INR 50,000."""
+    #Category 3: account under 7 days old placing an order over INR 50,000.
     return (
         features["time_since_registration"] < NEW_ACCOUNT_DAYS
         and features["order_value"] > LARGE_ORDER_VALUE
@@ -60,13 +43,13 @@ def check_new_account_large_order(features: Dict) -> bool:
 
 
 def check_impossible_location_change(features: Dict) -> bool:
-    """Category 4: login from a city that is not geographically possible
-    given how recently the user logged in from a different city."""
+    #Category 4: login from a city that is not geographically possible
+    #given how recently the user logged in from a different city.
     return features["location_changed"]
 
 
 def check_failed_mpin_then_large_order(features: Dict) -> bool:
-    """Category 5: multiple failed MPIN attempts, then a big order."""
+    #Category 5: multiple failed MPIN attempts, then a big order.
     return (
         features["failed_mpin_count_24hr"] >= FAILED_MPIN_THRESHOLD
         and features["login_count_today"] >= 1
@@ -84,11 +67,12 @@ CATEGORY_CHECKS = {
 
 
 def evaluate_fraud_event(event: Dict) -> Dict:
-    """Run all 5 category checks against one event.
+    # Run all 5 category checks against one event.
 
-    Returns the extracted features, which categories triggered, and
-    whether the event should be treated as an anomaly overall.
-    """
+    # Returns the extracted features, which categories triggered, and
+    # whether the event should be treated as an anomaly.
+
+
     features = extract_fraud_features(event)
 
     triggered: List[str] = [

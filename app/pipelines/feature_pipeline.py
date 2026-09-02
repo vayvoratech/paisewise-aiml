@@ -108,26 +108,12 @@ def _session_features(sessions):
 
 
 def _get_watermark(db):
-    """Find the last time this pipeline updated any user.
-
-    This is what makes the daily run incremental: instead of touching
-    every single user every day, we only look at users who had new
-    activity after this timestamp.
-    """
+    
     latest = db.query(func.max(UserFeatures.updated_at)).scalar()
     return latest
 
 
 def _get_users_needing_update(db, watermark):
-    """Return the User rows that should be recomputed today.
-
-    A user needs an update if either:
-      - they don't have a user_features row yet (first-time run), or
-      - they had new activity (session/lesson/quiz/trade) after the
-        watermark timestamp.
-    If there's no watermark yet (very first run), every user is
-    processed once to build the initial feature table.
-    """
     if watermark is None:
         return db.query(User).all()
 
@@ -164,14 +150,6 @@ def _get_users_needing_update(db, watermark):
 
 
 def run_behaviour_feature_pipeline(full_refresh=False):
-    """Update behaviour features for users with new activity.
-
-    By default this is incremental: only users with new activity since
-    the pipeline's last run get recomputed (Week 6 task: "incremental
-    update query, daily update, not full refresh"). Pass
-    full_refresh=True to force recomputing every user, e.g. for a
-    one-off backfill.
-    """
     db = SessionLocal()
 
     try:
@@ -182,10 +160,7 @@ def run_behaviour_feature_pipeline(full_refresh=False):
             print("Behaviour feature pipeline: no users had new activity.")
             return 0
 
-        # The 90-day lookback window is still used to CALCULATE each
-        # stat (completion rate, streak, etc need history, not just
-        # today's rows). What's incremental is WHICH users get
-        # touched, not how far back each user's own stats look.
+        
         start_date = datetime.utcnow() - timedelta(days=LOOKBACK_DAYS)
         user_ids = [user.user_id for user in users]
 

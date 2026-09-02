@@ -9,9 +9,7 @@ fraud_model = None
 
 
 def load_fraud_model():
-    """
-    Load the fraud detection model into memory at application startup.
-    """
+    
 
     global fraud_model
 
@@ -29,8 +27,6 @@ def load_fraud_model():
 
 
 def get_fraud_model():
-    """
-    Return the loaded fraud model.
-    """
+    
 
     return fraud_model

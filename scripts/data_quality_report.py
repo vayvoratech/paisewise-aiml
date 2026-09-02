@@ -14,18 +14,17 @@ def run_data_quality_checks():
     cursor = connection.cursor()
 
     try:
-        # ---------------------------------------------------------
+       
         # 1. Total records
-        # ---------------------------------------------------------
+
         cursor.execute("""
             SELECT COUNT(*)
             FROM public.user_features
         """)
         total_records = cursor.fetchone()[0]
 
-        # ---------------------------------------------------------
         # 2. Null checks
-        # ---------------------------------------------------------
+    
         cursor.execute("""
             SELECT
                 COUNT(*) FILTER (WHERE user_id IS NULL),
@@ -44,9 +43,9 @@ def run_data_quality_checks():
             null_computed_at,
         ) = cursor.fetchone()
 
-        # ---------------------------------------------------------
+    
         # 3. Range checks
-        # ---------------------------------------------------------
+        
         cursor.execute("""
             SELECT COUNT(*)
             FROM public.user_features
@@ -70,9 +69,8 @@ def run_data_quality_checks():
         """)
         invalid_avg_score = cursor.fetchone()[0]
 
-        # ---------------------------------------------------------
         # 4. Freshness checks
-        # ---------------------------------------------------------
+        
         cursor.execute("""
             SELECT
                 COUNT(*) FILTER (
@@ -101,9 +99,9 @@ def run_data_quality_checks():
             oldest_age_hours,
         ) = cursor.fetchone()
 
-        # ---------------------------------------------------------
+        
         # 5. Overall status
-        # ---------------------------------------------------------
+        
         has_issues = (
             null_user_id > 0
             or null_quiz_attempts > 0
@@ -118,9 +116,9 @@ def run_data_quality_checks():
 
         status = "FAIL" if has_issues else "PASS"
 
-        # ---------------------------------------------------------
+        
         # 6. Return structured results
-        # ---------------------------------------------------------
+
         return {
             "total_records": total_records,
 

@@ -54,7 +54,7 @@ def test_fund_recommendation_api(monkeypatch):
     response = client.post(
         "/ai/fund-recommend",
         json={
-            "userId": "test-user",
+            "userId": "550e8400-e29b-41d4-a716-446655440000",
             "riskProfile": "Moderate",
             "investmentAmount": 100000,
             "investmentHorizon": 5,
@@ -74,7 +74,7 @@ def test_invalid_risk_profile(monkeypatch):
     response = client.post(
         "/ai/fund-recommend",
         json={
-            "userId": "test-user",
+            "userId": "550e8400-e29b-41d4-a716-446655440000",
             "riskProfile": "Unknown",
             "investmentAmount": 100000,
             "investmentHorizon": 5,

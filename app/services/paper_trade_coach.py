@@ -46,7 +46,8 @@ def extract_trade_context(
 
 
 def evaluate_trade(context: Dict[str, Any]) -> Dict[str, Any]:
-    """Apply the Week 9 rubric and return structured coaching signals."""
+
+    
     checks = []
 
     price = context.get("price")

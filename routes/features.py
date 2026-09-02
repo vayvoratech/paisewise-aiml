@@ -1,9 +1,7 @@
-
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
 from services.feature_service import get_latest_features
-
 
 router = APIRouter()
 
@@ -20,19 +18,15 @@ class FeatureResponse(BaseModel):
     updated_at: str | None = None
 
 
-@router.get(
-    "/features/{userId}",
-    response_model=FeatureResponse
-)
+@router.get("/features/{userId}", response_model=FeatureResponse)
 def fetch_features(userId: str):
-
     result = get_latest_features(userId)
-
     if result is None:
-        raise HTTPException(
-            status_code=404,
-            detail="User features not found"
-        )
-
+        raise HTTPException(status_code=404, detail="User features not found")
     return result
 
+
+@router.post("/ai/features/refresh/{userId}") #telling the actual path.....
+def refresh_features(userId: str):
+   
+    return {"status": "refresh_requested", "userId": userId}

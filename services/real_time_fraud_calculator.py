@@ -6,14 +6,7 @@ def calculate_real_time_fraud_features(
     new_device: bool,
     location_changed: bool,
 ) -> FraudFeatures:
-    """
-    Calculate fraud features from an incoming order and
-    already-resolved user/device/location signals.
-
-    This function intentionally performs no database access
-    so that the calculation can complete within the real-time
-    latency requirement.
-    """
+   
 
     amount = None
 

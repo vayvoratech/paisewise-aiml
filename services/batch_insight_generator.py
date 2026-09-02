@@ -11,7 +11,7 @@ async def generate_single_insight(user_id: str):
         insight = await asyncio.wait_for(
             asyncio.to_thread(
                 get_portfolio_insight,
-                user_id,
+                {"user_id": user_id},
                 "english"
             ),
             timeout=15
