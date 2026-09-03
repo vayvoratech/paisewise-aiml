@@ -3,14 +3,12 @@ from pathlib import Path
 import joblib
 
 
-MODEL_PATH = Path(__file__).resolve().parent.parent / "fraud_model_v1.pkl"
+MODEL_PATH = Path(__file__).resolve().parent.parent / "models" / "fraud_model_v1.pkl"
 
 fraud_model = None
 
 
 def load_fraud_model():
-    
-
     global fraud_model
 
     if not MODEL_PATH.exists():
@@ -27,6 +25,4 @@ def load_fraud_model():
 
 
 def get_fraud_model():
-    
-
     return fraud_model
