@@ -1525,5 +1525,856 @@ POST /news/classify
 GET /news/classified
 ```
 
+
+# 50. Task 4 – Portfolio Analysis
+
+The portfolio analysis module is used to analyze a user's portfolio from different perspectives such as diversification, risk, drawdown, and correlation.
+
+The main portfolio tasks are:
+
+```text
+Portfolio Diversification
+        ↓
+Portfolio Analysis
+        ↓
+Risk Assessment
+        ↓
+Drawdown Calculation
+        ↓
+Correlation Analysis
+        ↓
+Portfolio Health Report
+````
+
+---
+
+# 51. Portfolio Diversification
+
+Run:
+
+```powershell
+python Portfolio_Diversification.py
+```
+
+This checks how diversified the portfolio is.
+
+The analysis considers:
+
+```text
+Sector Concentration
+Single Stock Concentration
+Overall Diversification
+```
+
+The module generates a diversification score from 0–100.
+
+Example:
+
+```text
+Diversification Score: 78/100
+```
+
+---
+
+# 52. Portfolio Analysis
+
+Run:
+
+```powershell
+python portfolio_analyser.py
+```
+
+This performs the main portfolio-level analysis.
+
+The analysis checks:
+
+```text
+Portfolio Holdings
+Sector Exposure
+Stock Concentration
+Portfolio Distribution
+```
+
+---
+
+# 53. Portfolio Risk Assessment
+
+Run:
+
+```powershell
+python risk_assessment.py
+```
+
+This analyzes portfolio risk and compares it with the NIFTY 50 benchmark.
+
+The flow is:
+
+```text
+Portfolio
+    ↓
+Risk Calculation
+    ↓
+NIFTY 50 Comparison
+    ↓
+Risk Result
+```
+
+---
+
+# 54. Portfolio Drawdown Calculation
+
+Run:
+
+```powershell
+python Portfolio_Drawdown_Calculator.py
+```
+
+This calculates the maximum fall in portfolio value from a previous peak.
+
+The calculation flow is:
+
+```text
+Portfolio Values
+      ↓
+Find Highest Value
+      ↓
+Find Lowest Value After Peak
+      ↓
+Calculate Maximum Drawdown
+```
+
+Example:
+
+```text
+Highest Portfolio Value: 123343.54
+Lowest Value: 96428.78
+Maximum Drawdown: 21.82%
+```
+
+---
+
+# 55. Portfolio Correlation Matrix
+
+Run:
+
+```powershell
+python portfolio_correlation_matrix.py
+```
+
+This checks how different assets in the portfolio move in relation to each other.
+
+The analysis helps identify:
+
+```text
+Highly Correlated Assets
+Less Correlated Assets
+Possible Portfolio Concentration
+```
+
+Correlation values are generally interpreted as:
+
+```text
+-1 → Opposite movement
+ 0 → Little or no relationship
++1 → Similar movement
+```
+
+---
+
+# 56. Portfolio Health Report
+
+Run:
+
+```powershell
+python portfolio_health_report.py
+```
+
+This combines the portfolio analysis results into a single health report.
+
+The report combines:
+
+```text
+Diversification
+      +
+Risk
+      +
+Performance
+      +
+Drawdown
+      +
+Correlation
+      ↓
+Portfolio Health Report
+```
+
+---
+
+# 57. Task 5 – Churn Prediction
+
+The churn prediction model is used to identify users who may stop using the PaiseWise application.
+
+The current churn definition is:
+
+```text
+User with 0 app opens
+for 14 consecutive days
+        ↓
+Churned User
+```
+
+The churn prediction flow is:
+
+```text
+User Activity
+      ↓
+Feature Engineering
+      ↓
+XGBoost Model
+      ↓
+Churn Prediction
+      ↓
+High-Risk Users
+```
+
+---
+
+# 58. Churn Features
+
+The churn model uses Day-7 user activity features:
+
+```text
+d7_lesson_count
+d7_quiz_count
+d7_paper_trade_count
+d7_streak_days
+d7_xp_earned
+d7_notification_open_rate
+onboarding_goal_set
+kyc_completed_d7
+first_paper_trade_d7
+```
+
+These features represent the user's early engagement with the application.
+
+---
+
+# 59. Check Churn Dataset
+
+Run:
+
+```powershell
+python churn_data.py
+```
+
+This checks and prepares the churn training data.
+
+The dataset contains:
+
+```text
+User ID
+User Activity Features
+Churned
+```
+
+The target column is:
+
+```text
+churned
+```
+
+Target values:
+
+```text
+0 = Retained
+1 = Churned
+```
+
+---
+
+# 60. Train Churn Model
+
+Run:
+
+```powershell
+python churn_training.py
+```
+
+The churn model uses:
+
+```text
+XGBoost Classifier
+```
+
+The training flow is:
+
+```text
+Churn Dataset
+      ↓
+Training Data
+      ↓
+XGBoost Classifier
+      ↓
+New Churn Model
+      ↓
+Model File
+```
+
+The model is evaluated using:
+
+```text
+Accuracy
+Precision
+Recall
+F1 Score
+```
+
+---
+
+# 61. Validate Churn Model
+
+Run:
+
+```powershell
+python churn_validation.py
+```
+
+This compares the newly trained churn model with the existing model.
+
+The comparison uses:
+
+```text
+F1 Score
+```
+
+Example:
+
+```text
+Current F1 : 100%
+New F1     : 100%
+Improvement: 0%
+```
+
+If the new model is not better, the existing model is kept.
+
+---
+
+# 62. Churn Automated Retraining
+
+Run the complete churn retraining pipeline manually:
+
+```powershell
+python churn_retraining_pipeline.py
+```
+
+The complete flow is:
+
+```text
+Churn Data
+    ↓
+Train New Model
+    ↓
+Validate Model
+    ↓
+Compare With Current Model
+    ↓
+Is New Model Better?
+   /              \
+ Yes              No
+  ↓                ↓
+Deploy          Keep Current
+```
+
+Example final output:
+
+```text
+RETRAINING PIPELINE COMPLETED
+
+Status: rejected
+Decision: KEEP_CURRENT_MODEL
+Improvement: 0.00%
+```
+
+---
+
+# 63. MLflow Tracking
+
+MLflow is used to track model training and validation metrics.
+
+Start MLflow:
+
+```powershell
+mlflow ui
+```
+
+The MLflow dashboard can then be opened using the local URL displayed in the terminal.
+
+The churn experiment is:
+
+```text
+PaiseWise-Churn-Retraining
+```
+
+MLflow can be used to monitor:
+
+```text
+Model Metrics
+Training Information
+Validation Results
+Model Comparison
+```
+
+---
+
+# 64. Monthly Churn Retraining Schedule
+
+The churn retraining requirement is:
+
+```text
+Every Month
+Day: 1
+Time: 3:00 AM
+```
+
+Windows Task Scheduler configuration:
+
+```text
+Task Name:
+PaiseWise Monthly Churn Retraining
+
+Program:
+C:\Users\Malinirani\Desktop\paiseWise-rag\.venv\Scripts\python.exe
+
+Arguments:
+churn_retraining_pipeline.py
+
+Start In:
+C:\Users\Malinirani\Desktop\paiseWise-rag\src
+```
+
+The scheduled flow is:
+
+```text
+1st of Every Month
+        ↓
+3:00 AM
+        ↓
+Churn Retraining Pipeline
+        ↓
+Train Model
+        ↓
+Validate Model
+        ↓
+Log Metrics in MLflow
+        ↓
+Deploy if Better
+```
+
+> Note: The current local churn development dataset does not contain a date/timestamp column. Therefore, the actual "last 90 days of churn outcomes" filter needs to be connected to a timestamped production data source.
+
+---
+
+# 65. Task 6 – Sector Sentiment and Market Context
+
+The market context combines market information with sector-level sentiment.
+
+The flow is:
+
+```text
+Market News
+      ↓
+Sector Classification
+      ↓
+Sentiment Analysis
+      ↓
+Sector Sentiment
+      ↓
+Market Context
+```
+
+Sector sentiment represents the overall sentiment for each sector.
+
+Example:
+
+```text
+IT          → Positive
+Banking     → Neutral
+Pharma      → Positive
+Auto        → Negative
+```
+
+---
+
+# 66. Task 7 – Automated Fund Model Retraining
+
+The fund model retraining pipeline is designed to run weekly.
+
+The requirement is:
+
+```text
+Every Sunday
+2:00 AM
+```
+
+The pipeline performs:
+
+```text
+Latest Fund Data
+      ↓
+Recalculate Scoring
+      ↓
+Update Model
+      ↓
+Validate New Model
+      ↓
+Compare With Current Model
+      ↓
+Improvement > 2% ?
+      /          \
+    Yes           No
+     ↓             ↓
+Deploy New      Keep Current
+Model           Model
+```
+
+---
+
+# 67. Run Fund Data Pipeline
+
+Run:
+
+```powershell
+python fund_data.py
+```
+
+This retrieves and prepares the latest fund performance data used by the scoring system.
+
+The flow is:
+
+```text
+Latest Fund Data
+      ↓
+Fund Performance
+      ↓
+Prepared Fund Dataset
+```
+
+---
+
+# 68. Run Fund Scoring
+
+Run:
+
+```powershell
+python fund_scoring.py
+```
+
+This recalculates fund scores using recent performance information.
+
+The flow is:
+
+```text
+Fund Performance
+      ↓
+Scoring Factors
+      ↓
+Updated Weights
+      ↓
+Fund Score
+```
+
+---
+
+# 69. Validate Fund Model
+
+Run:
+
+```powershell
+python model_validation.py
+```
+
+This compares the new fund model with the currently deployed model.
+
+The deployment condition is:
+
+```text
+Improvement > 2%
+```
+
+If the improvement is greater than 2%:
+
+```text
+Deploy New Model
+```
+
+Otherwise:
+
+```text
+Keep Current Model
+```
+
+---
+
+# 70. Fund Model Deployment
+
+Run:
+
+```powershell
+python model_deployment.py
+```
+
+This performs the final deployment decision.
+
+If the new model is better:
+
+```text
+New Model Better
+      ↓
+Deploy New Model
+```
+
+If the new model is not better:
+
+```text
+New Model Not Better
+      ↓
+Keep Current Model
+```
+
+---
+
+# 71. Complete Fund Retraining Pipeline
+
+Run the complete pipeline manually:
+
+```powershell
+python retrain_pipeline.py
+```
+
+The complete workflow is:
+
+```text
+Fund Data
+   ↓
+Fund Scoring
+   ↓
+Model Validation
+   ↓
+Model Comparison
+   ↓
+Deployment Decision
+```
+
+---
+
+# 72. Weekly Fund Retraining Schedule
+
+The required schedule is:
+
+```text
+Every Sunday
+2:00 AM
+```
+
+Windows Task Scheduler configuration:
+
+```text
+Task Name:
+PaiseWise Weekly Fund Retraining
+
+Program:
+C:\Users\Malinirani\Desktop\paiseWise-rag\.venv\Scripts\python.exe
+
+Arguments:
+retrain_pipeline.py
+
+Start In:
+C:\Users\Malinirani\Desktop\paiseWise-rag\src
+```
+
+The scheduled flow is:
+
+```text
+Every Sunday
+      ↓
+2:00 AM
+      ↓
+Fund Retraining Pipeline
+      ↓
+Fetch Latest Data
+      ↓
+Recalculate Scores
+      ↓
+Validate Model
+      ↓
+Check Improvement
+      ↓
+Deploy if Improvement > 2%
+```
+
+---
+
+# 73. Complete Remaining Task Commands
+
+Run the following commands from the `src` directory.
+
+## Portfolio
+
+```powershell
+python Portfolio_Diversification.py
+python portfolio_analyser.py
+python risk_assessment.py
+python Portfolio_Drawdown_Calculator.py
+python portfolio_correlation_matrix.py
+python portfolio_health_report.py
+```
+
+## Churn
+
+```powershell
+python churn_data.py
+python churn_training.py
+python churn_validation.py
+python churn_retraining_pipeline.py
+```
+
+## MLflow
+
+```powershell
+mlflow ui
+```
+
+## Fund Retraining
+
+```powershell
+python fund_data.py
+python fund_scoring.py
+python model_validation.py
+python model_deployment.py
+python retrain_pipeline.py
+```
+
+---
+
+# 74. Overall Internship Task Flow
+
+The remaining AI/ML tasks can be viewed as:
+
+```text
+PaiseWise
+   │
+   ├── RAG Assistant
+   │      ↓
+   │   Financial Education
+   │
+   ├── Market Context
+   │      ↓
+   │   News + Sector Sentiment
+   │
+   ├── Portfolio Analysis
+   │      ↓
+   │   Diversification + Risk + Health
+   │
+   ├── Churn Prediction
+   │      ↓
+   │   XGBoost + Automated Retraining
+   │
+   └── Fund Retraining
+          ↓
+       Scoring + Validation + Deployment
+```
+
+---
+
+# 75. Final Development Checklist
+
+Before considering the complete AI/ML workflow ready, verify:
+
+```text
+[ ] RAG knowledge base is populated
+[ ] ChromaDB is working
+[ ] Retrieval testing completed
+[ ] Re-ranking tested
+[ ] Guardrails tested
+[ ] FastAPI running
+[ ] Market context working
+[ ] News ingestion working
+[ ] Sector classification working
+[ ] Portfolio analysis tested
+[ ] Portfolio health report tested
+[ ] Churn model trained
+[ ] Churn model validated
+[ ] MLflow tracking available
+[ ] Monthly churn schedule configured
+[ ] Fund scoring tested
+[ ] Fund model validated
+[ ] Weekly fund schedule configured
+[ ] Git changes committed and pushed
+```
+
+---
+
+# 76. Final Run Order
+
+For a complete local verification, use:
+
+```powershell
+cd paiseWise-rag
+
+.venv\Scripts\activate
+
+cd src
+
+# Check RAG database
+python check_database.py
+
+# Test retrieval
+python retrieval_test.py
+
+# Test reranking
+python test_reranker.py
+
+# Evaluate retrieval
+python evaluate_retrieval.py
+
+# Test news
+python news_ingestion.py
+python news_classifier.py
+
+# Test portfolio
+python Portfolio_Diversification.py
+python portfolio_analyser.py
+python risk_assessment.py
+python Portfolio_Drawdown_Calculator.py
+python portfolio_correlation_matrix.py
+python portfolio_health_report.py
+
+# Test churn
+python churn_data.py
+python churn_training.py
+python churn_validation.py
+python churn_retraining_pipeline.py
+
+# Test fund retraining
+python fund_data.py
+python fund_scoring.py
+python model_validation.py
+python model_deployment.py
+python retrain_pipeline.py
+
+# Start API
+uvicorn main:app --reload
+```
+
+Then open:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+The API endpoints can be tested from Swagger UI.
+
+```
+```
+
 This starts the PaiseWise API from the existing ChromaDB knowledge base through the RAG and market-news pipeline.
 
