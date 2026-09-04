@@ -20,74 +20,33 @@ llm_client = LLMClient()
 
 
 def find_related_lesson(cursor, topic):
-   
-    # 1. Try direct topic matching
-    lesson_query = """
-    SELECT
-        id,
-        title
-    FROM learn.lessons
-    WHERE
-        LOWER(title) LIKE LOWER(%s)
-        OR LOWER(chapter) LIKE LOWER(%s)
-        OR LOWER(segments_json) LIKE LOWER(%s)
-        OR LOWER(jargon_words_json) LIKE LOWER(%s)
-    ORDER BY chapter_no, index
-    LIMIT 1
-    """
+    from app.config.lesson_curriculum import LESSON_CURRICULUM
 
-    topic_pattern = f"%{topic}%"
+    topic_text = str(topic).strip().lower()
 
-    cursor.execute(
-        lesson_query,
-        (
-            topic_pattern,
-            topic_pattern,
-            topic_pattern,
-            topic_pattern,
-        )
-    )
+    # Try to find the closest lesson from the existing curriculum.
+    for lesson in LESSON_CURRICULUM:
+        lesson_name = lesson["lesson_name"]
+        readable_name = lesson_name.replace("_", " ")
 
-    result = cursor.fetchone()
+        if topic_text in readable_name or readable_name in topic_text:
+            return {
+                "id": lesson_name,
+                "title": readable_name.title(),
+            }
 
-    if result:
-        return {
-            "id": result[0],
-            "title": result[1],
-        }
+    # Fallback for paper-trading concepts.
+    for lesson in LESSON_CURRICULUM:
+        if lesson["lesson_name"] == "paper_trading_intro":
+            return {
+                "id": lesson["lesson_name"],
+                "title": "Paper Trading Intro",
+            }
 
-    # 2. Fallback for paper-trading concepts
-    fallback_query = """
-    SELECT
-        id,
-        title
-    FROM learn.lessons
-    WHERE
-        LOWER(title) LIKE '%price movement%'
-        OR LOWER(chapter) LIKE '%market movement%'
-        OR LOWER(segments_json) LIKE '%market movement%'
-        OR LOWER(jargon_words_json) LIKE '%price movement%'
-        OR LOWER(jargon_words_json) LIKE '%trend%'
-    ORDER BY chapter_no, index
-    LIMIT 1
-    """
-
-    cursor.execute(fallback_query)
-
-    result = cursor.fetchone()
-
-    if result:
-        return {
-            "id": result[0],
-            "title": result[1],
-        }
-
-    # 3. No related lesson available
     return {
         "id": "",
         "title": "No related lesson found",
     }
-
 
 def get_paper_trade_coach(order_id):
     """
