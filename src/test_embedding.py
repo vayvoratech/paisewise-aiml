@@ -1,10 +1,13 @@
-from embeddings import create_embedding
+from .embeddings import create_embedding
 
 
-text = "A mutual fund collects money from different investors and invests it in financial assets."
+def test_embedding():
+    text = "What is a mutual fund?"
 
-embedding = create_embedding(text)
+    embedding = create_embedding(text)
 
-print("Embedding created successfully.")
-print("Number of values:", len(embedding))
-print("First 5 values:", embedding[:5])
+    assert embedding is not None
+    assert len(embedding) > 0
+
+    print("\nEmbedding created successfully.")
+    print("Embedding length:", len(embedding))
