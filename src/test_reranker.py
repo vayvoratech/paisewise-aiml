@@ -1,76 +1,115 @@
 import chromadb
 
-from embeddings import create_embedding
-from reranker import rerank_results
+from pathlib import Path
+
+from .embeddings import create_embedding
+from .reranker import rerank_results
+
+# --------------------------------------------------
+# Project paths
+# --------------------------------------------------
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+CHROMA_DB_PATH = PROJECT_ROOT / "chroma_db"
 
 
-# Connect to our ChromaDB database
-client = chromadb.PersistentClient(
-    path="../chroma_db"
-)
+# --------------------------------------------------
+# Reranker Test
+# --------------------------------------------------
 
+def test_reranker():
 
-# Open the PaiseWise knowledge base
-collection = client.get_collection(
-    name="paisewise_knowledge_base"
-)
+    print("\n" + "=" * 60)
+    print("PaiseWise Reranker Test")
+    print("=" * 60)
 
+    # Connect to ChromaDB
+    client = chromadb.PersistentClient(
+        path=str(CHROMA_DB_PATH)
+    )
 
-print("Documents available:", collection.count())
+    # Get PaiseWise knowledge collection
+    collection = client.get_collection(
+        name="paisewise_knowledge_base"
+    )
 
+    # Check documents
+    document_count = collection.count()
 
-# Question to test
-question = "What is SIP?"
+    print("\nDocuments available:", document_count)
 
+    assert document_count > 0, (
+        "PaiseWise knowledge base is empty."
+    )
 
-# Convert the question into an embedding
-question_embedding = create_embedding(question)
+    # --------------------------------------------------
+    # Test question
+    # --------------------------------------------------
 
+    question = "What is SIP?"
 
-# Retrieve available documents
-number_to_retrieve = min(10, collection.count())
+    print("\nQuestion:", question)
 
-results = collection.query(
-    query_embeddings=[question_embedding],
-    n_results=number_to_retrieve
-)
+    # Create embedding
+    question_embedding = create_embedding(question)
 
+    # Retrieve top 10 documents
+    number_to_retrieve = min(
+        10,
+        document_count
+    )
 
-documents = results["documents"][0]
+    results = collection.query(
+        query_embeddings=[question_embedding],
+        n_results=number_to_retrieve
+    )
 
+    documents = results["documents"][0]
 
-print("\nQuestion:", question)
+    print(
+        "\nDocuments retrieved:",
+        len(documents)
+    )
 
-print("\nInitial retrieved results:")
-print("Number of results:", len(documents))
+    assert len(documents) > 0, (
+        "No documents were retrieved from ChromaDB."
+    )
 
+    # --------------------------------------------------
+    # Reranking
+    # --------------------------------------------------
 
-for i, document in enumerate(
-    documents,
-    start=1
-):
+    ranked_results = rerank_results(
+        question,
+        documents
+    )
 
-    print(f"\nInitial Result {i}:")
-    print(document[:300])
+    print(
+        "\nDocuments after reranking:",
+        len(ranked_results)
+    )
 
+    assert ranked_results, (
+        "Reranker returned no results."
+    )
 
-# Re-rank the retrieved documents
-ranked_results = rerank_results(
-    question,
-    documents
-)
+    # --------------------------------------------------
+    # Display results
+    # --------------------------------------------------
 
+    print("\n" + "-" * 60)
+    print("RERANKED RESULTS")
+    print("-" * 60)
 
-print("\n" + "=" * 60)
-print("Re-ranked results")
-print("=" * 60)
+    for number, (document, score) in enumerate(
+        ranked_results,
+        start=1
+    ):
+        print(f"\nRank {number}")
+        print(f"Score: {score}")
+        print(f"Document: {document[:300]}")
 
-
-for number, (document, score) in enumerate(
-    ranked_results,
-    start=1
-):
-
-    print(f"\nResult {number}")
-    print("Relevance score:", round(score, 4))
-    print("Content:", document[:300])
+    print("\n" + "=" * 60)
+    print("Reranker test completed successfully.")
+    print("=" * 60)
