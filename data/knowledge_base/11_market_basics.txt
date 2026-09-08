@@ -1,0 +1,20 @@
+MARKET BASICS
+Development RAG Knowledge Source
+
+Financial markets are systems in which financial assets can be issued, bought, and sold.
+
+The primary market is where securities are issued to investors. An initial public offering (IPO) is one example. The secondary market is where existing securities are traded among market participants.
+
+Market prices are influenced by buying and selling interest. Changes in expectations can alter demand and supply.
+
+A market index is a measure designed to represent the performance of a selected group of securities or a defined market segment.
+
+A bull market commonly describes a period of broadly rising prices, while a bear market commonly describes a period of broadly declining prices.
+
+Interest-rate changes can affect borrowing costs, bond valuations, company financing conditions, and investor expectations. Inflation, employment, economic growth, and other indicators can influence markets.
+
+Markets can experience periods of rapid price movement. Volatility can increase around economic events, corporate announcements, geopolitical developments, or changes in expectations.
+
+New information can cause investors to revise expectations, which can affect prices.
+
+Market explanations describe general mechanisms. They are not predictions of future market movements or recommendations to trade.

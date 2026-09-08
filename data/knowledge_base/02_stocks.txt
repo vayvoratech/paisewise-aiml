@@ -1,0 +1,16 @@
+STOCKS
+Development RAG Knowledge Source
+
+A stock, also called an equity share, generally represents an ownership interest in a company. Some shares may provide voting rights and some companies may distribute dividends.
+
+Stock prices can change because of company performance, earnings expectations, economic conditions, investor sentiment, news, interest rates, industry developments, and supply and demand.
+
+Market capitalization is commonly calculated as market price per share multiplied by shares outstanding. It is often used to describe the size of a publicly traded company.
+
+A dividend is a distribution made by a company to eligible shareholders. Companies are not necessarily required to pay dividends, and payments can change or stop.
+
+If a security is sold for more than its purchase price, the difference may represent a capital gain before applicable costs and taxes. Selling below the purchase price may result in a capital loss.
+
+Volatility describes the degree to which an asset's price fluctuates. A stock can be affected by company-specific risks such as competition, management decisions, regulation, debt, and product demand, as well as broad market risk.
+
+Explaining stocks is educational. Identifying a specific stock as suitable for a particular person would be personalized investment advice and is outside the scope of this knowledge base.

@@ -1,0 +1,18 @@
+COMPOUNDING AND RETURNS
+Development RAG Knowledge Source
+
+Investment return can include income such as interest or dividends and changes in the market value of an asset.
+
+Compounding occurs when returns earned on an investment are reinvested and future returns are then earned on both the original amount and accumulated returns.
+
+If an amount grows by a positive percentage and gains remain invested, later growth is calculated on the larger accumulated amount. This illustrates why time and reinvestment can matter.
+
+An annualized return expresses growth over a period in a form that can be compared across periods using an appropriate compounding method.
+
+Nominal return does not adjust for inflation. Real return attempts to account for inflation's effect on purchasing power.
+
+For investments with changing returns, the average of periodic returns does not necessarily equal the actual compounded growth rate. Negative returns reduce the base on which future gains compound, so recovering from a loss can require a larger percentage gain than the percentage loss.
+
+Fees, transaction costs, and applicable taxes can reduce the amount that remains invested and affect realized outcomes.
+
+Examples are conceptual and are not forecasts or promises of future returns.
