@@ -1,0 +1,201 @@
+term,category,difficulty
+Mutual Fund,Investment,Beginner
+SIP,Investment,Beginner
+NAV,Mutual Fund,Beginner
+Equity,Stock Market,Beginner
+Debt Fund,Mutual Fund,Beginner
+ELSS,Tax Saving,Intermediate
+Index Fund,Mutual Fund,Beginner
+Large Cap,Stock Market,Beginner
+Mid Cap,Stock Market,Beginner
+Small Cap,Stock Market,Beginner
+Dividend,Stock Market,Beginner
+Portfolio,Investment,Beginner
+Asset Allocation,Investment,Intermediate
+Risk Profile,Investment,Beginner
+CAGR,Returns,Intermediate
+Inflation,Economy,Beginner
+Liquidity,Banking,Beginner
+Bond,Fixed Income,Beginner
+ETF,Mutual Fund,Intermediate
+Capital Gain,Taxation,Intermediate
+Compound Interest,Banking,Beginner
+Simple Interest,Banking,Beginner
+Principal Amount,Banking,Beginner
+Annual Return,Returns,Beginner
+ROI,Returns,Beginner
+Market Capitalization,Stock Market,Intermediate
+Blue Chip Stock,Stock Market,Intermediate
+Bull Market,Stock Market,Beginner
+Bear Market,Stock Market,Beginner
+Volatility,Stock Market,Intermediate
+Diversification,Investment,Beginner
+Expense Ratio,Mutual Fund,Intermediate
+Exit Load,Mutual Fund,Intermediate
+Lock-in Period,Investment,Beginner
+Redemption,Mutual Fund,Beginner
+Lump Sum,Investment,Beginner
+Asset Class,Investment,Intermediate
+Treasury Bill,Fixed Income,Intermediate
+Government Bond,Fixed Income,Beginner
+Corporate Bond,Fixed Income,Intermediate
+Credit Rating,Fixed Income,Intermediate
+Yield,Returns,Intermediate
+Coupon Rate,Fixed Income,Intermediate
+Face Value,Fixed Income,Beginner
+Maturity Date,Fixed Income,Beginner
+Demat Account,Stock Market,Beginner
+Trading Account,Stock Market,Beginner
+Broker,Stock Market,Beginner
+Stock Exchange,Stock Market,Beginner
+NSE,Stock Market,Beginner
+BSE,Stock Market,Beginner
+Sensex,Stock Market,Beginner
+Nifty 50,Stock Market,Beginner
+IPO,Stock Market,Beginner
+FPO,Stock Market,Intermediate
+Rights Issue,Stock Market,Intermediate
+Bonus Shares,Stock Market,Beginner
+Stock Split,Stock Market,Beginner
+Buyback,Stock Market,Intermediate
+Dividend Yield,Stock Market,Intermediate
+P/E Ratio,Stock Market,Intermediate
+EPS,Stock Market,Intermediate
+Book Value,Stock Market,Intermediate
+Intrinsic Value,Stock Market,Advanced
+Market Price,Stock Market,Beginner
+Margin Trading,Stock Market,Advanced
+Futures,Derivatives,Advanced
+Options,Derivatives,Advanced
+Call Option,Derivatives,Advanced
+Put Option,Derivatives,Advanced
+Strike Price,Derivatives,Advanced
+Premium,Derivatives,Intermediate
+Hedging,Derivatives,Advanced
+Arbitrage,Derivatives,Advanced
+Stop Loss,Trading,Beginner
+Limit Order,Trading,Beginner
+Market Order,Trading,Beginner
+Short Selling,Trading,Advanced
+Forex,Currency,Intermediate
+Exchange Rate,Currency,Beginner
+Currency Risk,Currency,Intermediate
+GDP,Economy,Beginner
+Fiscal Deficit,Economy,Intermediate
+Monetary Policy,Economy,Intermediate
+Repo Rate,Banking,Beginner
+Reverse Repo Rate,Banking,Intermediate
+CRR,Banking,Intermediate
+SLR,Banking,Intermediate
+NEFT,Banking,Beginner
+RTGS,Banking,Beginner
+IMPS,Banking,Beginner
+UPI,Banking,Beginner
+Fixed Deposit,Banking,Beginner
+Recurring Deposit,Banking,Beginner
+Savings Account,Banking,Beginner
+Current Account,Banking,Beginner
+Credit Score,Banking,Beginner
+EMI,Loans,Beginner
+Home Loan,Loans,Beginner
+Personal Loan,Loans,Beginner
+Mortgage,Loans,Intermediate
+Systematic Withdrawal Plan,Investment,Intermediate
+SWP,Investment,Intermediate
+Systematic Transfer Plan,Investment,Intermediate
+STP,Investment,Intermediate
+Asset Under Management,Mutual Fund,Intermediate
+AUM,Mutual Fund,Intermediate
+Fund Manager,Mutual Fund,Beginner
+Fund House,Mutual Fund,Beginner
+AMC,Mutual Fund,Beginner
+Scheme Name,Mutual Fund,Beginner
+Scheme Code,Mutual Fund,Intermediate
+ISIN,Mutual Fund,Intermediate
+Direct Plan,Mutual Fund,Intermediate
+Regular Plan,Mutual Fund,Intermediate
+Growth Option,Mutual Fund,Beginner
+IDCW,Mutual Fund,Intermediate
+Benchmark,Mutual Fund,Intermediate
+Tracking Error,Mutual Fund,Advanced
+Tracking Difference,Mutual Fund,Advanced
+Rolling Return,Returns,Intermediate
+Absolute Return,Returns,Beginner
+Point-to-Point Return,Returns,Beginner
+Annualized Return,Returns,Intermediate
+Total Return,Returns,Intermediate
+Real Return,Returns,Intermediate
+Risk-Adjusted Return,Returns,Advanced
+Sharpe Ratio,Risk,Advanced
+Sortino Ratio,Risk,Advanced
+Standard Deviation,Risk,Intermediate
+Beta,Risk,Advanced
+Alpha,Risk,Advanced
+R-Squared,Risk,Advanced
+Drawdown,Risk,Advanced
+Maximum Drawdown,Risk,Advanced
+Downside Risk,Risk,Advanced
+Credit Risk,Risk,Intermediate
+Interest Rate Risk,Risk,Intermediate
+Liquidity Risk,Risk,Intermediate
+Concentration Risk,Risk,Intermediate
+Reinvestment Risk,Risk,Advanced
+Default Risk,Risk,Intermediate
+Market Risk,Risk,Beginner
+Systematic Risk,Risk,Intermediate
+Unsystematic Risk,Risk,Intermediate
+Risk Premium,Risk,Intermediate
+Risk-Free Rate,Risk,Intermediate
+Volatility Index,Stock Market,Advanced
+Circuit Breaker,Stock Market,Intermediate
+Market Breadth,Stock Market,Advanced
+Advance Decline Ratio,Stock Market,Advanced
+Free Float Market Capitalization,Stock Market,Advanced
+Index Weight,Stock Market,Advanced
+Index Rebalancing,Stock Market,Intermediate
+Sector Rotation,Stock Market,Advanced
+Market Correction,Stock Market,Beginner
+Market Crash,Stock Market,Beginner
+All-Time High,Stock Market,Beginner
+All-Time Low,Stock Market,Beginner
+52-Week High,Stock Market,Beginner
+52-Week Low,Stock Market,Beginner
+Volume,Stock Market,Beginner
+Delivery Volume,Stock Market,Intermediate
+Liquidity Ratio,Stock Market,Intermediate
+Promoter Holding,Stock Market,Intermediate
+Public Holding,Stock Market,Intermediate
+Pledge of Shares,Stock Market,Advanced
+Insider Trading,Regulation,Intermediate
+Insider Holding,Stock Market,Intermediate
+Promoter Buying,Stock Market,Intermediate
+Corporate Action,Stock Market,Intermediate
+Dividend Payout Ratio,Stock Market,Intermediate
+Dividend Coverage Ratio,Stock Market,Advanced
+Price to Book Ratio,Stock Market,Intermediate
+Price to Sales Ratio,Stock Market,Advanced
+EV/EBITDA,Stock Market,Advanced
+Enterprise Value,Stock Market,Advanced
+Debt to Equity Ratio,Stock Market,Intermediate
+Current Ratio,Stock Market,Intermediate
+Return on Equity,Stock Market,Intermediate
+Return on Capital Employed,Stock Market,Advanced
+Operating Margin,Stock Market,Intermediate
+Net Profit Margin,Stock Market,Intermediate
+Gross Profit Margin,Stock Market,Intermediate
+Revenue Growth,Stock Market,Beginner
+Earnings Growth,Stock Market,Intermediate
+Free Cash Flow,Stock Market,Advanced
+Operating Cash Flow,Stock Market,Advanced
+Cash Flow Statement,Accounting,Intermediate
+Balance Sheet,Accounting,Beginner
+Income Statement,Accounting,Beginner
+Profit Before Tax,Accounting,Intermediate
+Profit After Tax,Accounting,Beginner
+Depreciation,Accounting,Intermediate
+Amortization,Accounting,Intermediate
+Working Capital,Accounting,Intermediate
+Contingent Liability,Accounting,Advanced
+Book Closure,Corporate Action,Advanced
+Record Date,Corporate Action,Intermediate
+Ex-Dividend Date,Corporate Action,Intermediate

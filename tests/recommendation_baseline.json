@@ -1,0 +1,13 @@
+{
+    "moderate_user_profile": {
+        "userId": "550e8400-e29b-41d4-a716-446655440001",
+        "riskProfile": "Moderate",
+        "investmentAmount": 50000,
+        "investmentHorizon": 3,
+        "recommendedFunds": [
+            "Parag Parikh Flexi Cap Fund",
+            "Axis Bluechip Fund",
+            "Nippon India Small Cap Fund"
+        ]
+    }
+}

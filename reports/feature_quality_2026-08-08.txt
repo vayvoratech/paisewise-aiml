@@ -1,0 +1,30 @@
+========== FEATURE STORE DATA QUALITY REPORT ==========
+
+Report date: 2026-08-08
+Overall status: FAIL
+
+--- RECORD COUNT ---
+Total records: 1
+
+--- COMPLETENESS / NULL CHECKS ---
+user_id: 0 nulls
+quiz_attempts_total: 0 nulls
+quiz_pass_rate: 0 nulls
+avg_quiz_score: 0 nulls
+computed_at: 0 nulls
+
+--- VALIDITY / RANGE CHECKS ---
+Invalid quiz_attempts_total: 0
+Invalid quiz_pass_rate: 0
+Invalid avg_quiz_score: 0
+
+--- FRESHNESS CHECK ---
+Stale records: 1
+Missing timestamps: 0
+Oldest record age: 119.60 hours
+Freshness threshold: 24 hours
+
+--- RESULT ---
+STATUS: FAIL
+
+========================================================
