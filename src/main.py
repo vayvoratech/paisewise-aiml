@@ -9,15 +9,12 @@ import time
 # --------------------------------------------------
 # Existing PaiseWise modules
 # --------------------------------------------------
+from news_classifier import classify_article
 
 from embeddings import create_embedding
 from reranker import rerank_results
 from guardrails import is_guardrail_question
 from market_context import create_market_context
-
-# --------------------------------------------------
-# News modules
-# --------------------------------------------------
 
 from news_ingestion import fetch_market_news
 from news_classifier import classify_article
