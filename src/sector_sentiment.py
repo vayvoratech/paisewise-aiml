@@ -1,7 +1,8 @@
 # PaiseWise Sector Sentiment
 
-from sentiment_analyser import analyze_sentiment
+from collections import defaultdict
 
+from .sentiment_analyser import analyze_sentiment
 
 def calculate_sector_sentiment(articles):
 
