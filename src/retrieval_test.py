@@ -1,17 +1,23 @@
+
 import chromadb
-from embeddings import create_embedding
+from pathlib import Path
+
+from .embeddings import create_embedding
 
 
-# Connect to the existing ChromaDB database
-client = chromadb.PersistentClient(path="../chroma_db")
+# ==================================================
+# Project Paths
+# ==================================================
 
-# Open the PaiseWise knowledge base
-collection = client.get_collection(
-    name="paisewise_knowledge_base"
-)
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+CHROMA_DB_PATH = PROJECT_ROOT / "chroma_db"
 
 
-# Questions used for testing
+# ==================================================
+# Test Questions
+# ==================================================
+
 questions = [
     "What is a mutual fund?",
     "What is SIP?",
@@ -36,27 +42,117 @@ questions = [
 ]
 
 
-# Test every question
-for number, question in enumerate(questions, start=1):
+# ==================================================
+# Retrieval Test
+# ==================================================
 
-    # Convert the question into an embedding
-    question_embedding = create_embedding(question)
-
-    # Search ChromaDB for similar content
-    results = collection.query(
-        query_embeddings=[question_embedding],
-        n_results=3
-    )
+def test_retrieval():
 
     print("\n" + "=" * 60)
-    print(f"Question {number}: {question}")
+    print("PAISEWISE RETRIEVAL TEST")
     print("=" * 60)
 
-    documents = results["documents"][0]
-    distances = results["distances"][0]
+    # --------------------------------------------------
+    # Connect to ChromaDB
+    # --------------------------------------------------
 
-    for i, document in enumerate(documents, start=1):
-        print(f"\nResult {i}")
-        print("Similarity distance:", distances[i - 1])
-        print("Retrieved content:")
-        print(document[:500])
+    client = chromadb.PersistentClient(
+        path=str(CHROMA_DB_PATH)
+    )
+
+    collection = client.get_collection(
+        name="paisewise_knowledge_base"
+    )
+
+    document_count = collection.count()
+
+    print(
+        "\nDocuments available:",
+        document_count
+    )
+
+    # --------------------------------------------------
+    # Make sure knowledge base is not empty
+    # --------------------------------------------------
+
+    assert document_count > 0, (
+        "PaiseWise knowledge base is empty."
+    )
+
+    # --------------------------------------------------
+    # Test every question
+    # --------------------------------------------------
+
+    for number, question in enumerate(
+        questions,
+        start=1
+    ):
+
+        question_embedding = create_embedding(
+            question
+        )
+
+        results = collection.query(
+            query_embeddings=[
+                question_embedding
+            ],
+            n_results=min(
+                3,
+                document_count
+            )
+        )
+
+        documents = results["documents"][0]
+
+        distances = results["distances"][0]
+
+        # --------------------------------------------------
+        # Validate retrieval
+        # --------------------------------------------------
+
+        assert len(documents) > 0, (
+            f"No documents retrieved for: {question}"
+        )
+
+        print("\n" + "=" * 60)
+
+        print(
+            f"Question {number}: {question}"
+        )
+
+        print("=" * 60)
+
+        for i, document in enumerate(
+            documents,
+            start=1
+        ):
+
+            print(
+                f"\nResult {i}"
+            )
+
+            print(
+                "Similarity distance:",
+                round(
+                    distances[i - 1],
+                    4
+                )
+            )
+
+            print(
+                "Retrieved content:"
+            )
+
+            print(
+                document[:500]
+            )
+
+    # --------------------------------------------------
+    # Final validation
+    # --------------------------------------------------
+
+    print("\n" + "=" * 60)
+    print("RETRIEVAL TEST PASSED")
+    print("=" * 60)
+
+    assert True
