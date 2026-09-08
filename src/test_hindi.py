@@ -1,21 +1,23 @@
 import chromadb
 
-from embeddings import create_embedding
+from pathlib import Path
+
+from .embeddings import create_embedding
+
+# ==================================================
+# Project Paths
+# ==================================================
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+CHROMA_DB_PATH = PROJECT_ROOT / "chroma_db"
 
 
-# Connect to ChromaDB
-client = chromadb.PersistentClient(
-    path="../chroma_db"
-)
+# ==================================================
+# Hindi Questions
+# ==================================================
 
-collection = client.get_collection(
-    name="paisewise_knowledge_base"
-)
-
-
-# Hindi questions for multilingual testing
 hindi_questions = [
-
     "म्यूचुअल फंड क्या है?",
     "SIP कैसे काम करता है?",
     "NAV का मतलब क्या है?",
@@ -36,55 +38,127 @@ hindi_questions = [
     "डाइवर्सिफिकेशन क्यों जरूरी है?",
     "निवेश में जोखिम क्या होता है?",
     "बचत और निवेश में क्या अंतर है?"
-
 ]
 
 
-print("=" * 60)
-print("HINDI RETRIEVAL TEST")
-print("=" * 60)
+# ==================================================
+# Hindi Retrieval Test
+# ==================================================
 
-print("Total Hindi questions:", len(hindi_questions))
-print("Documents available:", collection.count())
-
-
-for number, question in enumerate(
-    hindi_questions,
-    start=1
-):
+def test_hindi_retrieval():
 
     print("\n" + "=" * 60)
-    print(f"Question {number}: {question}")
+    print("HINDI RETRIEVAL TEST")
     print("=" * 60)
 
-    # Create embedding
-    question_embedding = create_embedding(
-        question
+    # --------------------------------------------------
+    # Connect to ChromaDB
+    # --------------------------------------------------
+
+    client = chromadb.PersistentClient(
+        path=str(CHROMA_DB_PATH)
     )
 
-    # Retrieve top 3 results
-    results = collection.query(
-        query_embeddings=[question_embedding],
-        n_results=3
+    collection = client.get_collection(
+        name="paisewise_knowledge_base"
     )
 
-    documents = results["documents"][0]
-    distances = results["distances"][0]
+    document_count = collection.count()
 
-    print("\nRetrieved results:")
+    print("\nDocuments available:", document_count)
 
-    for i, document in enumerate(
-        documents,
+    # --------------------------------------------------
+    # Make sure database is not empty
+    # --------------------------------------------------
+
+    assert document_count > 0, (
+        "PaiseWise knowledge base is empty."
+    )
+
+    print(
+        "Total Hindi questions:",
+        len(hindi_questions)
+    )
+
+    # --------------------------------------------------
+    # Test Hindi questions
+    # --------------------------------------------------
+
+    for number, question in enumerate(
+        hindi_questions,
         start=1
     ):
 
-        print(f"\nResult {i}")
+        print("\n" + "=" * 60)
         print(
-            "Similarity distance:",
-            round(distances[i - 1], 4)
+            f"Question {number}: {question}"
+        )
+        print("=" * 60)
+
+        # Create embedding
+        question_embedding = create_embedding(
+            question
         )
 
-        print("Retrieved content:")
-        print(document[:300])
+        # Retrieve top 3 documents
+        results = collection.query(
+            query_embeddings=[
+                question_embedding
+            ],
+            n_results=min(
+                3,
+                document_count
+            )
+        )
 
-    print("\nResponse should be: Hindi")
+        documents = results["documents"][0]
+        distances = results["distances"][0]
+
+        # --------------------------------------------------
+        # Validate results
+        # --------------------------------------------------
+
+        assert len(documents) > 0, (
+            f"No documents retrieved for: {question}"
+        )
+
+        print("\nRetrieved results:")
+
+        for i, document in enumerate(
+            documents,
+            start=1
+        ):
+
+            print(
+                f"\nResult {i}"
+            )
+
+            print(
+                "Similarity distance:",
+                round(
+                    distances[i - 1],
+                    4
+                )
+            )
+
+            print(
+                "Retrieved content:"
+            )
+
+            print(
+                document[:300]
+            )
+
+        print(
+            "\nResponse should be: Hindi"
+        )
+
+    # --------------------------------------------------
+    # Final result
+    # --------------------------------------------------
+
+    print("\n" + "=" * 60)
+    print("HINDI RETRIEVAL TEST PASSED")
+    print("=" * 60)
+
+    assert True
