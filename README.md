@@ -1707,6 +1707,34 @@ Correlation
 Portfolio Health Report
 ```
 
+#  Sector Sentiment and Market Context
+
+The market context combines market information with sector-level sentiment.
+
+The flow is:
+
+```text
+Market News
+      ↓
+Sector Classification
+      ↓
+Sentiment Analysis
+      ↓
+Sector Sentiment
+      ↓
+Market Context
+```
+
+Sector sentiment represents the overall sentiment for each sector.
+
+Example:
+
+```text
+IT          → Positive
+Banking     → Neutral
+Pharma      → Positive
+Auto        → Negative
+```
 ---
 
 # 57. Task 5 – Churn Prediction
@@ -1969,291 +1997,570 @@ Log Metrics in MLflow
 Deploy if Better
 ```
 
-> Note: The current local churn development dataset does not contain a date/timestamp column. Therefore, the actual "last 90 days of churn outcomes" filter needs to be connected to a timestamped production data source.
+
+# Automated Model Retraining
+
+PaiseWise includes automated retraining pipelines for:
+
+1. Churn Prediction Model
+2. Fund Recommendation Model
+
+The pipelines retrain models periodically, validate the newly trained model against the current model, track results using MLflow, and deploy the new model only when the required performance improvement is achieved.
 
 ---
 
-# 65. Task 6 – Sector Sentiment and Market Context
+## 1. Churn Model Retraining
 
-The market context combines market information with sector-level sentiment.
+### Schedule
 
-The flow is:
+The churn model is scheduled to retrain:
+
+- Frequency: Monthly
+- Day: 1st day of every month
+- Time: 3:00 AM
+
+### Retraining Workflow
 
 ```text
-Market News
-      ↓
-Sector Classification
-      ↓
-Sentiment Analysis
-      ↓
-Sector Sentiment
-      ↓
-Market Context
+Scheduler
+   |
+   v
+Load latest churn data
+   |
+   v
+Filter last 90 days of data
+   |
+   v
+Train new XGBoost model
+   |
+   v
+Holdout validation
+   |
+   v
+Calculate Accuracy / Precision / Recall / F1
+   |
+   v
+Compare current model vs new model
+   |
+   v
+Is improvement > 2%?
+   |                 |
+  YES                NO
+   |                 |
+   v                 v
+Deploy new       Keep current
+model            model
+   |
+   v
+Log metrics and decision in MLflow
+````
+
+### Churn Features
+
+The model uses the following user-engagement features:
+
+* `d7_lesson_count`
+* `d7_quiz_count`
+* `d7_paper_trade_count`
+* `d7_streak_days`
+* `d7_xp_earned`
+* `d7_notification_open_rate`
+* `onboarding_goal_set`
+* `kyc_completed_d7`
+* `first_paper_trade_d7`
+
+### Model
+
+The churn prediction model uses:
+
+```text
+XGBoost Classifier
 ```
 
-Sector sentiment represents the overall sentiment for each sector.
+### Validation Metrics
+
+The following metrics are calculated during retraining:
+
+* Accuracy
+* Precision
+* Recall
+* F1 Score
+
+The F1 score is used to compare the current model with the newly trained model.
+
+### Deployment Rule
+
+```text
+New F1 - Current F1 > 2%
+        |
+       YES
+        |
+        v
+Deploy new model
+```
+
+If the improvement is not greater than 2%, the existing model is retained.
+
+### MLflow
+
+Churn retraining is tracked using the MLflow experiment:
+
+```text
+PaiseWise-Churn-Retraining
+```
+
+MLflow records:
+
+* Model parameters
+* Accuracy
+* Precision
+* Recall
+* F1 Score
+* Current model F1
+* New model F1
+* Improvement
+* Deployment decision
+* Model artifact
+
+---
+
+# 2. Fund Recommendation Model Retraining
+
+### Schedule
+
+The fund recommendation model is scheduled to retrain:
+
+* Frequency: Weekly
+* Day: Sunday
+* Time: 2:00 AM
+
+### Retraining Workflow
+
+```text
+Scheduler
+   |
+   v
+Load latest fund performance data
+   |
+   v
+Calculate dynamic scoring weights
+   |
+   v
+Calculate fund scores
+   |
+   v
+Rank funds
+   |
+   v
+Generate new recommendation model
+   |
+   v
+Validate recommendation ranking
+   |
+   v
+Compare current model vs new model
+   |
+   v
+Is improvement > 2%?
+   |                 |
+  YES                NO
+   |                 |
+   v                 v
+Deploy new       Keep current
+model            model
+   |
+   v
+Log metrics and decision in MLflow
+```
+
+### Fund Scoring Factors
+
+The recommendation model currently considers:
+
+* 1-year return
+* 3-year return
+* Risk score
+* Consistency score
+
+### Dynamic Scoring Weights
+
+The pipeline dynamically calculates the importance of each factor based on the available fund-performance dataset.
 
 Example:
 
 ```text
-IT          → Positive
-Banking     → Neutral
-Pharma      → Positive
-Auto        → Negative
+Return Weight       : 71.31%
+Risk Weight         : 10.53%
+Consistency Weight  : 18.16%
+
+Total Weight        : 100%
 ```
 
----
+The weights can change when the underlying fund-performance data changes.
 
-# 66. Task 7 – Automated Fund Model Retraining
+### Fund Score
 
-The fund model retraining pipeline is designed to run weekly.
-
-The requirement is:
+Each fund receives a combined recommendation score based on:
 
 ```text
-Every Sunday
-2:00 AM
+Fund Score =
+    Return Score × Return Weight
+  + Risk Score × Risk Weight
+  + Consistency Score × Consistency Weight
 ```
 
-The pipeline performs:
+Funds are then ranked according to the final score.
+
+### Example Recommendation Ranking
 
 ```text
-Latest Fund Data
-      ↓
-Recalculate Scoring
-      ↓
-Update Model
-      ↓
-Validate New Model
-      ↓
-Compare With Current Model
-      ↓
-Improvement > 2% ?
-      /          \
-    Yes           No
-     ↓             ↓
-Deploy New      Keep Current
-Model           Model
+1. HDFC Mid-Cap Opportunities Fund
+2. Kotak Emerging Equity Fund
+3. Quant Flexi Cap Fund
+4. Parag Parikh Flexi Cap Fund
+5. Axis Midcap Fund
 ```
 
----
+> Note: The current fund-performance dataset is a demo/test dataset and is not a live market-data feed.
 
-# 67. Run Fund Data Pipeline
+### Deployment Rule
 
-Run:
-
-```powershell
-python fund_data.py
-```
-
-This retrieves and prepares the latest fund performance data used by the scoring system.
-
-The flow is:
+The new fund recommendation model is deployed only when:
 
 ```text
-Latest Fund Data
-      ↓
-Fund Performance
-      ↓
-Prepared Fund Dataset
-```
-
----
-
-# 68. Run Fund Scoring
-
-Run:
-
-```powershell
-python fund_scoring.py
-```
-
-This recalculates fund scores using recent performance information.
-
-The flow is:
-
-```text
-Fund Performance
-      ↓
-Scoring Factors
-      ↓
-Updated Weights
-      ↓
-Fund Score
-```
-
----
-
-# 69. Validate Fund Model
-
-Run:
-
-```powershell
-python model_validation.py
-```
-
-This compares the new fund model with the currently deployed model.
-
-The deployment condition is:
-
-```text
-Improvement > 2%
-```
-
-If the improvement is greater than 2%:
-
-```text
-Deploy New Model
+New Model Score - Current Model Score > 2%
 ```
 
 Otherwise:
 
 ```text
-Keep Current Model
+KEEP_CURRENT_MODEL
+```
+
+For the current test run:
+
+```text
+Current Score : 41.67%
+New Score     : 41.67%
+Improvement   : 0.00%
+
+Decision      : KEEP_CURRENT_MODEL
+```
+
+This demonstrates that the deployment safeguard is working correctly.
+
+---
+
+# 3. MLflow Tracking
+
+Fund recommendation retraining is tracked using:
+
+```text
+PaiseWise-Fund-Retraining
+```
+
+MLflow records:
+
+### Metrics
+
+```text
+return_weight
+risk_weight
+consistency_weight
+current_score
+new_score
+improvement
+```
+
+### Parameters
+
+```text
+model_type
+retraining_frequency
+retraining_day
+retraining_time
+evaluation_metric
+deployment_threshold
+deployment_decision
+```
+
+### Model Artifact
+
+The newly generated model is stored as:
+
+```text
+new_fund_recommendation_model.pkl
+```
+
+The model artifact is logged in MLflow under:
+
+```text
+fund_model/
 ```
 
 ---
 
-# 70. Fund Model Deployment
+# 4. Project Files
 
-Run:
-
-```powershell
-python model_deployment.py
-```
-
-This performs the final deployment decision.
-
-If the new model is better:
+The automated retraining modules are organized as follows:
 
 ```text
-New Model Better
-      ↓
-Deploy New Model
+src/
+│
+├── churn_data.py
+├── churn_training.py
+├── churn_deployment.py
+├── churn_retraining_pipeline.py
+├── churn_scheduler.py
+│
+├── fund_data.py
+├── fund_scoring.py
+├── fund_training.py
+├── fund_deployment.py
+├── fund_retraining_pipeline.py
+└── fund_scheduler.py
 ```
 
-If the new model is not better:
+Data and model files:
 
 ```text
-New Model Not Better
-      ↓
-Keep Current Model
+data/
+│
+├── churn/
+│   ├── churn_training_dataset.csv
+│   └── models/
+│       ├── churn_model.pkl
+│       └── new_churn_model.pkl
+│
+└── funds/
+    ├── fund_performance.csv
+    └── models/
+        ├── fund_recommendation_model.pkl
+        └── new_fund_recommendation_model.pkl
 ```
 
 ---
 
-# 71. Complete Fund Retraining Pipeline
+# 5. Running the Pipelines
 
-Run the complete pipeline manually:
-
-```powershell
-python retrain_pipeline.py
-```
-
-The complete workflow is:
-
-```text
-Fund Data
-   ↓
-Fund Scoring
-   ↓
-Model Validation
-   ↓
-Model Comparison
-   ↓
-Deployment Decision
-```
-
----
-
-# 72. Weekly Fund Retraining Schedule
-
-The required schedule is:
-
-```text
-Every Sunday
-2:00 AM
-```
-
-Windows Task Scheduler configuration:
-
-```text
-Task Name:
-PaiseWise Weekly Fund Retraining
-
-Program:
-C:\Users\Malinirani\Desktop\paiseWise-rag\.venv\Scripts\python.exe
-
-Arguments:
-retrain_pipeline.py
-
-Start In:
-C:\Users\Malinirani\Desktop\paiseWise-rag\src
-```
-
-The scheduled flow is:
-
-```text
-Every Sunday
-      ↓
-2:00 AM
-      ↓
-Fund Retraining Pipeline
-      ↓
-Fetch Latest Data
-      ↓
-Recalculate Scores
-      ↓
-Validate Model
-      ↓
-Check Improvement
-      ↓
-Deploy if Improvement > 2%
-```
-
----
-
-# 73. Complete Remaining Task Commands
-
-Run the following commands from the `src` directory.
-
-## Portfolio
+Activate the virtual environment:
 
 ```powershell
-python Portfolio_Diversification.py
-python portfolio_analyser.py
-python risk_assessment.py
-python Portfolio_Drawdown_Calculator.py
-python portfolio_correlation_matrix.py
-python portfolio_health_report.py
+.venv\Scripts\activate
 ```
 
-## Churn
+## Test Churn Retraining
 
 ```powershell
-python churn_data.py
-python churn_training.py
-python churn_validation.py
 python churn_retraining_pipeline.py
 ```
 
-## MLflow
+## Test Churn Scheduler
 
 ```powershell
-mlflow ui
+python churn_scheduler.py
 ```
 
-## Fund Retraining
+The scheduler can be configured using:
 
-```powershell
-python fund_data.py
-python fund_scoring.py
-python model_validation.py
-python model_deployment.py
-python retrain_pipeline.py
+```python
+TEST_MODE = True
+```
+
+When `TEST_MODE = True`, the retraining runs immediately for testing.
+
+For production scheduling:
+
+```python
+TEST_MODE = False
+```
+
+The production schedule is:
+
+```text
+1st day of every month at 3:00 AM
 ```
 
 ---
+
+## Test Fund Retraining
+
+```powershell
+python fund_retraining_pipeline.py
+```
+
+## Test Fund Scheduler
+
+```powershell
+python fund_scheduler.py
+```
+
+For testing:
+
+```python
+TEST_MODE = True
+```
+
+This runs the fund retraining immediately instead of waiting for Sunday.
+
+For production:
+
+```python
+TEST_MODE = False
+```
+
+The production schedule is:
+
+```text
+Every Sunday at 2:00 AM
+```
+
+---
+
+# 6. MLflow UI
+
+Start MLflow using the project's tracking database:
+
+```powershell
+mlflow ui --backend-store-uri sqlite:///C:/Users/Malinirani/Desktop/paiseWise-rag/src/mlflow.db
+```
+
+Then open the MLflow UI in your browser.
+
+The following experiments are available:
+
+```text
+PaiseWise-Churn-Retraining
+PaiseWise-Fund-Retraining
+```
+
+---
+
+# 7. Automated Deployment Logic
+
+Both models follow the same high-level deployment principle:
+
+```text
+                New Model
+                    |
+                    v
+              Model Validation
+                    |
+                    v
+        Compare Current vs New
+                    |
+                    v
+             Improvement > 2%?
+              /            \
+            YES             NO
+             |               |
+             v               v
+       Deploy New       Keep Current
+          Model             Model
+```
+
+This prevents a newly retrained model from automatically replacing a better-performing production model.
+
+---
+
+# 8. Current Testing Status
+
+### Churn Pipeline
+
+```text
+Data Loading             : PASS
+Model Training           : PASS
+Holdout Validation       : PASS
+MLflow Tracking          : PASS
+Model Comparison         : PASS
+Deployment Decision      : PASS
+Scheduler Test           : PASS
+```
+
+Current test result:
+
+```text
+Current F1 : 100.00%
+New F1     : 100.00%
+Improvement: 0.00%
+
+Decision   : KEEP_CURRENT_MODEL
+```
+
+### Fund Pipeline
+
+```text
+Fund Data Loading        : PASS
+Dynamic Weighting        : PASS
+Fund Scoring              : PASS
+Model Generation          : PASS
+Model Validation          : PASS
+MLflow Tracking           : PASS
+Model Comparison          : PASS
+Deployment Decision       : PASS
+Scheduler Test            : PASS
+```
+
+Current test result:
+
+```text
+Current Score : 41.67%
+New Score     : 41.67%
+Improvement   : 0.00%
+
+Decision      : KEEP_CURRENT_MODEL
+```
+
+---
+
+# 9. Production Considerations
+
+The current implementation demonstrates the automated retraining architecture using test/demo datasets.
+
+For production deployment:
+
+* Connect the fund pipeline to a reliable live/historical fund-performance source.
+* Use a separate fixed test/holdout dataset for model evaluation.
+* Store dated fund-performance data for weekly comparisons.
+* Store actual churn outcomes with timestamps to support the 90-day training window.
+* Add monitoring and alerts for failed scheduled jobs.
+* Use a production scheduler such as Airflow, Azure Data Factory, or another orchestration platform if required.
+* Add model versioning and rollback support.
+* Add stronger validation before production deployment.
+
+---
+
+## Summary
+
+PaiseWise now contains automated retraining workflows for both churn prediction and fund recommendation.
+
+```text
+CHURN
+Monthly → 1st day → 3:00 AM
+        → Last 90 days
+        → XGBoost
+        → Holdout validation
+        → MLflow
+        → Deploy if >2% better
+
+
+FUND RECOMMENDATION
+Weekly → Sunday → 2:00 AM
+        → Latest fund performance
+        → Dynamic scoring weights
+        → Fund ranking
+        → Model validation
+        → MLflow
+        → Deploy if >2% better
+```
+
+The automated retraining framework helps PaiseWise keep its ML models up to date while preventing automatic deployment of models that do not demonstrate sufficient improvement.
+
+```
+
+**GitHub tip:** I would put this under a README heading such as **`## Automated ML Retraining & Deployment`** rather than replacing your entire existing README. This gives a clean explanation of the work you completed today and is suitable for explaining the implementation during your internship review.
+```
+
 
 # 74. Overall Internship Task Flow
 
