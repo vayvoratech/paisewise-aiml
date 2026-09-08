@@ -2,20 +2,61 @@
 
 A Retrieval-Augmented Generation (RAG) based financial education API for **PaiseWise**.
 
-The project combines a financial knowledge base, vector search, document embeddings, re-ranking, guardrails, market context, and market-news ingestion/classification into a FastAPI application.
+The project combines a financial knowledge base, vector search, document embeddings, re-ranking, financial guardrails, market context, market-news ingestion, sector classification, sentiment analysis, portfolio analysis, churn prediction, and automated ML model retraining into a FastAPI application.
 
 ---
 
-## 1. Project Overview
+# 1. Project Overview
 
-The PaiseWise RAG system is designed to answer general financial education questions using information stored in a knowledge base.
+PaiseWise is designed to provide **general financial education** using information stored in a curated knowledge base.
 
-The main flow is:
+The system is designed to explain financial concepts such as:
+
+* Mutual funds
+* SIP
+* NAV
+* Expense ratio
+* Equity
+* Debt funds
+* Hybrid funds
+* Diversification
+* Risk
+* KYC
+* Demat accounts
+* SEBI
+* AMFI
+* Inflation
+* Compound interest
+* Liquidity
+* Saving vs investing
+
+The application also contains supporting AI/ML features for:
+
+* Market context
+* Market-news ingestion
+* Sector classification
+* Sentiment analysis
+* Portfolio diversification
+* Portfolio risk
+* Portfolio drawdown
+* Portfolio correlation
+* Portfolio health
+* Churn prediction
+* Automated churn model retraining
+* Fund recommendation model retraining
+
+---
+
+# 2. Main RAG Flow
+
+The main financial education flow is:
 
 ```text
 User Question
       ↓
 FastAPI
+      ↓
+Pydantic Validation
       ↓
 Guardrail Check
       ↓
@@ -34,7 +75,39 @@ Relevance Check
 Answer
 ```
 
-The market-news flow is:
+The purpose of each step is:
+
+```text
+FastAPI
+    → Receives the user's question
+
+Pydantic
+    → Validates the request
+
+Guardrails
+    → Prevents personalized financial advice
+
+Embeddings
+    → Converts the question into a vector
+
+ChromaDB
+    → Finds similar knowledge-base documents
+
+Re-ranker
+    → Reorders retrieved documents based on relevance
+
+Relevance Check
+    → Prevents unrelated content from being returned
+
+Response
+    → Returns the educational answer
+```
+
+---
+
+# 3. Market News Flow
+
+The market-news pipeline is:
 
 ```text
 NewsAPI
@@ -47,91 +120,146 @@ Zero-Shot Sector Classification
    ↓
 Sector + Confidence
    ↓
+Sentiment Analysis
+   ↓
+Sector Sentiment
+   ↓
 Market Context
 ```
 
 ---
 
-# 2. Technologies Used
+# 4. Technologies Used
+
+The project uses:
 
 * Python
 * FastAPI
 * Uvicorn
+* Pydantic
 * ChromaDB
 * Sentence Transformers
 * Hugging Face Transformers
 * NewsAPI
 * Requests
-* Pydantic
 * VADER Sentiment
 * XGBoost
-* Git/GitHub
+* Pandas
+* NumPy
+* Scikit-learn
+* Python-dotenv
+* MLflow
+* Git
+* GitHub
 
 ---
 
-# 3. Knowledge Base
+# 5. Python Version
 
-The PaiseWise knowledge base contains financial education information such as:
-
-* 30 lesson contents
-* 200 financial jargon definitions
-* PaiseWise product FAQs
-* SEBI-approved financial education content
-* Mutual fund category explanations
-
-The documents are converted into chunks before being stored in ChromaDB.
-
-### Chunking Strategy
+The current development environment uses:
 
 ```text
-Chunk Size  : 200 words
-Overlap     : 50 words
+Python 3.13
 ```
 
-The overlap helps preserve context between consecutive chunks.
+Check your Python version:
+
+```powershell
+python --version
+```
 
 ---
 
-# 4. Project Structure
+# 6. Project Structure
 
-Recommended project structure:
+The project is organized as follows:
 
 ```text
 paiseWise-rag/
 │
 ├── src/
 │   │
+│   ├── __init__.py
 │   ├── main.py
+│   │
 │   ├── embeddings.py
 │   ├── reranker.py
 │   ├── guardrails.py
-│   ├── market_context.py
+│   │
 │   ├── news_ingestion.py
 │   ├── news_classifier.py
+│   ├── sentiment_analyser.py
+│   ├── sector_sentiment.py
+│   ├── corporate_events.py
+│   ├── market_context.py
+│   ├── market_data.py
+│   │
 │   ├── ingest_document.py
 │   ├── chunking.py
 │   ├── retrieval_test.py
 │   ├── evaluate_retrieval.py
-│   └── check_database.py
+│   ├── check_database.py
+│   │
+│   ├── test_api_guardrails.py
+│   ├── test_embedding.py
+│   ├── test_hindi.py
+│   ├── test_reranker.py
+│   └── test_churn_predictions.py
 │
 ├── data/
+│   │
 │   ├── lessons/
-│   └── jargon/
+│   ├── jargon/
+│   │
+│   ├── churn/
+│   │   ├── churn_training_dataset.csv
+│   │   └── models/
+│   │       ├── churn_model.pkl
+│   │       └── new_churn_model.pkl
+│   │
+│   └── funds/
+│       ├── fund_performance.csv
+│       └── models/
+│           ├── fund_recommendation_model.pkl
+│           └── new_fund_recommendation_model.pkl
 │
 ├── chroma_db/
 │
 ├── requirements.txt
 ├── .env
+├── .gitignore
 └── README.md
+```
+
+### Important
+
+The file:
+
+```text
+src/__init__.py
+```
+
+makes `src` a Python package.
+
+Because of this, the project uses package-style imports such as:
+
+```python
+from .embeddings import create_embedding
+```
+
+and the FastAPI application should be started from the **project root** using:
+
+```powershell
+uvicorn src.main:app --reload
 ```
 
 ---
 
-# 5. Start From Scratch
+# 7. Clone the Repository
 
-## Step 1: Clone the Repository
+Open PowerShell.
 
-Open PowerShell or Command Prompt.
+Clone the repository:
 
 ```powershell
 git clone <YOUR_REPOSITORY_URL>
@@ -143,7 +271,13 @@ Move into the project:
 cd paiseWise-rag
 ```
 
-If you are using a specific branch:
+Check the current branch:
+
+```powershell
+git branch
+```
+
+If a specific branch is required:
 
 ```powershell
 git checkout <YOUR_BRANCH_NAME>
@@ -151,9 +285,9 @@ git checkout <YOUR_BRANCH_NAME>
 
 ---
 
-# 6. Create Python Virtual Environment
+# 8. Create Virtual Environment
 
-Create a virtual environment:
+Create the virtual environment:
 
 ```powershell
 python -m venv .venv
@@ -162,18 +296,20 @@ python -m venv .venv
 Activate it:
 
 ```powershell
-.venv\Scripts\activate
+.venv\Scripts\Activate.ps1
 ```
 
-After activation, you should see something similar to:
+After activation, you should see:
 
 ```text
-(.venv) PS C:\Users\...\paiseWise-rag>
+(.venv) PS C:\...\paiseWise-rag>
 ```
 
 ---
 
-# 7. Upgrade pip
+# 9. Upgrade pip
+
+Run:
 
 ```powershell
 python -m pip install --upgrade pip
@@ -181,23 +317,23 @@ python -m pip install --upgrade pip
 
 ---
 
-# 8. Install Required Packages
+# 10. Install Dependencies
 
-Install the main dependencies:
-
-```powershell
-pip install fastapi uvicorn chromadb sentence-transformers transformers requests pydantic vaderSentiment xgboost pandas numpy scikit-learn python-dotenv
-```
-
-If a `requirements.txt` file is available:
+If `requirements.txt` is available:
 
 ```powershell
 pip install -r requirements.txt
 ```
 
+If you need to install the packages manually:
+
+```powershell
+pip install fastapi uvicorn chromadb sentence-transformers transformers requests pydantic vaderSentiment xgboost pandas numpy scikit-learn python-dotenv mlflow
+```
+
 ---
 
-# 9. Verify Python Environment
+# 11. Verify the Environment
 
 Check Python:
 
@@ -229,20 +365,68 @@ Check Transformers:
 python -c "from transformers import pipeline; print('Transformers OK')"
 ```
 
----
+Check XGBoost:
 
-# 10. Prepare the Data
-
-Place lesson files inside:
-
-```text
-data/lessons/
+```powershell
+python -c "import xgboost; print('XGBoost OK')"
 ```
 
-Place jargon files inside:
+Check MLflow:
+
+```powershell
+python -c "import mlflow; print('MLflow OK')"
+```
+
+---
+
+# 12. Environment Variables
+
+The news pipeline requires a NewsAPI key.
+
+The code reads:
+
+```python
+NEWS_API_KEY = os.getenv("NEWS_API_KEY")
+```
+
+You can create a `.env` file if the project uses `python-dotenv`:
 
 ```text
-data/jargon/
+NEWS_API_KEY=YOUR_NEWS_API_KEY
+```
+
+Do not commit the real API key to GitHub.
+
+For PowerShell, you can temporarily set it using:
+
+```powershell
+$env:NEWS_API_KEY="YOUR_NEWS_API_KEY"
+```
+
+Verify:
+
+```powershell
+echo $env:NEWS_API_KEY
+```
+
+---
+
+# 13. Knowledge Base
+
+The PaiseWise knowledge base contains financial education content including:
+
+* 30 lesson contents
+* 200 financial jargon definitions
+* PaiseWise FAQs
+* SEBI financial education content
+* Mutual fund category explanations
+
+The data is stored under:
+
+```text
+data/
+├── lessons/
+└── jargon/
 ```
 
 Example:
@@ -263,70 +447,102 @@ data/
 
 ---
 
-# 11. Document Chunking
+# 14. Document Chunking
 
-The document ingestion process divides large documents into smaller chunks.
+Large documents are divided into smaller chunks before being inserted into ChromaDB.
 
 Current strategy:
 
 ```text
-200 words per chunk
-50 words overlap
+Chunk Size : 200 words
+Overlap    : 50 words
 ```
 
-Example:
+The process is:
 
 ```text
 Original Document
        ↓
 Chunk 1 → 200 words
        ↓
+50-word overlap
+       ↓
 Chunk 2 → 200 words
+       ↓
+50-word overlap
        ↓
 Chunk 3 → 200 words
 ```
 
-The 50-word overlap helps prevent important information from being lost between chunks.
+The overlap helps preserve context between consecutive chunks.
 
 ---
 
-# 12. Generate Embeddings
+# 15. Embedding Model
 
-The project uses:
+The actual PaiseWise project uses:
 
 ```text
-all-MiniLM-L6-v2
+paraphrase-multilingual-MiniLM-L12-v2
 ```
 
 from Sentence Transformers.
 
-The process is:
+This model is useful because the project also tests multilingual questions, including Hindi.
+
+The embedding flow is:
 
 ```text
 Document
-   ↓
+    ↓
 Text
-   ↓
+    ↓
 Sentence Transformer
-   ↓
+    ↓
 Vector Embedding
+    ↓
+ChromaDB
 ```
 
-The same embedding model is used to convert user questions into vectors.
+The same embedding model is used when converting a user's question into a vector.
 
 ---
 
-# 13. ChromaDB Setup
+# 16. Lazy Model Loading
 
-The project uses ChromaDB as the local vector database.
+The embedding model is loaded only when it is actually needed.
 
-Database path:
+The project uses lazy loading so that simply importing the module does not immediately load the large ML model.
+
+Conceptually:
 
 ```text
-../chroma_db
+Python imports embeddings.py
+        ↓
+Model is NOT loaded yet
+        ↓
+create_embedding() is called
+        ↓
+Model is loaded
+        ↓
+Embedding is generated
 ```
 
-Collection name:
+This is important for test collection and application startup stability.
+
+---
+
+# 17. ChromaDB
+
+ChromaDB is used as the local vector database.
+
+Database:
+
+```text
+chroma_db/
+```
+
+Collection:
 
 ```text
 paisewise_knowledge_base
@@ -338,31 +554,51 @@ The collection stores:
 Document
 Embedding
 Metadata
-ID
+Chunk ID
 ```
 
 ---
 
-# 14. Ingest Documents
+# 18. Check ChromaDB
 
-From the `src` directory:
+From the project root, run:
 
 ```powershell
-cd src
+python src/check_database.py
 ```
 
-Run the document ingestion script according to the current project implementation.
+This checks the local ChromaDB database.
 
-Example:
+Expected type of output:
+
+```text
+ChromaDB connected successfully.
+ChromaDB path: ...
+Documents available: ...
+```
+
+The current development database has contained approximately:
+
+```text
+290 documents
+```
+
+The exact number can change when documents are added or re-ingested.
+
+---
+
+# 19. Ingest Documents
+
+From the project root:
 
 ```powershell
-python ingest_document.py
+python src/ingest_document.py
 ```
 
 The ingestion process is:
 
 ```text
-Lesson/Jargon File
+Lesson / Jargon File
        ↓
 Read Document
        ↓
@@ -370,43 +606,22 @@ Chunk Text
        ↓
 Create Embedding
        ↓
-Generate Chunk ID
+Generate Unique Chunk ID
        ↓
 Store in ChromaDB
 ```
 
 ---
 
-# 15. Check ChromaDB
+# 20. Test Retrieval
 
 Run:
 
 ```powershell
-python check_database.py
+python src/retrieval_test.py
 ```
 
-This checks whether documents have been successfully stored.
-
-Expected type of output:
-
-```text
-Collection: paisewise_knowledge_base
-Document count: ...
-```
-
----
-
-# 16. Test Basic Retrieval
-
-Run:
-
-```powershell
-python retrieval_test.py
-```
-
-This tests multiple financial questions against the vector database.
-
-Example questions:
+The retrieval test checks questions such as:
 
 ```text
 What is a mutual fund?
@@ -417,19 +632,32 @@ What is diversification?
 What is equity?
 ```
 
-The retrieval system returns the most similar chunks.
+The process is:
+
+```text
+Question
+   ↓
+Question Embedding
+   ↓
+ChromaDB
+   ↓
+Top Matching Documents
+   ↓
+Similarity Distance
+```
 
 ---
 
-# 17. Understanding ChromaDB Distance
+# 21. Understanding ChromaDB Distance
 
-ChromaDB retrieval returns a distance value.
+ChromaDB returns a distance value for retrieved documents.
 
 Generally:
 
 ```text
-Lower distance = More similar
-Higher distance = Less similar
+Lower distance
+      ↓
+More similar
 ```
 
 Example:
@@ -437,62 +665,86 @@ Example:
 ```text
 Question: What is SIP?
 
-Result 1 distance: 0.43
-Result 2 distance: 0.82
-Result 3 distance: 1.10
+Result 1 → Distance: 0.43
+Result 2 → Distance: 0.82
+Result 3 → Distance: 1.10
 ```
 
 Result 1 is more similar than Result 2 and Result 3.
 
 ---
 
-# 18. Re-ranking
+# 22. Re-ranking
 
-Initial retrieval gets the top 10 documents.
+Initial retrieval returns the top documents from ChromaDB.
+
+The PaiseWise flow is:
 
 ```text
 Question
-   ↓
+    ↓
 ChromaDB
-   ↓
-Top 10 documents
-   ↓
+    ↓
+Top 10 Documents
+    ↓
 Re-ranker
-   ↓
-Best relevant document
+    ↓
+Ranked Documents
+    ↓
+Best Relevant Document
 ```
 
-The re-ranker calculates relevance using the question and retrieved document.
-
-Run the re-ranker test:
-
-```powershell
-python test_reranker.py
-```
-
-The re-ranker score is interpreted differently from ChromaDB distance:
+The re-ranker evaluates the relationship between:
 
 ```text
-Higher relevance score = More relevant
+Question
++
+Retrieved Document
 ```
+
+A higher relevance score generally means the document is more relevant.
 
 ---
 
-# 19. Retrieval Evaluation
+# 23. Test Re-ranking
 
 Run:
 
 ```powershell
-python evaluate_retrieval.py
+python src/test_reranker.py
 ```
 
-This is used to evaluate whether the correct content is being retrieved for test questions.
+The test:
 
-The evaluation helps identify issues such as:
+1. Connects to ChromaDB.
+2. Gets the PaiseWise collection.
+3. Creates an embedding for:
 
 ```text
-Correct question
-      ↓
+What is SIP?
+```
+
+4. Retrieves up to 10 documents.
+5. Sends them to the re-ranker.
+6. Displays the ranked results.
+
+---
+
+# 24. Retrieval Evaluation
+
+Run:
+
+```powershell
+python src/evaluate_retrieval.py
+```
+
+This helps evaluate retrieval quality.
+
+It can identify problems such as:
+
+```text
+Question
+   ↓
 Wrong document retrieved
 ```
 
@@ -500,49 +752,149 @@ or:
 
 ```text
 Different questions
-      ↓
+       ↓
 Same document repeatedly retrieved
+```
+
+The evaluation is useful for improving the knowledge base and retrieval process.
+
+---
+
+# 25. Hindi Retrieval Testing
+
+The project includes Hindi retrieval testing.
+
+Example questions include:
+
+```text
+म्यूचुअल फंड क्या है?
+SIP कैसे काम करता है?
+NAV का मतलब क्या है?
+एक्सपेंस रेशियो क्या होता है?
+इक्विटी फंड क्या है?
+डेट फंड क्या होता है?
+KYC क्या है?
+SEBI क्या है?
+डाइवर्सिफिकेशन क्यों जरूरी है?
+```
+
+Run:
+
+```powershell
+pytest -q src/test_hindi.py
+```
+
+The test:
+
+```text
+Hindi Question
+      ↓
+Multilingual Embedding
+      ↓
+ChromaDB
+      ↓
+Top 3 Results
+      ↓
+Retrieved Content
 ```
 
 ---
 
-# 20. Guardrails
+# 26. Guardrails
 
-The PaiseWise assistant is intended for financial education and should not provide personalized investment recommendations.
+PaiseWise is designed for **financial education**, not personalized financial advice.
 
-The guardrail checks questions such as:
+The guardrail should block questions such as:
 
 ```text
 Which stock should I buy?
 Should I sell this stock?
-Which mutual fund is best for me?
-Should I invest in this SIP?
+Which mutual fund should I buy?
+Which SIP is best for me?
+Where should I invest my money?
 ```
 
-These questions should be deflected.
-
-Educational questions such as:
+Educational questions can be answered:
 
 ```text
 What is SIP?
 What is NAV?
 What is a mutual fund?
 What is diversification?
+What is an expense ratio?
 ```
-
-can be answered.
 
 ---
 
-# 21. FastAPI Application
+# 27. Guardrail Testing
 
-The main API file is:
+Run:
+
+```powershell
+pytest -q src/test_api_guardrails.py
+```
+
+The guardrail test checks a set of financial-advice questions.
+
+The project target is:
+
+```text
+95% or higher deflection rate
+```
+
+The current test has demonstrated:
+
+```text
+Total questions : 16
+Blocked         : 16
+Not blocked     : 0
+
+Deflection rate : 100%
+```
+
+---
+
+# 28. Multilingual and Red-Team Testing
+
+The project also includes:
+
+* Hindi testing
+* Adversarial questions
+* Financial advice questions
+* Educational questions
+* Guardrail testing
+
+The broader testing objective is:
+
+```text
+Advice Questions
+       ↓
+Deflect
+
+Educational Questions
+       ↓
+Answer
+
+Hindi Questions
+       ↓
+Retrieve Correct Knowledge
+
+Adversarial Questions
+       ↓
+Remain Safe
+```
+
+---
+
+# 29. FastAPI Application
+
+The main FastAPI file is:
 
 ```text
 src/main.py
 ```
 
-It connects:
+The API connects the main PaiseWise components:
 
 ```text
 FastAPI
@@ -555,28 +907,32 @@ ChromaDB
    ↓
 Retrieval
    ↓
-Reranker
+Re-ranking
    ↓
-Answer
+Relevance Check
+   ↓
+Response
 ```
 
 ---
 
-# 22. Start FastAPI With Uvicorn
+# 30. IMPORTANT: Start FastAPI Correctly
 
-Make sure you are inside the `src` directory:
+Because `src` is a Python package and `main.py` uses relative imports, **run Uvicorn from the project root**.
 
-```powershell
-cd src
+Make sure your terminal is here:
+
+```text
+C:\Users\...\paiseWise-rag
 ```
 
-Run:
+Then run:
 
 ```powershell
-uvicorn main:app --reload
+uvicorn src.main:app --reload
 ```
 
-You should see:
+You should see something similar to:
 
 ```text
 Uvicorn running on http://127.0.0.1:8000
@@ -584,31 +940,65 @@ Uvicorn running on http://127.0.0.1:8000
 
 ---
 
-# 23. Run Uvicorn With Host and Port
+# 31. Do NOT Start It This Way
 
-To expose the API on a specific host and port:
+Do not use:
 
 ```powershell
-uvicorn main:app --host 0.0.0.0 --port 8000
+cd src
+uvicorn main:app --reload
 ```
 
-For local development:
+with the current package structure.
 
-```powershell
-uvicorn main:app --host 127.0.0.1 --port 8000
+This causes:
+
+```text
+ImportError:
+attempted relative import with no known parent package
 ```
 
-With auto reload:
+because `main.py` contains imports such as:
 
-```powershell
-uvicorn main:app --host 127.0.0.1 --port 8000 --reload
+```python
+from .news_classifier import classify_article
 ```
 
 ---
 
-# 24. Open Swagger API Documentation
+# 32. Correct FastAPI Commands
 
-After starting Uvicorn, open:
+From the project root:
+
+### Development
+
+```powershell
+uvicorn src.main:app --reload
+```
+
+### Specific host and port
+
+```powershell
+uvicorn src.main:app --host 127.0.0.1 --port 8000
+```
+
+### Host + port + reload
+
+```powershell
+uvicorn src.main:app --host 127.0.0.1 --port 8000 --reload
+```
+
+### Port 8080
+
+```powershell
+uvicorn src.main:app --host 127.0.0.1 --port 8080 --reload
+```
+
+---
+
+# 33. Swagger UI
+
+After starting FastAPI, open:
 
 ```text
 http://127.0.0.1:8000/docs
@@ -616,11 +1006,17 @@ http://127.0.0.1:8000/docs
 
 FastAPI automatically provides Swagger UI.
 
-You can test all API endpoints from the browser.
+Swagger can be used to:
+
+* View endpoints
+* View request schemas
+* View response schemas
+* Send test requests
+* Check API responses
 
 ---
 
-# 25. Home Endpoint
+# 34. Home Endpoint
 
 Endpoint:
 
@@ -628,7 +1024,7 @@ Endpoint:
 GET /
 ```
 
-Open:
+URL:
 
 ```text
 http://127.0.0.1:8000/
@@ -644,7 +1040,7 @@ Expected response:
 
 ---
 
-# 26. Health Endpoint
+# 35. Health Endpoint
 
 Endpoint:
 
@@ -652,24 +1048,24 @@ Endpoint:
 GET /health
 ```
 
-Open:
+URL:
 
 ```text
 http://127.0.0.1:8000/health
 ```
 
-It checks:
+The health endpoint can be used to verify:
 
 ```text
 API status
 ChromaDB connection
-Collection name
+Collection
 Document count
 ```
 
 ---
 
-# 27. Ask Question API
+# 36. Ask Question Endpoint
 
 Endpoint:
 
@@ -677,25 +1073,13 @@ Endpoint:
 POST /ask
 ```
 
-Use Swagger:
+Swagger:
 
 ```text
 http://127.0.0.1:8000/docs
 ```
 
-Select:
-
-```text
-POST /ask
-```
-
-Click:
-
-```text
-Try it out
-```
-
-Enter:
+Example request:
 
 ```json
 {
@@ -703,15 +1087,9 @@ Enter:
 }
 ```
 
-Click:
-
-```text
-Execute
-```
-
 ---
 
-# 28. `/ask` Internal Flow
+# 37. `/ask` Internal Flow
 
 When the user asks:
 
@@ -722,30 +1100,56 @@ What is SIP?
 the API performs:
 
 ```text
-1. Receive question
+1. Receive Question
         ↓
-2. Check empty input
+2. Validate Request
         ↓
-3. Guardrail check
+3. Guardrail Check
         ↓
-4. Create embedding
+4. Create Question Embedding
         ↓
 5. Search ChromaDB
         ↓
-6. Retrieve top 10
+6. Retrieve Top 10 Documents
         ↓
-7. Re-rank documents
+7. Re-rank Documents
         ↓
-8. Select best document
+8. Select Best Result
         ↓
-9. Check relevance threshold
+9. Check Relevance
         ↓
-10. Return answer
+10. Return Educational Answer
 ```
 
 ---
 
-# 29. Relevance Threshold
+# 38. Financial Advice Guardrail Flow
+
+When the user asks:
+
+```text
+Which stock should I buy today?
+```
+
+the flow becomes:
+
+```text
+Question
+   ↓
+Guardrail
+   ↓
+Financial Advice Detected
+   ↓
+Block / Deflect
+   ↓
+Educational Safety Response
+```
+
+The system should not provide a personalized buy/sell recommendation.
+
+---
+
+# 39. Relevance Threshold
 
 The current API uses:
 
@@ -753,18 +1157,44 @@ The current API uses:
 RELEVANCE_THRESHOLD = 0.25
 ```
 
-If the best result has a score below the threshold, the API returns:
+The threshold is used to prevent unrelated documents from being returned as answers.
+
+Conceptually:
 
 ```text
-I couldn't find relevant information
-in the PaiseWise knowledge base.
+Retrieved Result
+      ↓
+Relevance Check
+      ↓
+Above Threshold?
+   /          \
+ YES           NO
+  ↓             ↓
+Answer       No relevant
+             information
 ```
 
-This prevents unrelated content from being returned as an answer.
+If the result is not relevant enough, the API can return a response indicating that relevant information was not found in the PaiseWise knowledge base.
 
 ---
 
-# 30. Market Context
+# 40. Market Context
+
+The market-context feature combines information from different market sources.
+
+The flow is:
+
+```text
+Market Data
+     +
+Market News
+     +
+Sector Sentiment
+     +
+Corporate Events
+     ↓
+Market Context
+```
 
 Endpoint:
 
@@ -772,51 +1202,43 @@ Endpoint:
 GET /market-context
 ```
 
-The market context module creates a summary using:
+---
+
+# 41. Market Data
+
+The market data module provides market/index information such as NIFTY movement.
+
+Conceptually:
 
 ```text
-News Count
-Sector Sentiment
+Market Data
+    ↓
 NIFTY Change
+    ↓
+Market Context
 ```
 
 Example:
 
 ```text
-News Count: 20
-
-IT:
-Positive
-
-Banking:
-Neutral
-
-Pharma:
-Positive
-
-NIFTY:
-+0.75%
+NIFTY Change: +0.75%
 ```
 
-The endpoint can be tested through:
-
-```text
-http://127.0.0.1:8000/docs
-```
+The actual value depends on the available market-data implementation.
 
 ---
 
-# 31. News Ingestion
+# 42. News Ingestion
 
 The project uses NewsAPI to retrieve market-related news.
 
-The news search query is:
+The search query is:
 
 ```text
 NSE OR BSE OR NIFTY OR Sensex
 ```
 
-The ingestion process retrieves:
+The ingestion process retrieves information such as:
 
 * Article title
 * Description
@@ -826,76 +1248,65 @@ The ingestion process retrieves:
 
 ---
 
-# 32. NewsAPI Key
+# 43. Test News Ingestion
 
-The news ingestion module reads:
-
-```python
-NEWS_API_KEY = os.getenv("NEWS_API_KEY")
-```
-
-Set the environment variable before running the news ingestion.
-
-### PowerShell
+Set the API key first:
 
 ```powershell
 $env:NEWS_API_KEY="YOUR_NEWS_API_KEY"
 ```
 
-Verify:
+Then run from the project root:
 
 ```powershell
-echo $env:NEWS_API_KEY
+python src/news_ingestion.py
 ```
 
-Do not commit the API key to GitHub.
-
----
-
-# 33. Run News Ingestion Directly
-
-From `src`:
-
-```powershell
-python news_ingestion.py
-```
-
-Expected flow:
+The flow is:
 
 ```text
-============================================================
-PaiseWise News Ingestion
-============================================================
-
-Articles fetched: 20
-
-1. Article title
-2. Article title
-3. Article title
-...
-```
-
-At the end:
-
-```text
-News ingestion completed successfully.
+NewsAPI
+   ↓
+API Request
+   ↓
+Market Articles
+   ↓
+Article Information
 ```
 
 ---
 
-# 34. News Sector Classification
+# 44. News Endpoint
 
-The project uses Hugging Face zero-shot classification.
-
-Model:
+Endpoint:
 
 ```text
-valhalla/distilbart-mnli-12-3
+GET /news
 ```
+
+The endpoint calls:
+
+```python
+fetch_market_news()
+```
+
+from:
+
+```text
+news_ingestion.py
+```
+
+The endpoint returns market-related news.
+
+---
+
+# 45. Sector Classification
+
+The news classifier uses Hugging Face zero-shot classification.
 
 The classifier assigns a sector to each article.
 
-Current sectors:
+Candidate sectors include:
 
 ```text
 IT
@@ -911,9 +1322,7 @@ Market Index
 Other
 ```
 
----
-
-# 35. News Classification Flow
+The classification flow is:
 
 ```text
 News Article
@@ -924,61 +1333,50 @@ Zero-Shot Classifier
       ↓
 Compare Candidate Sectors
       ↓
-Select Highest Score
+Highest Score
       ↓
 Sector + Confidence
 ```
 
+---
+
+# 46. Example Sector Classification
+
 Example:
 
 ```text
+Article:
+
 TCS reports strong quarterly growth
-          ↓
-Sector: IT
-Confidence: 0.xx
 ```
+
+The classifier may produce:
+
+```text
+Sector:
+IT
+
+Confidence:
+0.xx
+```
+
+The actual confidence depends on the model output.
 
 ---
 
-# 36. Run News Classifier
+# 47. Test News Classifier
 
 Run:
 
 ```powershell
-python news_classifier.py
+python src/news_classifier.py
 ```
 
-The script loads the zero-shot classification model.
-
-The first execution may take longer because the model needs to be downloaded.
+The first execution may take longer because the Hugging Face model may need to be downloaded.
 
 ---
 
-# 37. News API Endpoint
-
-The FastAPI application exposes:
-
-```text
-GET /news
-```
-
-This calls:
-
-```python
-fetch_market_news()
-```
-
-from:
-
-```text
-news_ingestion.py
-```
-
-It returns the latest market news.
-
----
-
-# 38. Classify News Through API
+# 48. Classify News API
 
 Endpoint:
 
@@ -995,7 +1393,7 @@ Example request:
 }
 ```
 
-Expected type of response:
+Example response structure:
 
 ```json
 {
@@ -1008,7 +1406,7 @@ Expected type of response:
 
 ---
 
-# 39. Fetch and Classify All News
+# 49. Classified News Endpoint
 
 Endpoint:
 
@@ -1016,7 +1414,7 @@ Endpoint:
 GET /news/classified
 ```
 
-The complete flow is:
+Complete flow:
 
 ```text
 GET /news/classified
@@ -1025,7 +1423,7 @@ fetch_market_news()
         ↓
 NewsAPI
         ↓
-20 Articles
+Market Articles
         ↓
 classify_article()
         ↓
@@ -1033,10 +1431,12 @@ Sector Classification
         ↓
 Confidence
         ↓
-JSON Response
+Sentiment
+        ↓
+Response
 ```
 
-The response contains information such as:
+The response can contain:
 
 ```text
 Title
@@ -1048,147 +1448,1176 @@ Sector
 Confidence
 ```
 
+depending on the current API implementation.
+
 ---
 
-# 40. Complete Project Architecture
+# 50. Sentiment Analysis
+
+The project includes sentiment analysis using VADER sentiment analysis.
+
+News can be classified into:
 
 ```text
-                         PaiseWise
-                            │
-                            ▼
-                       FastAPI API
-                            │
-              ┌─────────────┴─────────────┐
-              │                           │
-           RAG Flow                   News Flow
-              │                           │
-              ▼                           ▼
-         User Question                NewsAPI
-              │                           │
-              ▼                           ▼
-         Guardrails                News Ingestion
-              │                           │
-              ▼                           ▼
-         Embeddings               News Articles
-              │                           │
-              ▼                           ▼
-          ChromaDB                 Sector Classifier
-              │                           │
-              ▼                           ▼
-       Top 10 Retrieval             Sector + Score
-              │                           │
-              ▼                           │
-          Re-ranker                       │
-              │                           │
-              ▼                           │
-        Best Document                     │
-              │                           │
-              └──────────┬────────────────┘
-                         ▼
-                   Market Context
+Positive
+Negative
+Neutral
+```
+
+The flow is:
+
+```text
+News Article
+      ↓
+Sentiment Analyzer
+      ↓
+Sentiment Score
+      ↓
+Positive / Negative / Neutral
 ```
 
 ---
 
-# 41. Complete Commands From Scratch
+# 51. Sector Sentiment
 
-The basic development sequence is:
+Sector sentiment aggregates sentiment across news articles belonging to the same sector.
 
-```powershell
-git clone <YOUR_REPOSITORY_URL>
+Example:
 
-cd paiseWise-rag
-
-python -m venv .venv
-
-.venv\Scripts\activate
-
-python -m pip install --upgrade pip
-
-pip install -r requirements.txt
-
-cd src
-
-python ingest_document.py
-
-python check_database.py
-
-python retrieval_test.py
-
-python test_reranker.py
-
-python evaluate_retrieval.py
-
-python news_ingestion.py
-
-python news_classifier.py
-
-uvicorn main:app --reload
+```text
+IT
+   ↓
+Positive News
+Positive News
+Neutral News
+   ↓
+Overall IT Sentiment
 ```
 
-Then open:
+Example output:
+
+```text
+IT          → Positive
+Banking     → Neutral
+Pharma      → Positive
+Auto        → Negative
+```
+
+---
+
+# 52. Corporate Events
+
+The market-context pipeline can also extract major corporate events from market information.
+
+Conceptually:
+
+```text
+Market News
+     ↓
+Corporate Event Detection
+     ↓
+Major Events
+     ↓
+Market Context
+```
+
+---
+
+# 53. Complete Market Context Flow
+
+```text
+             Market Data
+                 │
+                 ▼
+           NIFTY Movement
+                 │
+                 │
+NewsAPI ──→ News Articles
+                 │
+                 ▼
+          Sector Classification
+                 │
+                 ▼
+          Sentiment Analysis
+                 │
+                 ▼
+           Sector Sentiment
+                 │
+                 ▼
+          Corporate Events
+                 │
+                 ▼
+          Market Context
+```
+
+---
+
+# 54. Portfolio Analysis
+
+The portfolio analysis module evaluates a portfolio from different perspectives.
+
+Main areas include:
+
+```text
+Diversification
+Risk
+Drawdown
+Correlation
+Portfolio Health
+```
+
+Overall flow:
+
+```text
+Portfolio Holdings
+       ↓
+Portfolio Analysis
+       ↓
+Diversification
+       ↓
+Risk
+       ↓
+Drawdown
+       ↓
+Correlation
+       ↓
+Portfolio Health
+```
+
+---
+
+# 55. Portfolio Diversification
+
+The diversification analysis checks:
+
+```text
+Sector Concentration
+Single Stock Concentration
+Overall Diversification
+```
+
+The module generates a diversification score from:
+
+```text
+0 – 100
+```
+
+Example:
+
+```text
+Diversification Score: 78/100
+```
+
+Run:
+
+```powershell
+python src/Portfolio_Diversification.py
+```
+
+---
+
+# 56. Portfolio Analysis
+
+Run:
+
+```powershell
+python src/portfolio_analyser.py
+```
+
+The analysis considers:
+
+```text
+Portfolio Holdings
+Sector Exposure
+Stock Concentration
+Portfolio Distribution
+```
+
+---
+
+# 57. Portfolio Risk Assessment
+
+Run:
+
+```powershell
+python src/risk_assessment.py
+```
+
+The risk module evaluates portfolio risk and compares it with the NIFTY 50 benchmark where supported by the implementation.
+
+Flow:
+
+```text
+Portfolio
+    ↓
+Risk Calculation
+    ↓
+NIFTY 50 Comparison
+    ↓
+Risk Result
+```
+
+---
+
+# 58. Portfolio Drawdown
+
+Run:
+
+```powershell
+python src/Portfolio_Drawdown_Calculator.py
+```
+
+Maximum drawdown measures the largest decline from a previous portfolio peak.
+
+Flow:
+
+```text
+Portfolio Values
+      ↓
+Find Peak
+      ↓
+Find Lowest Value After Peak
+      ↓
+Calculate Drawdown
+```
+
+Example:
+
+```text
+Highest Portfolio Value: 123343.54
+Lowest Value: 96428.78
+Maximum Drawdown: 21.82%
+```
+
+---
+
+# 59. Portfolio Correlation Matrix
+
+Run:
+
+```powershell
+python src/portfolio_correlation_matrix.py
+```
+
+Correlation shows how assets move in relation to each other.
+
+General interpretation:
+
+```text
+-1 → Opposite movement
+ 0 → Little or no relationship
++1 → Similar movement
+```
+
+The analysis can identify:
+
+* Highly correlated assets
+* Less correlated assets
+* Possible concentration
+* Diversification opportunities
+
+---
+
+# 60. Portfolio Health Report
+
+Run:
+
+```powershell
+python src/portfolio_health_report.py
+```
+
+The health report combines:
+
+```text
+Diversification
+       +
+Risk
+       +
+Performance
+       +
+Drawdown
+       +
+Correlation
+       ↓
+Portfolio Health Report
+```
+
+---
+
+# 61. Portfolio API
+
+If portfolio endpoints are enabled in the current `main.py`, they can be tested through:
 
 ```text
 http://127.0.0.1:8000/docs
 ```
 
+For example, a diversification request can contain holdings similar to:
+
+```json
+{
+    "holdings": [
+        {
+            "stock": "TCS",
+            "sector": "IT",
+            "amount": 40000,
+            "market_cap": "Large"
+        }
+    ]
+}
+```
+
+Always use the request schema displayed by the current Swagger documentation.
+
 ---
 
-# 42. Useful Uvicorn Commands
+# 62. Churn Prediction
 
-### Development
+The churn prediction system identifies users who may stop using PaiseWise.
 
-```powershell
-uvicorn main:app --reload
-```
-
-### Specific Host and Port
-
-```powershell
-uvicorn main:app --host 0.0.0.0 --port 8000
-```
-
-### Host + Port + Reload
-
-```powershell
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-### Different Port
-
-```powershell
-uvicorn main:app --host 127.0.0.1 --port 8080 --reload
-```
-
-Then open:
+Current churn definition:
 
 ```text
-http://127.0.0.1:8080/docs
+User with 0 app opens
+for 14 consecutive days
+        ↓
+Churned User
 ```
 
----
-
-# 43. Troubleshooting
-
-## ChromaDB not found
-
-Check that the database exists at:
+The overall flow is:
 
 ```text
-../chroma_db
-```
-
-from the `src` directory.
-
-Check:
-
-```powershell
-python check_database.py
+User Activity
+      ↓
+Feature Engineering
+      ↓
+XGBoost Classifier
+      ↓
+Churn Prediction
+      ↓
+High-Risk Users
 ```
 
 ---
 
-## Sentence Transformers Error
+# 63. Churn Features
+
+The model uses the following Day-7 engagement features:
+
+```text
+d7_lesson_count
+d7_quiz_count
+d7_paper_trade_count
+d7_streak_days
+d7_xp_earned
+d7_notification_open_rate
+onboarding_goal_set
+kyc_completed_d7
+first_paper_trade_d7
+```
+
+These features represent early user engagement.
+
+---
+
+# 64. Churn Dataset
+
+Run:
+
+```powershell
+python src/churn_data.py
+```
+
+The dataset contains user activity and churn information.
+
+Target:
+
+```text
+churned
+```
+
+Target values:
+
+```text
+0 = Retained
+1 = Churned
+```
+
+---
+
+# 65. Train Churn Model
+
+Run:
+
+```powershell
+python src/churn_training.py
+```
+
+Model:
+
+```text
+XGBoost Classifier
+```
+
+Training flow:
+
+```text
+Churn Dataset
+      ↓
+Feature Preparation
+      ↓
+Training
+      ↓
+XGBoost
+      ↓
+Model
+```
+
+---
+
+# 66. Churn Validation
+
+Run:
+
+```powershell
+python src/churn_validation.py
+```
+
+The validation process compares:
+
+```text
+Current Model
+       vs
+New Model
+```
+
+Metrics include:
+
+```text
+Accuracy
+Precision
+Recall
+F1 Score
+```
+
+The F1 score is used for model comparison.
+
+---
+
+# 67. Automated Churn Retraining
+
+Run:
+
+```powershell
+python src/churn_retraining_pipeline.py
+```
+
+Flow:
+
+```text
+Latest Churn Data
+       ↓
+Filter Training Data
+       ↓
+Train New XGBoost Model
+       ↓
+Holdout Validation
+       ↓
+Calculate Metrics
+       ↓
+Compare Current vs New
+       ↓
+Improvement > 2%?
+      /       \
+    YES        NO
+     ↓          ↓
+ Deploy       Keep Current
+ New Model       Model
+     \           /
+      ↓         ↓
+       MLflow
+```
+
+---
+
+# 68. Churn Deployment Rule
+
+The new churn model is deployed only if its performance improves by more than the required threshold.
+
+Conceptually:
+
+```text
+New F1 - Current F1 > 2%
+```
+
+If:
+
+```text
+Improvement > 2%
+```
+
+then:
+
+```text
+DEPLOY_NEW_MODEL
+```
+
+Otherwise:
+
+```text
+KEEP_CURRENT_MODEL
+```
+
+Example:
+
+```text
+Current F1 : 100.00%
+New F1     : 100.00%
+Improvement: 0.00%
+
+Decision   : KEEP_CURRENT_MODEL
+```
+
+This demonstrates that the deployment safeguard prevents an equal or weaker model from replacing the current model.
+
+---
+
+# 69. Churn MLflow Tracking
+
+Experiment:
+
+```text
+PaiseWise-Churn-Retraining
+```
+
+MLflow can track:
+
+```text
+Accuracy
+Precision
+Recall
+F1 Score
+Current Model F1
+New Model F1
+Improvement
+Deployment Decision
+Model Artifact
+```
+
+---
+
+# 70. Churn Monthly Schedule
+
+Production schedule:
+
+```text
+Frequency : Monthly
+Day       : 1st day of every month
+Time      : 3:00 AM
+```
+
+Scheduler:
+
+```text
+src/churn_scheduler.py
+```
+
+Test:
+
+```powershell
+python src/churn_scheduler.py
+```
+
+If the scheduler supports:
+
+```python
+TEST_MODE = True
+```
+
+the pipeline can be executed immediately for testing.
+
+For the actual schedule:
+
+```python
+TEST_MODE = False
+```
+
+---
+
+# 71. Fund Recommendation Retraining
+
+PaiseWise also contains an automated fund recommendation retraining workflow.
+
+The process uses fund-performance information to calculate scores and rank funds.
+
+Flow:
+
+```text
+Fund Performance Data
+        ↓
+Dynamic Scoring Weights
+        ↓
+Fund Scores
+        ↓
+Fund Ranking
+        ↓
+Validation
+        ↓
+Compare Current vs New
+        ↓
+Deployment Decision
+```
+
+---
+
+# 72. Fund Scoring Factors
+
+The fund scoring pipeline considers factors such as:
+
+```text
+1-Year Return
+3-Year Return
+Risk Score
+Consistency Score
+```
+
+---
+
+# 73. Dynamic Fund Weights
+
+The scoring pipeline dynamically calculates the importance of different factors based on the available dataset.
+
+Example:
+
+```text
+Return Weight      : 71.31%
+Risk Weight        : 10.53%
+Consistency Weight : 18.16%
+
+Total              : 100%
+```
+
+The actual weights can change when the underlying dataset changes.
+
+---
+
+# 74. Fund Score
+
+Conceptually:
+
+```text
+Fund Score =
+    Return Score × Return Weight
+  + Risk Score × Risk Weight
+  + Consistency Score × Consistency Weight
+```
+
+Funds are then ranked according to the final score.
+
+---
+
+# 75. Fund Recommendation Example
+
+An example ranking may look like:
+
+```text
+1. HDFC Mid-Cap Opportunities Fund
+2. Kotak Emerging Equity Fund
+3. Quant Flexi Cap Fund
+4. Parag Parikh Flexi Cap Fund
+5. Axis Midcap Fund
+```
+
+These rankings are based on the project's test/demo dataset and should **not** be interpreted as live investment recommendations.
+
+---
+
+# 76. Fund Retraining Pipeline
+
+Run the fund retraining pipeline using the actual filename present in `src`.
+
+If the project contains:
+
+```text
+fund_retraining_pipeline.py
+```
+
+run:
+
+```powershell
+python src/fund_retraining_pipeline.py
+```
+
+The pipeline performs:
+
+```text
+Load Fund Data
+      ↓
+Calculate Weights
+      ↓
+Calculate Fund Scores
+      ↓
+Generate Ranking
+      ↓
+Validate
+      ↓
+Compare Models
+      ↓
+Deploy if Better
+```
+
+---
+
+# 77. Fund Deployment Rule
+
+The new fund model is deployed only if the required improvement is achieved.
+
+Conceptually:
+
+```text
+New Score - Current Score > 2%
+```
+
+Otherwise:
+
+```text
+KEEP_CURRENT_MODEL
+```
+
+Example:
+
+```text
+Current Score : 41.67%
+New Score     : 41.67%
+Improvement   : 0.00%
+
+Decision      : KEEP_CURRENT_MODEL
+```
+
+---
+
+# 78. Fund MLflow Tracking
+
+Experiment:
+
+```text
+PaiseWise-Fund-Retraining
+```
+
+Metrics can include:
+
+```text
+return_weight
+risk_weight
+consistency_weight
+current_score
+new_score
+improvement
+```
+
+Parameters can include:
+
+```text
+model_type
+retraining_frequency
+retraining_day
+retraining_time
+evaluation_metric
+deployment_threshold
+deployment_decision
+```
+
+The generated model artifact can be stored as:
+
+```text
+new_fund_recommendation_model.pkl
+```
+
+---
+
+# 79. Fund Weekly Schedule
+
+Production schedule:
+
+```text
+Frequency : Weekly
+Day       : Sunday
+Time      : 2:00 AM
+```
+
+Scheduler:
+
+```text
+src/fund_scheduler.py
+```
+
+Run:
+
+```powershell
+python src/fund_scheduler.py
+```
+
+If supported:
+
+```python
+TEST_MODE = True
+```
+
+can be used for immediate testing.
+
+For production:
+
+```python
+TEST_MODE = False
+```
+
+---
+
+# 80. MLflow UI
+
+Start MLflow:
+
+```powershell
+mlflow ui --backend-store-uri sqlite:///C:/Users/Malinirani/Desktop/paiseWise-rag/src/mlflow.db
+```
+
+MLflow will display a local URL in the terminal.
+
+Open that URL in your browser.
+
+The main experiments are:
+
+```text
+PaiseWise-Churn-Retraining
+PaiseWise-Fund-Retraining
+```
+
+---
+
+# 81. Automated Deployment Architecture
+
+Both ML models follow the same basic safety mechanism:
+
+```text
+             New Model
+                 ↓
+          Model Validation
+                 ↓
+       Compare With Current
+                 ↓
+        Improvement > 2%?
+            /        \
+          YES         NO
+           ↓           ↓
+      Deploy New    Keep Current
+         Model          Model
+           \           /
+             ↓       ↓
+                MLflow
+```
+
+This prevents a weaker model from automatically replacing the existing model.
+
+---
+
+# 82. Testing With Pytest
+
+The project uses pytest for automated testing.
+
+The mentor/team requested the command:
+
+```powershell
+pytest -q
+```
+
+Run it from the **project root**:
+
+```powershell
+cd paiseWise-rag
+```
+
+Activate the environment:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+Then:
+
+```powershell
+pytest -q
+```
+
+---
+
+# 83. Important Pytest Package Structure
+
+Because `src` contains:
+
+```text
+src/__init__.py
+```
+
+test files inside `src` should use package-relative imports where appropriate.
+
+Correct:
+
+```python
+from .embeddings import create_embedding
+```
+
+Correct:
+
+```python
+from .reranker import rerank_results
+```
+
+For importing the FastAPI application:
+
+```python
+from src.main import app
+```
+
+Avoid:
+
+```python
+from embeddings import create_embedding
+```
+
+when pytest is running from the project root.
+
+---
+
+# 84. Embedding Test
+
+The embedding test should contain an actual pytest test function.
+
+Example:
+
+```python
+from .embeddings import create_embedding
+
+
+def test_embedding():
+    text = "What is a mutual fund?"
+
+    embedding = create_embedding(text)
+
+    assert embedding is not None
+    assert len(embedding) > 0
+
+    print("\nEmbedding created successfully.")
+    print("Embedding length:", len(embedding))
+```
+
+Run individually:
+
+```powershell
+pytest -q src/test_embedding.py
+```
+
+---
+
+# 85. Hindi Test
+
+Run:
+
+```powershell
+pytest -q src/test_hindi.py
+```
+
+This verifies:
+
+```text
+Hindi Question
+      ↓
+Multilingual Embedding
+      ↓
+ChromaDB
+      ↓
+Retrieved Documents
+```
+
+---
+
+# 86. Reranker Test
+
+Run:
+
+```powershell
+pytest -q src/test_reranker.py
+```
+
+This verifies:
+
+```text
+Question
+    ↓
+Embedding
+    ↓
+ChromaDB
+    ↓
+Top 10
+    ↓
+Reranker
+    ↓
+Ranked Results
+```
+
+---
+
+# 87. Guardrail Test
+
+Run:
+
+```powershell
+pytest -q src/test_api_guardrails.py
+```
+
+Expected target:
+
+```text
+Guardrail deflection rate >= 95%
+```
+
+---
+
+# 88. Full Test Suite
+
+The final command is:
+
+```powershell
+pytest -q
+```
+
+Run this from:
+
+```text
+paiseWise-rag/
+```
+
+not from:
+
+```text
+paiseWise-rag/src/
+```
+
+Correct:
+
+```text
+C:\Users\...\paiseWise-rag>
+pytest -q
+```
+
+---
+
+# 89. If Pytest Reports Import Errors
+
+If you see:
+
+```text
+ModuleNotFoundError: No module named 'embeddings'
+```
+
+check that the test uses:
+
+```python
+from .embeddings import create_embedding
+```
+
+instead of:
+
+```python
+from embeddings import create_embedding
+```
+
+Also make sure:
+
+```text
+src/__init__.py
+```
+
+exists.
+
+---
+
+# 90. If Uvicorn Reports Relative Import Error
+
+If you see:
+
+```text
+ImportError:
+attempted relative import with no known parent package
+```
+
+you are probably starting the application incorrectly.
+
+Do:
+
+```powershell
+cd C:\Users\...\paiseWise-rag
+```
+
+then:
+
+```powershell
+uvicorn src.main:app --reload
+```
+
+Do not use:
+
+```powershell
+cd src
+uvicorn main:app
+```
+
+---
+
+# 91. If ChromaDB Is Empty
+
+Check the database:
+
+```powershell
+python src/check_database.py
+```
+
+If the collection is empty, run the ingestion process:
+
+```powershell
+python src/ingest_document.py
+```
+
+Then check again:
+
+```powershell
+python src/check_database.py
+```
+
+---
+
+# 92. If Pandas Is Missing
+
+If you see:
+
+```text
+ModuleNotFoundError: No module named 'pandas'
+```
+
+install:
+
+```powershell
+pip install pandas
+```
+
+or reinstall all requirements:
+
+```powershell
+pip install -r requirements.txt
+```
+
+---
+
+# 93. If Sentence Transformers Is Missing
 
 Install:
 
@@ -1204,23 +2633,23 @@ python -c "from sentence_transformers import SentenceTransformer; print('Sentenc
 
 ---
 
-## Pandas Error
+# 94. If XGBoost Is Missing
 
-If you see:
-
-```text
-ModuleNotFoundError: No module named 'pandas'
-```
-
-run:
+Install:
 
 ```powershell
-pip install pandas
+pip install xgboost
+```
+
+Test:
+
+```powershell
+python -c "import xgboost; print('XGBoost OK')"
 ```
 
 ---
 
-## News API Key Error
+# 95. If NewsAPI Key Is Missing
 
 If you see:
 
@@ -1228,7 +2657,7 @@ If you see:
 NEWS_API_KEY environment variable is not set.
 ```
 
-PowerShell:
+set:
 
 ```powershell
 $env:NEWS_API_KEY="YOUR_NEWS_API_KEY"
@@ -1237,63 +2666,248 @@ $env:NEWS_API_KEY="YOUR_NEWS_API_KEY"
 Then run:
 
 ```powershell
-python news_ingestion.py
+python src/news_ingestion.py
 ```
 
 ---
 
-## Hugging Face Warning
+# 96. Hugging Face Warnings
 
-You may see a warning about unauthenticated requests to the Hugging Face Hub.
-
-For development, the model can still be downloaded, but rate limits may be lower.
-
-If your environment uses a Hugging Face token, configure it appropriately.
-
----
-
-## Uvicorn Import Error
-
-If you see:
+The first model download may produce warnings related to:
 
 ```text
-Error loading ASGI app
+Hugging Face Hub
 ```
 
-make sure you are inside the directory containing `main.py`.
+An unauthenticated Hugging Face environment can still download publicly available models, although rate limits may apply.
+
+A Hugging Face token can be configured if required by your environment.
+
+---
+
+# 97. Pytest Warnings
+
+You may see warnings such as:
+
+```text
+StarletteDeprecationWarning
+```
+
+or:
+
+```text
+BPE deprecation warning
+```
+
+Warnings are different from test failures.
 
 For example:
 
-```powershell
-cd src
-uvicorn main:app --reload
-```
-
-The command:
-
 ```text
-main:app
+5 passed, 2 warnings
 ```
 
 means:
 
 ```text
-main.py
-   ↓
-app = FastAPI(...)
+Tests passed successfully.
+Warnings are present but did not fail the tests.
 ```
 
 ---
 
-# 44. Git Commands
+# 98. Windows / ML Model Stability
 
-Check status:
+The project uses ML libraries such as:
+
+```text
+PyTorch
+Transformers
+Sentence Transformers
+```
+
+These libraries can load native components.
+
+For this reason:
+
+* Avoid loading models unnecessarily during module import.
+* Keep embedding model loading lazy.
+* Keep expensive ML calls inside test functions.
+* Avoid executing model inference directly at test-module import time.
+
+For example, avoid:
+
+```python
+embedding = create_embedding("What is SIP?")
+```
+
+at the top level of a pytest file.
+
+Instead use:
+
+```python
+def test_embedding():
+    embedding = create_embedding("What is SIP?")
+```
+
+---
+
+# 99. Complete API Endpoint List
+
+The main API currently exposes the following endpoints:
+
+```text
+GET  /
+GET  /health
+POST /ask
+GET  /market-context
+GET  /news
+POST /news/classify
+GET  /news/classified
+```
+
+Portfolio-related endpoints may also be available depending on the current `src/main.py`.
+
+Always use:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+as the source of truth for the currently registered endpoints.
+
+---
+
+# 100. Complete API Architecture
+
+```text
+                         PaiseWise
+                            │
+                            ▼
+                       FastAPI API
+                            │
+          ┌─────────────────┼─────────────────┐
+          │                 │                 │
+          ▼                 ▼                 ▼
+       RAG Flow        Market Context     Portfolio
+          │                 │                 │
+          ▼                 ▼                 ▼
+     Guardrails          Market Data     Diversification
+          │                 │                 │
+          ▼                 ▼                 ▼
+     Embeddings         NewsAPI          Risk
+          │                 │                 │
+          ▼                 ▼                 ▼
+      ChromaDB        Classification     Drawdown
+          │                 │                 │
+          ▼                 ▼                 ▼
+     Top 10 Docs       Sentiment         Correlation
+          │                 │                 │
+          ▼                 ▼                 ▼
+      Re-ranker       Sector Sentiment   Health Report
+          │                 │
+          ▼                 ▼
+    Best Document      Market Context
+          │
+          ▼
+       Answer
+```
+
+---
+
+# 101. Complete ML Architecture
+
+```text
+                    PaiseWise ML
+                         │
+             ┌───────────┴───────────┐
+             │                       │
+             ▼                       ▼
+        Churn Model            Fund Model
+             │                       │
+             ▼                       ▼
+        User Activity        Fund Performance
+             │                       │
+             ▼                       ▼
+      Feature Engineering       Scoring
+             │                       │
+             ▼                       ▼
+          XGBoost              Fund Ranking
+             │                       │
+             ▼                       ▼
+         Validation             Validation
+             │                       │
+             └───────────┬───────────┘
+                         ▼
+                    MLflow
+                         │
+                         ▼
+                Deployment Decision
+```
+
+---
+
+# 102. Automated Retraining Overview
+
+## Churn
+
+```text
+Monthly
+   ↓
+1st Day
+   ↓
+3:00 AM
+   ↓
+Latest Churn Data
+   ↓
+Training
+   ↓
+Validation
+   ↓
+F1 Comparison
+   ↓
+Deploy if >2% improvement
+```
+
+## Fund Recommendation
+
+```text
+Weekly
+   ↓
+Sunday
+   ↓
+2:00 AM
+   ↓
+Latest Fund Data
+   ↓
+Dynamic Weights
+   ↓
+Fund Scoring
+   ↓
+Validation
+   ↓
+Score Comparison
+   ↓
+Deploy if >2% improvement
+```
+
+---
+
+# 103. Git Workflow
+
+Check the current branch:
+
+```powershell
+git branch
+```
+
+Check changed files:
 
 ```powershell
 git status
 ```
 
-Add files:
+Add changes:
 
 ```powershell
 git add .
@@ -1311,161 +2925,11 @@ Push:
 git push
 ```
 
-Check branch:
-
-```powershell
-git branch
-```
-
-Switch branch:
-
-```powershell
-git checkout <BRANCH_NAME>
-```
-
 ---
 
-# 45. Development Workflow
+# 104. Security
 
-For normal development, use this workflow:
-
-```text
-1. Activate environment
-        ↓
-2. Go to src
-        ↓
-3. Update code
-        ↓
-4. Test individual Python files
-        ↓
-5. Check ChromaDB
-        ↓
-6. Start FastAPI
-        ↓
-7. Open /docs
-        ↓
-8. Test API endpoints
-```
-
-Commands:
-
-```powershell
-.venv\Scripts\activate
-
-cd src
-
-python check_database.py
-
-python retrieval_test.py
-
-python test_reranker.py
-
-python news_ingestion.py
-
-python news_classifier.py
-
-uvicorn main:app --reload
-```
-
-Open:
-
-```text
-http://127.0.0.1:8000/docs
-```
-
----
-
-# 46. Final API Endpoints
-
-The current API provides:
-
-```text
-GET  /
-GET  /health
-POST /ask
-GET  /market-context
-GET  /news
-POST /news/classify
-GET  /news/classified
-```
-
----
-
-# 47. Final End-to-End Flow
-
-### Financial Education
-
-```text
-User
- ↓
-POST /ask
- ↓
-Guardrail
- ↓
-Embedding
- ↓
-ChromaDB
- ↓
-Top 10 Retrieval
- ↓
-Re-ranking
- ↓
-Relevance Threshold
- ↓
-PaiseWise Answer
-```
-
-### Market News
-
-```text
-GET /news
- ↓
-NewsAPI
- ↓
-fetch_market_news()
- ↓
-Market Articles
-```
-
-### News Classification
-
-```text
-GET /news/classified
- ↓
-NewsAPI
- ↓
-fetch_market_news()
- ↓
-classify_article()
- ↓
-Zero-Shot Classification
- ↓
-Sector
- ↓
-Confidence
- ↓
-API Response
-```
-
-### Market Context
-
-```text
-Market News
-     +
-Sector Information
-     +
-Market/NIFTY Information
-     ↓
-create_market_context()
-     ↓
-Market Context
-```
-
----
-
-# 48. Important Security Notes
-
-Do not commit API keys or secrets to GitHub.
+Never commit secrets to GitHub.
 
 Do not write:
 
@@ -1475,38 +2939,45 @@ NEWS_API_KEY = "actual-secret-key"
 
 inside the source code.
 
-Use an environment variable:
+Use:
 
 ```text
 NEWS_API_KEY
 ```
 
-and keep secret files such as `.env` out of Git.
+as an environment variable.
 
-Example `.gitignore`:
+Recommended `.gitignore`:
 
 ```text
 .venv/
 .env
 __pycache__/
-chroma_db/
 *.pyc
+chroma_db/
+*.db
 ```
+
+Depending on project requirements, model files and datasets may or may not be committed to Git.
 
 ---
 
-# 49. Quick Start
+# 105. Quick Start – Existing Project
 
-If everything is already installed and the database is populated:
+If the repository is already cloned, dependencies are installed, and ChromaDB is already populated:
 
 ```powershell
-cd paiseWise-rag
+cd C:\Users\Malinirani\Desktop\paiseWise-rag
 
-.venv\Scripts\activate
+.venv\Scripts\Activate.ps1
 
-cd src
+pytest -q
+```
 
-uvicorn main:app --reload
+If tests pass, start the API:
+
+```powershell
+uvicorn src.main:app --reload
 ```
 
 Open:
@@ -1515,1161 +2986,554 @@ Open:
 http://127.0.0.1:8000/docs
 ```
 
-Test:
-
-```text
-POST /ask
-GET /market-context
-GET /news
-POST /news/classify
-GET /news/classified
-```
-
-
-# 50. Task 4 – Portfolio Analysis
-
-The portfolio analysis module is used to analyze a user's portfolio from different perspectives such as diversification, risk, drawdown, and correlation.
-
-The main portfolio tasks are:
-
-```text
-Portfolio Diversification
-        ↓
-Portfolio Analysis
-        ↓
-Risk Assessment
-        ↓
-Drawdown Calculation
-        ↓
-Correlation Analysis
-        ↓
-Portfolio Health Report
-````
-
 ---
 
-# 51. Portfolio Diversification
+# 106. Quick Start – Fresh Installation
 
-Run:
+For a new machine:
 
 ```powershell
-python Portfolio_Diversification.py
+git clone <YOUR_REPOSITORY_URL>
+
+cd paiseWise-rag
+
+python -m venv .venv
+
+.venv\Scripts\Activate.ps1
+
+python -m pip install --upgrade pip
+
+pip install -r requirements.txt
 ```
 
-This checks how diversified the portfolio is.
-
-The analysis considers:
-
-```text
-Sector Concentration
-Single Stock Concentration
-Overall Diversification
-```
-
-The module generates a diversification score from 0–100.
-
-Example:
-
-```text
-Diversification Score: 78/100
-```
-
----
-
-# 52. Portfolio Analysis
-
-Run:
+Prepare the environment variable:
 
 ```powershell
-python portfolio_analyser.py
+$env:NEWS_API_KEY="YOUR_NEWS_API_KEY"
 ```
 
-This performs the main portfolio-level analysis.
-
-The analysis checks:
-
-```text
-Portfolio Holdings
-Sector Exposure
-Stock Concentration
-Portfolio Distribution
-```
-
----
-
-# 53. Portfolio Risk Assessment
-
-Run:
+Check the database:
 
 ```powershell
-python risk_assessment.py
+python src/check_database.py
 ```
 
-This analyzes portfolio risk and compares it with the NIFTY 50 benchmark.
-
-The flow is:
-
-```text
-Portfolio
-    ↓
-Risk Calculation
-    ↓
-NIFTY 50 Comparison
-    ↓
-Risk Result
-```
-
----
-
-# 54. Portfolio Drawdown Calculation
-
-Run:
+If the database is empty:
 
 ```powershell
-python Portfolio_Drawdown_Calculator.py
+python src/ingest_document.py
 ```
 
-This calculates the maximum fall in portfolio value from a previous peak.
-
-The calculation flow is:
-
-```text
-Portfolio Values
-      ↓
-Find Highest Value
-      ↓
-Find Lowest Value After Peak
-      ↓
-Calculate Maximum Drawdown
-```
-
-Example:
-
-```text
-Highest Portfolio Value: 123343.54
-Lowest Value: 96428.78
-Maximum Drawdown: 21.82%
-```
-
----
-
-# 55. Portfolio Correlation Matrix
-
-Run:
+Run tests:
 
 ```powershell
-python portfolio_correlation_matrix.py
+pytest -q
 ```
 
-This checks how different assets in the portfolio move in relation to each other.
-
-The analysis helps identify:
-
-```text
-Highly Correlated Assets
-Less Correlated Assets
-Possible Portfolio Concentration
-```
-
-Correlation values are generally interpreted as:
-
-```text
--1 → Opposite movement
- 0 → Little or no relationship
-+1 → Similar movement
-```
-
----
-
-# 56. Portfolio Health Report
-
-Run:
+Start the API:
 
 ```powershell
-python portfolio_health_report.py
+uvicorn src.main:app --reload
 ```
 
-This combines the portfolio analysis results into a single health report.
-
-The report combines:
+Open:
 
 ```text
-Diversification
-      +
-Risk
-      +
-Performance
-      +
-Drawdown
-      +
-Correlation
-      ↓
-Portfolio Health Report
-```
-
-#  Sector Sentiment and Market Context
-
-The market context combines market information with sector-level sentiment.
-
-The flow is:
-
-```text
-Market News
-      ↓
-Sector Classification
-      ↓
-Sentiment Analysis
-      ↓
-Sector Sentiment
-      ↓
-Market Context
-```
-
-Sector sentiment represents the overall sentiment for each sector.
-
-Example:
-
-```text
-IT          → Positive
-Banking     → Neutral
-Pharma      → Positive
-Auto        → Negative
-```
----
-
-# 57. Task 5 – Churn Prediction
-
-The churn prediction model is used to identify users who may stop using the PaiseWise application.
-
-The current churn definition is:
-
-```text
-User with 0 app opens
-for 14 consecutive days
-        ↓
-Churned User
-```
-
-The churn prediction flow is:
-
-```text
-User Activity
-      ↓
-Feature Engineering
-      ↓
-XGBoost Model
-      ↓
-Churn Prediction
-      ↓
-High-Risk Users
+http://127.0.0.1:8000/docs
 ```
 
 ---
 
-# 58. Churn Features
+# 107. Recommended Daily Development Workflow
 
-The churn model uses Day-7 user activity features:
-
-```text
-d7_lesson_count
-d7_quiz_count
-d7_paper_trade_count
-d7_streak_days
-d7_xp_earned
-d7_notification_open_rate
-onboarding_goal_set
-kyc_completed_d7
-first_paper_trade_d7
-```
-
-These features represent the user's early engagement with the application.
-
----
-
-# 59. Check Churn Dataset
-
-Run:
+Start from the project root:
 
 ```powershell
-python churn_data.py
+cd C:\Users\Malinirani\Desktop\paiseWise-rag
 ```
 
-This checks and prepares the churn training data.
-
-The dataset contains:
-
-```text
-User ID
-User Activity Features
-Churned
-```
-
-The target column is:
-
-```text
-churned
-```
-
-Target values:
-
-```text
-0 = Retained
-1 = Churned
-```
-
----
-
-# 60. Train Churn Model
-
-Run:
+Activate the environment:
 
 ```powershell
-python churn_training.py
+.venv\Scripts\Activate.ps1
 ```
 
-The churn model uses:
-
-```text
-XGBoost Classifier
-```
-
-The training flow is:
-
-```text
-Churn Dataset
-      ↓
-Training Data
-      ↓
-XGBoost Classifier
-      ↓
-New Churn Model
-      ↓
-Model File
-```
-
-The model is evaluated using:
-
-```text
-Accuracy
-Precision
-Recall
-F1 Score
-```
-
----
-
-# 61. Validate Churn Model
-
-Run:
+Run the complete test suite:
 
 ```powershell
-python churn_validation.py
+pytest -q
 ```
 
-This compares the newly trained churn model with the existing model.
-
-The comparison uses:
-
-```text
-F1 Score
-```
-
-Example:
-
-```text
-Current F1 : 100%
-New F1     : 100%
-Improvement: 0%
-```
-
-If the new model is not better, the existing model is kept.
-
----
-
-# 62. Churn Automated Retraining
-
-Run the complete churn retraining pipeline manually:
+If needed, check ChromaDB:
 
 ```powershell
-python churn_retraining_pipeline.py
+python src/check_database.py
 ```
 
-The complete flow is:
-
-```text
-Churn Data
-    ↓
-Train New Model
-    ↓
-Validate Model
-    ↓
-Compare With Current Model
-    ↓
-Is New Model Better?
-   /              \
- Yes              No
-  ↓                ↓
-Deploy          Keep Current
-```
-
-Example final output:
-
-```text
-RETRAINING PIPELINE COMPLETED
-
-Status: rejected
-Decision: KEEP_CURRENT_MODEL
-Improvement: 0.00%
-```
-
----
-
-# 63. MLflow Tracking
-
-MLflow is used to track model training and validation metrics.
-
-Start MLflow:
+Run individual tests when debugging:
 
 ```powershell
-mlflow ui
+pytest -q src/test_embedding.py
 ```
-
-The MLflow dashboard can then be opened using the local URL displayed in the terminal.
-
-The churn experiment is:
-
-```text
-PaiseWise-Churn-Retraining
-```
-
-MLflow can be used to monitor:
-
-```text
-Model Metrics
-Training Information
-Validation Results
-Model Comparison
-```
-
----
-
-# 64. Monthly Churn Retraining Schedule
-
-The churn retraining requirement is:
-
-```text
-Every Month
-Day: 1
-Time: 3:00 AM
-```
-
-Windows Task Scheduler configuration:
-
-```text
-Task Name:
-PaiseWise Monthly Churn Retraining
-
-Program:
-C:\Users\Malinirani\Desktop\paiseWise-rag\.venv\Scripts\python.exe
-
-Arguments:
-churn_retraining_pipeline.py
-
-Start In:
-C:\Users\Malinirani\Desktop\paiseWise-rag\src
-```
-
-The scheduled flow is:
-
-```text
-1st of Every Month
-        ↓
-3:00 AM
-        ↓
-Churn Retraining Pipeline
-        ↓
-Train Model
-        ↓
-Validate Model
-        ↓
-Log Metrics in MLflow
-        ↓
-Deploy if Better
-```
-
-
-# Automated Model Retraining
-
-PaiseWise includes automated retraining pipelines for:
-
-1. Churn Prediction Model
-2. Fund Recommendation Model
-
-The pipelines retrain models periodically, validate the newly trained model against the current model, track results using MLflow, and deploy the new model only when the required performance improvement is achieved.
-
----
-
-## 1. Churn Model Retraining
-
-### Schedule
-
-The churn model is scheduled to retrain:
-
-- Frequency: Monthly
-- Day: 1st day of every month
-- Time: 3:00 AM
-
-### Retraining Workflow
-
-```text
-Scheduler
-   |
-   v
-Load latest churn data
-   |
-   v
-Filter last 90 days of data
-   |
-   v
-Train new XGBoost model
-   |
-   v
-Holdout validation
-   |
-   v
-Calculate Accuracy / Precision / Recall / F1
-   |
-   v
-Compare current model vs new model
-   |
-   v
-Is improvement > 2%?
-   |                 |
-  YES                NO
-   |                 |
-   v                 v
-Deploy new       Keep current
-model            model
-   |
-   v
-Log metrics and decision in MLflow
-````
-
-### Churn Features
-
-The model uses the following user-engagement features:
-
-* `d7_lesson_count`
-* `d7_quiz_count`
-* `d7_paper_trade_count`
-* `d7_streak_days`
-* `d7_xp_earned`
-* `d7_notification_open_rate`
-* `onboarding_goal_set`
-* `kyc_completed_d7`
-* `first_paper_trade_d7`
-
-### Model
-
-The churn prediction model uses:
-
-```text
-XGBoost Classifier
-```
-
-### Validation Metrics
-
-The following metrics are calculated during retraining:
-
-* Accuracy
-* Precision
-* Recall
-* F1 Score
-
-The F1 score is used to compare the current model with the newly trained model.
-
-### Deployment Rule
-
-```text
-New F1 - Current F1 > 2%
-        |
-       YES
-        |
-        v
-Deploy new model
-```
-
-If the improvement is not greater than 2%, the existing model is retained.
-
-### MLflow
-
-Churn retraining is tracked using the MLflow experiment:
-
-```text
-PaiseWise-Churn-Retraining
-```
-
-MLflow records:
-
-* Model parameters
-* Accuracy
-* Precision
-* Recall
-* F1 Score
-* Current model F1
-* New model F1
-* Improvement
-* Deployment decision
-* Model artifact
-
----
-
-# 2. Fund Recommendation Model Retraining
-
-### Schedule
-
-The fund recommendation model is scheduled to retrain:
-
-* Frequency: Weekly
-* Day: Sunday
-* Time: 2:00 AM
-
-### Retraining Workflow
-
-```text
-Scheduler
-   |
-   v
-Load latest fund performance data
-   |
-   v
-Calculate dynamic scoring weights
-   |
-   v
-Calculate fund scores
-   |
-   v
-Rank funds
-   |
-   v
-Generate new recommendation model
-   |
-   v
-Validate recommendation ranking
-   |
-   v
-Compare current model vs new model
-   |
-   v
-Is improvement > 2%?
-   |                 |
-  YES                NO
-   |                 |
-   v                 v
-Deploy new       Keep current
-model            model
-   |
-   v
-Log metrics and decision in MLflow
-```
-
-### Fund Scoring Factors
-
-The recommendation model currently considers:
-
-* 1-year return
-* 3-year return
-* Risk score
-* Consistency score
-
-### Dynamic Scoring Weights
-
-The pipeline dynamically calculates the importance of each factor based on the available fund-performance dataset.
-
-Example:
-
-```text
-Return Weight       : 71.31%
-Risk Weight         : 10.53%
-Consistency Weight  : 18.16%
-
-Total Weight        : 100%
-```
-
-The weights can change when the underlying fund-performance data changes.
-
-### Fund Score
-
-Each fund receives a combined recommendation score based on:
-
-```text
-Fund Score =
-    Return Score × Return Weight
-  + Risk Score × Risk Weight
-  + Consistency Score × Consistency Weight
-```
-
-Funds are then ranked according to the final score.
-
-### Example Recommendation Ranking
-
-```text
-1. HDFC Mid-Cap Opportunities Fund
-2. Kotak Emerging Equity Fund
-3. Quant Flexi Cap Fund
-4. Parag Parikh Flexi Cap Fund
-5. Axis Midcap Fund
-```
-
-> Note: The current fund-performance dataset is a demo/test dataset and is not a live market-data feed.
-
-### Deployment Rule
-
-The new fund recommendation model is deployed only when:
-
-```text
-New Model Score - Current Model Score > 2%
-```
-
-Otherwise:
-
-```text
-KEEP_CURRENT_MODEL
-```
-
-For the current test run:
-
-```text
-Current Score : 41.67%
-New Score     : 41.67%
-Improvement   : 0.00%
-
-Decision      : KEEP_CURRENT_MODEL
-```
-
-This demonstrates that the deployment safeguard is working correctly.
-
----
-
-# 3. MLflow Tracking
-
-Fund recommendation retraining is tracked using:
-
-```text
-PaiseWise-Fund-Retraining
-```
-
-MLflow records:
-
-### Metrics
-
-```text
-return_weight
-risk_weight
-consistency_weight
-current_score
-new_score
-improvement
-```
-
-### Parameters
-
-```text
-model_type
-retraining_frequency
-retraining_day
-retraining_time
-evaluation_metric
-deployment_threshold
-deployment_decision
-```
-
-### Model Artifact
-
-The newly generated model is stored as:
-
-```text
-new_fund_recommendation_model.pkl
-```
-
-The model artifact is logged in MLflow under:
-
-```text
-fund_model/
-```
-
----
-
-# 4. Project Files
-
-The automated retraining modules are organized as follows:
-
-```text
-src/
-│
-├── churn_data.py
-├── churn_training.py
-├── churn_deployment.py
-├── churn_retraining_pipeline.py
-├── churn_scheduler.py
-│
-├── fund_data.py
-├── fund_scoring.py
-├── fund_training.py
-├── fund_deployment.py
-├── fund_retraining_pipeline.py
-└── fund_scheduler.py
-```
-
-Data and model files:
-
-```text
-data/
-│
-├── churn/
-│   ├── churn_training_dataset.csv
-│   └── models/
-│       ├── churn_model.pkl
-│       └── new_churn_model.pkl
-│
-└── funds/
-    ├── fund_performance.csv
-    └── models/
-        ├── fund_recommendation_model.pkl
-        └── new_fund_recommendation_model.pkl
-```
-
----
-
-# 5. Running the Pipelines
-
-Activate the virtual environment:
 
 ```powershell
-.venv\Scripts\activate
+pytest -q src/test_hindi.py
 ```
-
-## Test Churn Retraining
 
 ```powershell
-python churn_retraining_pipeline.py
+pytest -q src/test_reranker.py
 ```
-
-## Test Churn Scheduler
 
 ```powershell
-python churn_scheduler.py
+pytest -q src/test_api_guardrails.py
 ```
 
-The scheduler can be configured using:
+Then start FastAPI:
 
-```python
-TEST_MODE = True
+```powershell
+uvicorn src.main:app --reload
 ```
 
-When `TEST_MODE = True`, the retraining runs immediately for testing.
-
-For production scheduling:
-
-```python
-TEST_MODE = False
-```
-
-The production schedule is:
+Open:
 
 ```text
-1st day of every month at 3:00 AM
+http://127.0.0.1:8000/docs
 ```
 
 ---
 
-## Test Fund Retraining
+# 108. Recommended Verification Order
 
-```powershell
-python fund_retraining_pipeline.py
-```
-
-## Test Fund Scheduler
-
-```powershell
-python fund_scheduler.py
-```
-
-For testing:
-
-```python
-TEST_MODE = True
-```
-
-This runs the fund retraining immediately instead of waiting for Sunday.
-
-For production:
-
-```python
-TEST_MODE = False
-```
-
-The production schedule is:
+For a complete local verification:
 
 ```text
-Every Sunday at 2:00 AM
+1. Activate virtual environment
+          ↓
+2. Check dependencies
+          ↓
+3. Check ChromaDB
+          ↓
+4. Run pytest
+          ↓
+5. Test retrieval
+          ↓
+6. Test reranking
+          ↓
+7. Test guardrails
+          ↓
+8. Test Hindi retrieval
+          ↓
+9. Test portfolio modules
+          ↓
+10. Test churn pipeline
+          ↓
+11. Test fund pipeline
+          ↓
+12. Start FastAPI
+          ↓
+13. Open Swagger
+          ↓
+14. Test API endpoints
+```
+
+Commands:
+
+```powershell
+cd C:\Users\Malinirani\Desktop\paiseWise-rag
+
+.venv\Scripts\Activate.ps1
+
+python src/check_database.py
+
+pytest -q
+
+python src/retrieval_test.py
+
+python src/test_reranker.py
+
+pytest -q src/test_api_guardrails.py
+
+pytest -q src/test_hindi.py
+
+python src/Portfolio_Diversification.py
+
+python src/portfolio_analyser.py
+
+python src/risk_assessment.py
+
+python src/Portfolio_Drawdown_Calculator.py
+
+python src/portfolio_correlation_matrix.py
+
+python src/portfolio_health_report.py
+
+python src/churn_data.py
+
+python src/churn_training.py
+
+python src/churn_validation.py
+
+python src/churn_retraining_pipeline.py
+
+python src/fund_retraining_pipeline.py
+
+uvicorn src.main:app --reload
+```
+
+Then:
+
+```text
+http://127.0.0.1:8000/docs
 ```
 
 ---
 
-# 6. MLflow UI
+# 109. Important Command Difference
 
-Start MLflow using the project's tracking database:
+Because the project now uses `src` as a Python package, remember this rule:
+
+### Pytest
+
+Run from project root:
+
+```powershell
+pytest -q
+```
+
+### FastAPI
+
+Run from project root:
+
+```powershell
+uvicorn src.main:app --reload
+```
+
+### Python scripts
+
+Run from project root using the `src/` path:
+
+```powershell
+python src/check_database.py
+```
+
+```powershell
+python src/retrieval_test.py
+```
+
+```powershell
+python src/ingest_document.py
+```
+
+This avoids the relative-import problems caused by treating `src` as a standalone directory.
+
+---
+
+# 110. Troubleshooting Summary
+
+| Problem                                                  | Solution                                       |
+| -------------------------------------------------------- | ---------------------------------------------- |
+| `No module named embeddings`                             | Use `from .embeddings import create_embedding` |
+| `attempted relative import with no known parent package` | Run `uvicorn src.main:app` from project root   |
+| ChromaDB empty                                           | Run `python src/ingest_document.py`            |
+| Pandas missing                                           | `pip install pandas`                           |
+| Sentence Transformers missing                            | `pip install sentence-transformers`            |
+| XGBoost missing                                          | `pip install xgboost`                          |
+| NewsAPI key missing                                      | Set `NEWS_API_KEY`                             |
+| Pytest model crash                                       | Keep model calls inside test functions         |
+| FastAPI not starting                                     | Check `uvicorn src.main:app --reload`          |
+| Swagger unavailable                                      | Start FastAPI and open `/docs`                 |
+| MLflow unavailable                                       | Start `mlflow ui`                              |
+
+---
+
+# 111. Final Project Checklist
+
+Before considering the project ready:
+
+```text
+[ ] Repository cloned
+[ ] Correct branch selected
+[ ] Virtual environment created
+[ ] Virtual environment activated
+[ ] Dependencies installed
+[ ] Python version verified
+[ ] src/__init__.py exists
+[ ] Knowledge-base data available
+[ ] ChromaDB populated
+[ ] Embedding model working
+[ ] Retrieval tested
+[ ] Re-ranking tested
+[ ] Guardrails tested
+[ ] Hindi retrieval tested
+[ ] Red-team testing completed
+[ ] FastAPI starts successfully
+[ ] Swagger UI accessible
+[ ] Market context working
+[ ] News ingestion working
+[ ] News classification working
+[ ] Sentiment analysis working
+[ ] Sector sentiment working
+[ ] Portfolio diversification tested
+[ ] Portfolio analysis tested
+[ ] Risk assessment tested
+[ ] Drawdown tested
+[ ] Correlation tested
+[ ] Portfolio health tested
+[ ] Churn model trained
+[ ] Churn validation completed
+[ ] Churn retraining tested
+[ ] MLflow tracking available
+[ ] Churn scheduler configured
+[ ] Fund scoring tested
+[ ] Fund retraining tested
+[ ] Fund validation completed
+[ ] Fund scheduler configured
+[ ] Secrets excluded from Git
+[ ] pytest -q passes
+[ ] Git changes committed
+[ ] Git changes pushed
+```
+
+---
+
+# 112. Final End-to-End Architecture
+
+```text
+                         PAiseWise
+                            │
+                            ▼
+                       FastAPI API
+                            │
+       ┌────────────────────┼────────────────────┐
+       │                    │                    │
+       ▼                    ▼                    ▼
+   RAG Assistant       Market Intelligence   Portfolio
+       │                    │                    │
+       ▼                    ▼                    ▼
+  Guardrails            NewsAPI             Holdings
+       │                    │                    │
+       ▼                    ▼                    ▼
+  Embeddings          News Ingestion       Diversification
+       │                    │                    │
+       ▼                    ▼                    ▼
+   ChromaDB          Sector Classification     Risk
+       │                    │                    │
+       ▼                    ▼                    ▼
+ Top 10 Retrieval     Sentiment Analysis     Drawdown
+       │                    │                    │
+       ▼                    ▼                    ▼
+   Re-ranking         Sector Sentiment       Correlation
+       │                    │                    │
+       ▼                    ▼                    ▼
+ Relevance Check       Market Context      Health Report
+       │
+       ▼
+ Educational Answer
+
+
+                     PaiseWise ML
+                          │
+             ┌────────────┴────────────┐
+             ▼                         ▼
+        Churn Model              Fund Model
+             │                         │
+             ▼                         ▼
+       XGBoost Model             Fund Scoring
+             │                         │
+             ▼                         ▼
+       Validation                Validation
+             │                         │
+             └────────────┬────────────┘
+                          ▼
+                       MLflow
+                          │
+                          ▼
+                  Model Comparison
+                          │
+                   ┌──────┴──────┐
+                   ▼             ▼
+              >2% Better      Not Better
+                   │             │
+                   ▼             ▼
+             Deploy New     Keep Current
+```
+
+---
+
+# 113. Final Commands to Remember
+
+### Activate environment
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+### Run all tests
+
+```powershell
+pytest -q
+```
+
+### Check ChromaDB
+
+```powershell
+python src/check_database.py
+```
+
+### Ingest documents
+
+```powershell
+python src/ingest_document.py
+```
+
+### Test retrieval
+
+```powershell
+python src/retrieval_test.py
+```
+
+### Test reranking
+
+```powershell
+pytest -q src/test_reranker.py
+```
+
+### Test Hindi retrieval
+
+```powershell
+pytest -q src/test_hindi.py
+```
+
+### Test guardrails
+
+```powershell
+pytest -q src/test_api_guardrails.py
+```
+
+### Start FastAPI
+
+```powershell
+uvicorn src.main:app --reload
+```
+
+### Open Swagger
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+### Start MLflow
 
 ```powershell
 mlflow ui --backend-store-uri sqlite:///C:/Users/Malinirani/Desktop/paiseWise-rag/src/mlflow.db
 ```
 
-Then open the MLflow UI in your browser.
-
-The following experiments are available:
-
-```text
-PaiseWise-Churn-Retraining
-PaiseWise-Fund-Retraining
-```
-
 ---
 
-# 7. Automated Deployment Logic
+# 114. Summary
 
-Both models follow the same high-level deployment principle:
+PaiseWise is a financial education platform built around a RAG architecture.
 
-```text
-                New Model
-                    |
-                    v
-              Model Validation
-                    |
-                    v
-        Compare Current vs New
-                    |
-                    v
-             Improvement > 2%?
-              /            \
-            YES             NO
-             |               |
-             v               v
-       Deploy New       Keep Current
-          Model             Model
-```
-
-This prevents a newly retrained model from automatically replacing a better-performing production model.
-
----
-
-# 8. Current Testing Status
-
-### Churn Pipeline
+The core RAG pipeline is:
 
 ```text
-Data Loading             : PASS
-Model Training           : PASS
-Holdout Validation       : PASS
-MLflow Tracking          : PASS
-Model Comparison         : PASS
-Deployment Decision      : PASS
-Scheduler Test           : PASS
+Question
+   ↓
+Guardrail
+   ↓
+Embedding
+   ↓
+ChromaDB
+   ↓
+Top 10 Retrieval
+   ↓
+Re-ranking
+   ↓
+Relevance Check
+   ↓
+Educational Answer
 ```
 
-Current test result:
+The market intelligence pipeline is:
 
 ```text
-Current F1 : 100.00%
-New F1     : 100.00%
-Improvement: 0.00%
-
-Decision   : KEEP_CURRENT_MODEL
+NewsAPI
+   ↓
+News Ingestion
+   ↓
+Sector Classification
+   ↓
+Sentiment Analysis
+   ↓
+Sector Sentiment
+   ↓
+Market Context
 ```
 
-### Fund Pipeline
+The portfolio pipeline is:
 
 ```text
-Fund Data Loading        : PASS
-Dynamic Weighting        : PASS
-Fund Scoring              : PASS
-Model Generation          : PASS
-Model Validation          : PASS
-MLflow Tracking           : PASS
-Model Comparison          : PASS
-Deployment Decision       : PASS
-Scheduler Test            : PASS
+Portfolio
+   ↓
+Diversification
+   ↓
+Risk
+   ↓
+Drawdown
+   ↓
+Correlation
+   ↓
+Portfolio Health
 ```
 
-Current test result:
+The churn ML pipeline is:
 
 ```text
-Current Score : 41.67%
-New Score     : 41.67%
-Improvement   : 0.00%
-
-Decision      : KEEP_CURRENT_MODEL
+User Activity
+   ↓
+Feature Engineering
+   ↓
+XGBoost
+   ↓
+Validation
+   ↓
+MLflow
+   ↓
+Monthly Retraining
+   ↓
+Deploy if Better
 ```
 
----
-
-# 9. Production Considerations
-
-The current implementation demonstrates the automated retraining architecture using test/demo datasets.
-
-For production deployment:
-
-* Connect the fund pipeline to a reliable live/historical fund-performance source.
-* Use a separate fixed test/holdout dataset for model evaluation.
-* Store dated fund-performance data for weekly comparisons.
-* Store actual churn outcomes with timestamps to support the 90-day training window.
-* Add monitoring and alerts for failed scheduled jobs.
-* Use a production scheduler such as Airflow, Azure Data Factory, or another orchestration platform if required.
-* Add model versioning and rollback support.
-* Add stronger validation before production deployment.
-
----
-
-## Summary
-
-PaiseWise now contains automated retraining workflows for both churn prediction and fund recommendation.
+The fund retraining pipeline is:
 
 ```text
-CHURN
-Monthly → 1st day → 3:00 AM
-        → Last 90 days
-        → XGBoost
-        → Holdout validation
-        → MLflow
-        → Deploy if >2% better
-
-
-FUND RECOMMENDATION
-Weekly → Sunday → 2:00 AM
-        → Latest fund performance
-        → Dynamic scoring weights
-        → Fund ranking
-        → Model validation
-        → MLflow
-        → Deploy if >2% better
+Fund Performance
+   ↓
+Dynamic Weights
+   ↓
+Fund Scoring
+   ↓
+Ranking
+   ↓
+Validation
+   ↓
+MLflow
+   ↓
+Weekly Retraining
+   ↓
+Deploy if Better
 ```
 
-The automated retraining framework helps PaiseWise keep its ML models up to date while preventing automatic deployment of models that do not demonstrate sufficient improvement.
-
-```
-
-**GitHub tip:** I would put this under a README heading such as **`## Automated ML Retraining & Deployment`** rather than replacing your entire existing README. This gives a clean explanation of the work you completed today and is suitable for explaining the implementation during your internship review.
-```
-
-
-# 74. Overall Internship Task Flow
-
-The remaining AI/ML tasks can be viewed as:
-
-```text
-PaiseWise
-   │
-   ├── RAG Assistant
-   │      ↓
-   │   Financial Education
-   │
-   ├── Market Context
-   │      ↓
-   │   News + Sector Sentiment
-   │
-   ├── Portfolio Analysis
-   │      ↓
-   │   Diversification + Risk + Health
-   │
-   ├── Churn Prediction
-   │      ↓
-   │   XGBoost + Automated Retraining
-   │
-   └── Fund Retraining
-          ↓
-       Scoring + Validation + Deployment
-```
-
----
-
-# 75. Final Development Checklist
-
-Before considering the complete AI/ML workflow ready, verify:
-
-```text
-[ ] RAG knowledge base is populated
-[ ] ChromaDB is working
-[ ] Retrieval testing completed
-[ ] Re-ranking tested
-[ ] Guardrails tested
-[ ] FastAPI running
-[ ] Market context working
-[ ] News ingestion working
-[ ] Sector classification working
-[ ] Portfolio analysis tested
-[ ] Portfolio health report tested
-[ ] Churn model trained
-[ ] Churn model validated
-[ ] MLflow tracking available
-[ ] Monthly churn schedule configured
-[ ] Fund scoring tested
-[ ] Fund model validated
-[ ] Weekly fund schedule configured
-[ ] Git changes committed and pushed
-```
-
----
-
-# 76. Final Run Order
-
-For a complete local verification, use:
+The main development commands are:
 
 ```powershell
-cd paiseWise-rag
+cd C:\Users\Malinirani\Desktop\paiseWise-rag
 
-.venv\Scripts\activate
+.venv\Scripts\Activate.ps1
 
-cd src
+pytest -q
 
-# Check RAG database
-python check_database.py
-
-# Test retrieval
-python retrieval_test.py
-
-# Test reranking
-python test_reranker.py
-
-# Evaluate retrieval
-python evaluate_retrieval.py
-
-# Test news
-python news_ingestion.py
-python news_classifier.py
-
-# Test portfolio
-python Portfolio_Diversification.py
-python portfolio_analyser.py
-python risk_assessment.py
-python Portfolio_Drawdown_Calculator.py
-python portfolio_correlation_matrix.py
-python portfolio_health_report.py
-
-# Test churn
-python churn_data.py
-python churn_training.py
-python churn_validation.py
-python churn_retraining_pipeline.py
-
-# Test fund retraining
-python fund_data.py
-python fund_scoring.py
-python model_validation.py
-python model_deployment.py
-python retrain_pipeline.py
-
-# Start API
-uvicorn main:app --reload
+uvicorn src.main:app --reload
 ```
 
 Then open:
@@ -2678,10 +3542,4 @@ Then open:
 http://127.0.0.1:8000/docs
 ```
 
-The API endpoints can be tested from Swagger UI.
-
-```
-```
-
-This starts the PaiseWise API from the existing ChromaDB knowledge base through the RAG and market-news pipeline.
-
+This is the recommended starting point for running and testing the complete PaiseWise application.
