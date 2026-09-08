@@ -4,24 +4,23 @@ import chromadb
 import joblib
 import pandas as pd
 import time
+from pathlib import Path
+from typing import List
 
 
 # --------------------------------------------------
 # Existing PaiseWise modules
 # --------------------------------------------------
-from news_classifier import classify_article
 
-from embeddings import create_embedding
-from reranker import rerank_results
-from guardrails import is_guardrail_question
-from market_context import create_market_context
-
-from news_ingestion import fetch_market_news
-from news_classifier import classify_article
-from sector_sentiment import calculate_sector_sentiment
-from corporate_events import extract_corporate_events
-from market_data import get_nifty_change
-from typing import List
+from .news_classifier import classify_article
+from .embeddings import create_embedding
+from .reranker import rerank_results
+from .guardrails import is_guardrail_question
+from .market_context import create_market_context
+from .news_ingestion import fetch_market_news
+from .sector_sentiment import calculate_sector_sentiment
+from .corporate_events import extract_corporate_events
+from .market_data import get_nifty_change
 
 
 # ==================================================
@@ -36,37 +35,75 @@ app = FastAPI(
 
 
 # ==================================================
+# Project Paths
+# ==================================================
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+
+CHROMA_DB_PATH = PROJECT_ROOT / "chroma_db"
+
+CHURN_MODEL_PATH = (
+    PROJECT_ROOT
+    / "data"
+    / "churn"
+    / "models"
+    / "new_churn_model.pkl"
+)
+
+
+# ==================================================
 # Connect to ChromaDB
 # ==================================================
 
-client = chromadb.PersistentClient(
-    path="../chroma_db"
-)
+try:
+    client = chromadb.PersistentClient(
+        path=str(CHROMA_DB_PATH)
+    )
 
-collection = client.get_collection(
-    name="paisewise_knowledge_base"
-)
+    collection = client.get_collection(
+        name="paisewise_knowledge_base"
+    )
+
+    print("ChromaDB connected successfully.")
+    print("ChromaDB path:", CHROMA_DB_PATH)
+    print("Documents available:", collection.count())
+
+except Exception as e:
+    collection = None
+
+    print(
+        f"Warning: ChromaDB could not be connected: {e}"
+    )
 
 
 # ==================================================
 # Load Churn Model
 # ==================================================
 
-CHURN_MODEL_PATH = "../data/churn/models/new_churn_model.pkl"
-
 try:
-    churn_model = joblib.load(CHURN_MODEL_PATH)
+    churn_model = joblib.load(
+        str(CHURN_MODEL_PATH)
+    )
+
     print("Churn model loaded successfully.")
 
 except Exception as e:
     churn_model = None
-    print(f"Warning: Churn model could not be loaded: {e}")
-    
-# Market context cache
+
+    print(
+        f"Warning: Churn model could not be loaded: {e}"
+    )
+
+
+# ==================================================
+# Market Context Cache
+# ==================================================
+
 market_context_cache = None
 market_context_cache_time = 0
 
 MARKET_CONTEXT_CACHE_SECONDS = 15 * 60
+
 
 # ==================================================
 # Request Models
@@ -92,6 +129,7 @@ class ChurnRequest(BaseModel):
     kyc_completed_d7: bool
     first_paper_trade_d7: bool
 
+
 class PortfolioHolding(BaseModel):
     stock: str
     sector: str
@@ -101,6 +139,8 @@ class PortfolioHolding(BaseModel):
 
 class PortfolioRequest(BaseModel):
     holdings: List[PortfolioHolding]
+
+
 # ==================================================
 # 1. HOME ENDPOINT
 # ==================================================
@@ -119,6 +159,12 @@ def home():
 
 @app.get("/health")
 def health():
+
+    if collection is None:
+        raise HTTPException(
+            status_code=503,
+            detail="ChromaDB knowledge base is not available."
+        )
 
     try:
 
@@ -176,18 +222,47 @@ def ask_question(request: QuestionRequest):
         }
 
     # --------------------------------------------------
-    # Step 2: Create embedding
+    # Step 2: Check ChromaDB
     # --------------------------------------------------
 
-    question_embedding = create_embedding(
-        question
-    )
+    if collection is None:
+
+        raise HTTPException(
+            status_code=503,
+            detail="PaiseWise knowledge base is not available."
+        )
 
     # --------------------------------------------------
-    # Step 3: Check ChromaDB
+    # Step 3: Create embedding
     # --------------------------------------------------
 
-    collection_count = collection.count()
+    try:
+
+        question_embedding = create_embedding(
+            question
+        )
+
+    except Exception as e:
+
+        raise HTTPException(
+            status_code=500,
+            detail=f"Embedding creation failed: {str(e)}"
+        )
+
+    # --------------------------------------------------
+    # Step 4: Check ChromaDB document count
+    # --------------------------------------------------
+
+    try:
+
+        collection_count = collection.count()
+
+    except Exception as e:
+
+        raise HTTPException(
+            status_code=500,
+            detail=f"ChromaDB query failed: {str(e)}"
+        )
 
     if collection_count == 0:
 
@@ -201,7 +276,7 @@ def ask_question(request: QuestionRequest):
         }
 
     # --------------------------------------------------
-    # Step 4: Retrieve documents
+    # Step 5: Retrieve documents
     # --------------------------------------------------
 
     number_to_retrieve = min(
@@ -209,21 +284,39 @@ def ask_question(request: QuestionRequest):
         collection_count
     )
 
-    results = collection.query(
-        query_embeddings=[question_embedding],
-        n_results=number_to_retrieve
-    )
+    try:
 
-    documents = results["documents"][0]
+        results = collection.query(
+            query_embeddings=[question_embedding],
+            n_results=number_to_retrieve
+        )
+
+        documents = results["documents"][0]
+
+    except Exception as e:
+
+        raise HTTPException(
+            status_code=500,
+            detail=f"Document retrieval failed: {str(e)}"
+        )
 
     # --------------------------------------------------
-    # Step 5: Re-rank documents
+    # Step 6: Re-rank documents
     # --------------------------------------------------
 
-    ranked_results = rerank_results(
-        question,
-        documents
-    )
+    try:
+
+        ranked_results = rerank_results(
+            question,
+            documents
+        )
+
+    except Exception as e:
+
+        raise HTTPException(
+            status_code=500,
+            detail=f"Document reranking failed: {str(e)}"
+        )
 
     # --------------------------------------------------
     # Check retrieval results
@@ -242,13 +335,13 @@ def ask_question(request: QuestionRequest):
         }
 
     # --------------------------------------------------
-    # Step 6: Get best result
+    # Step 7: Get best result
     # --------------------------------------------------
 
     best_document, best_score = ranked_results[0]
 
     # --------------------------------------------------
-    # Step 7: Relevance threshold
+    # Step 8: Relevance threshold
     # --------------------------------------------------
 
     RELEVANCE_THRESHOLD = 0.25
@@ -270,7 +363,7 @@ def ask_question(request: QuestionRequest):
         }
 
     # --------------------------------------------------
-    # Step 8: Return answer
+    # Step 9: Return answer
     # --------------------------------------------------
 
     return {
@@ -286,7 +379,7 @@ def ask_question(request: QuestionRequest):
 
 
 # ==================================================
-# 3. PORTFOLIO DIVERSIFICATION ENDPOINT
+# 4. PORTFOLIO DIVERSIFICATION ENDPOINT
 # ==================================================
 
 @app.post("/portfolio/diversification")
@@ -306,6 +399,7 @@ def portfolio_diversification(request: PortfolioRequest):
     # --------------------------------------------------
 
     if not holdings:
+
         raise HTTPException(
             status_code=400,
             detail="Portfolio holdings are required."
@@ -321,6 +415,7 @@ def portfolio_diversification(request: PortfolioRequest):
     )
 
     if total_value <= 0:
+
         raise HTTPException(
             status_code=400,
             detail="Portfolio amount must be greater than zero."
@@ -359,9 +454,6 @@ def portfolio_diversification(request: PortfolioRequest):
 
         stock = holding["stock"]
 
-        # If the same stock appears more than once,
-        # combine its amount.
-
         stock_concentration[stock] = (
             stock_concentration.get(stock, 0)
             + holding["amount"]
@@ -384,7 +476,9 @@ def portfolio_diversification(request: PortfolioRequest):
         for amount in sector_values.values()
     ]
 
-    largest_sector_weight = max(sector_weights)
+    largest_sector_weight = max(
+        sector_weights
+    )
 
     sector_score = (
         1 - largest_sector_weight
@@ -435,22 +529,21 @@ def portfolio_diversification(request: PortfolioRequest):
             total_value,
             2
         ),
-
         "sector_concentration": (
             sector_concentration
         ),
-
         "stock_concentration": (
             stock_concentration
         ),
-
         "diversification_score": round(
             diversification_score,
             2
         )
     }
+
+
 # ==================================================
-# 4. MARKET CONTEXT ENDPOINT
+# 5. MARKET CONTEXT ENDPOINT
 # ==================================================
 
 @app.get("/market-context")
@@ -523,32 +616,20 @@ def get_market_context():
         # --------------------------------------------------
 
         context = create_market_context(
-
-            news_count=len(
-                articles
-            ),
-
-            sector_sentiment=
-            sector_sentiment,
-
-            nifty_change=
-            nifty_change,
-
-            corporate_events=
-            corporate_events
+            news_count=len(articles),
+            sector_sentiment=sector_sentiment,
+            nifty_change=nifty_change,
+            corporate_events=corporate_events
         )
 
         return {
-            "market_context":
-            context
+            "market_context": context
         }
 
     except Exception as e:
 
         raise HTTPException(
-
             status_code=500,
-
             detail=(
                 "Market context creation failed: "
                 f"{str(e)}"
@@ -557,7 +638,7 @@ def get_market_context():
 
 
 # ==================================================
-# 5. FETCH MARKET NEWS ENDPOINT
+# 6. FETCH MARKET NEWS ENDPOINT
 # ==================================================
 
 @app.get("/news")
@@ -575,19 +656,14 @@ def get_market_news():
         )
 
     return {
-
         "status": "success",
-
-        "articles_count": len(
-            articles
-        ),
-
+        "articles_count": len(articles),
         "articles": articles
     }
 
 
 # ==================================================
-# 6. CLASSIFY SINGLE NEWS ARTICLE
+# 7. CLASSIFY SINGLE NEWS ARTICLE
 # ==================================================
 
 @app.post("/news/classify")
@@ -626,19 +702,15 @@ def classify_news(request: NewsRequest):
         )
 
     return {
-
         "title": title,
-
         "description": description,
-
         "sector": result["sector"],
-
         "confidence": result["confidence"]
     }
 
 
 # ==================================================
-# 7. FETCH + CLASSIFY ALL MARKET NEWS
+# 8. FETCH + CLASSIFY ALL MARKET NEWS
 # ==================================================
 
 @app.get("/news/classified")
@@ -670,15 +742,8 @@ def get_classified_news():
         if not isinstance(article, dict):
             continue
 
-        title = article.get(
-            "title"
-        ) or ""
-
-        description = article.get(
-            "description"
-        ) or ""
-
-        # Skip articles without title
+        title = article.get("title") or ""
+        description = article.get("description") or ""
 
         if not title:
             continue
@@ -691,37 +756,20 @@ def get_classified_news():
             )
 
             classified_article = {
-
                 "title": title,
-
                 "description": description,
-
-                "source": article.get(
-                    "source"
-                ),
-
-                "published_at": article.get(
-                    "published_at"
-                ),
-
-                "url": article.get(
-                    "url"
-                ),
-
-                "sector": classification[
-                    "sector"
-                ],
-
-                "confidence": classification[
-                    "confidence"
-                ]
+                "source": article.get("source"),
+                "published_at": article.get("published_at"),
+                "url": article.get("url"),
+                "sector": classification["sector"],
+                "confidence": classification["confidence"]
             }
 
             classified_articles.append(
                 classified_article
             )
 
-        except Exception as e:
+        except Exception:
 
             print(
                 f"Classification failed for: {title}"
@@ -734,23 +782,15 @@ def get_classified_news():
     # --------------------------------------------------
 
     return {
-
         "status": "success",
-
-        "articles_fetched": len(
-            articles
-        ),
-
-        "articles_classified": len(
-            classified_articles
-        ),
-
+        "articles_fetched": len(articles),
+        "articles_classified": len(classified_articles),
         "articles": classified_articles
     }
 
 
 # ==================================================
-# 8. CHURN PREDICTION ENDPOINT
+# 9. CHURN PREDICTION ENDPOINT
 # ==================================================
 
 @app.post("/churn/predict")
@@ -761,6 +801,7 @@ def predict_churn(request: ChurnRequest):
     # --------------------------------------------------
 
     if churn_model is None:
+
         raise HTTPException(
             status_code=500,
             detail="Churn model is not loaded."
@@ -798,6 +839,7 @@ def predict_churn(request: ChurnRequest):
 
         "first_paper_trade_d7":
             int(request.first_paper_trade_d7)
+
     }])
 
     # --------------------------------------------------
@@ -849,8 +891,14 @@ def predict_churn(request: ChurnRequest):
 
         risk_level = "Low"
 
-    print(f"\nChurn probability: {churn_probability:.4f}")
-    print(f"Risk level: {risk_level}")
+    print(
+        f"\nChurn probability: {churn_probability:.4f}"
+    )
+
+    print(
+        f"Risk level: {risk_level}"
+    )
+
     print("=" * 60)
 
     # --------------------------------------------------
@@ -858,7 +906,6 @@ def predict_churn(request: ChurnRequest):
     # --------------------------------------------------
 
     return {
-
         "churn_probability":
             round(
                 float(churn_probability),
