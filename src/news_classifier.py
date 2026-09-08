@@ -1,27 +1,10 @@
-# PaiseWise News Sector Classifier
-
 from transformers import pipeline
-
 
 print("=" * 60)
 print("PaiseWise News Sector Classifier")
 print("=" * 60)
 
-print("\nLoading zero-shot classification model...")
-print("This may take some time on the first run...")
-
-
-classifier = pipeline(
-    "zero-shot-classification",
-    model="valhalla/distilbart-mnli-12-3"
-)
-
-
-print("Model loaded successfully!")
-
-
 SECTORS = [
-
     "IT",
     "Banking",
     "Pharma",
@@ -33,24 +16,24 @@ SECTORS = [
     "Financial Services",
     "Market Index",
     "Other"
-
 ]
 
+print("\nLoading zero-shot classification model...")
+print("This may take some time on the first run...")
 
-def classify_article(
-    title,
-    description=""
-):
+classifier = pipeline(
+    "zero-shot-classification",
+    model="valhalla/distilbart-mnli-12-3"
+)
 
+print("Model loaded successfully!")
+
+
+def classify_article(title, description=""):
     text = title
 
     if description:
-
-        text = (
-            title +
-            ". " +
-            description
-        )
+        text = title + ". " + description
 
     result = classifier(
         text,
@@ -58,9 +41,7 @@ def classify_article(
     )
 
     return {
-
         "sector": result["labels"][0],
-
         "confidence": round(
             float(result["scores"][0]),
             4
