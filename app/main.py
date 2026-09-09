@@ -1,21 +1,21 @@
 from fastapi import FastAPI
 
-from app.api.routes.chat import (
+from app.api.chat import (
     router as chat_router,
 )
-from app.api.routes.portfolio_analytics import (
+from app.api.portfolio_analytics import (
     router as portfolio_analytics_router,
 )
-from app.api.routes.what_if import (
+from app.api.what_if import (
     router as what_if_router,
 )
-from app.api.routes.portfolio_analytics_history import (
+from app.api.portfolio_analytics_history import (
     router as portfolio_analytics_history_router,
 )
-from app.api.routes.portfolio_comparison import (
+from app.api.portfolio_comparison import (
     router as portfolio_comparison_router,
 )
-from app.api.routes.churn import (
+from app.api.churn import (
     router as churn_router,
 )
 
