@@ -1,16 +1,16 @@
 from fastapi import APIRouter, HTTPException
 
-from app.repositories.churn_reengagement_repository import (
+from app.repositories.churn_reengagement_repository import ( # type: ignore
     ChurnReengagementRepository,
 )
-from app.schemas.churn import (
+from app.schemas.churn import ( # type: ignore
     ChurnScoreRequest,
     ChurnScoreResponse,
 )
-from app.services.churn_risk_service import (
+from app.services.churn_risk_service import ( # type: ignore
     ChurnRiskService,
 )
-from app.services.churn_service import ChurnService
+from app.services.churn_service import ChurnService # type: ignore
 
 
 router = APIRouter(
