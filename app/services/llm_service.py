@@ -1,18 +1,18 @@
-from app.config.settings import GEMINI_API_KEY, GEMINI_MODEL
+import app.config.settings
 from app.prompts.financial_prompt import build_financial_prompt
 
 
 def _get_client():
-    if not GEMINI_API_KEY:
+    if not app.config.settings.GEMINI_API_KEY:
         raise RuntimeError("GEMINI_API_KEY is not set.")
 
     from google import genai
 
-    return genai.Client(api_key=GEMINI_API_KEY)
+    return genai.Client(api_key=app.config.settings.GEMINI_API_KEY)
 
 
 def _check_model():
-    if not GEMINI_MODEL:
+    if not app.config.settings.GEMINI_MODEL:
         raise RuntimeError("GEMINI_MODEL is not set.")
 
 
@@ -21,7 +21,7 @@ def generate_response(term: str, language: str) -> str:
 
     prompt = build_financial_prompt(term, language)
     response = _get_client().models.generate_content(
-        model=GEMINI_MODEL,
+        model=app.config.settings.GEMINI_MODEL,
         contents=prompt,
     )
 
@@ -65,7 +65,7 @@ def generate_portfolio_response(prompt: str) -> str:
     _check_model()
 
     response = _get_client().models.generate_content(
-        model=GEMINI_MODEL,
+        model=app.config.settings.GEMINI_MODEL,
         contents=prompt,
     )
 

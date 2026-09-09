@@ -1,0 +1,14 @@
+INVESTMENT BASICS
+Development RAG Knowledge Source
+
+Investing means committing money or other resources to an asset with the expectation that it may generate income, appreciation, or another form of return over time. Returns are not guaranteed and investments can lose value.
+
+Common categories include stocks, bonds, mutual funds, exchange-traded funds (ETFs), cash or cash equivalents, and other financial assets. Each has different characteristics, risks, liquidity, and potential returns.
+
+A stock generally represents an ownership interest in a company. A bond is generally a debt instrument through which an investor lends money to an issuer under specified terms. Mutual funds and ETFs pool investor money and invest according to stated strategies.
+
+Risk is the possibility that an investment outcome differs from what was expected, including loss of money. Diversification spreads exposure across different assets, securities, sectors, or categories and can reduce concentration risk, but it cannot eliminate losses.
+
+Liquidity describes how easily an asset can be converted to cash without a significant effect on its price. Inflation can reduce purchasing power over time. An investment time horizon is the period for which money is expected to remain invested.
+
+A financial-learning assistant should explain concepts, risks, terminology, and general mechanisms. It should not turn general information into a personalized buy, sell, or allocation recommendation.

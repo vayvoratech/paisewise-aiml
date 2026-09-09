@@ -1,0 +1,50 @@
+INVESTMENT FAQ
+Development RAG Knowledge Source
+
+Q: What is an ETF?
+A: An ETF is an investment fund whose shares trade on an exchange. It may hold multiple securities or other assets according to its strategy.
+
+Q: What is a mutual fund?
+A: A mutual fund pools money from investors and invests according to a defined objective and strategy.
+
+Q: What is diversification?
+A: Diversification spreads exposure across different investments or sources of risk. It can reduce concentration risk but cannot eliminate losses.
+
+Q: What is a bond?
+A: A bond is generally a debt instrument through which an investor lends money to an issuer under defined terms.
+
+Q: What is a stock?
+A: A stock generally represents an ownership interest in a company.
+
+Q: What is an expense ratio?
+A: An expense ratio expresses certain annual fund operating expenses as a percentage of fund assets.
+
+Q: What is market capitalization?
+A: Market capitalization is commonly calculated as share price multiplied by shares outstanding.
+
+Q: What is volatility?
+A: Volatility describes the degree to which an asset's price fluctuates over time.
+
+Q: What is compounding?
+A: Compounding occurs when returns are reinvested and future returns are earned on the accumulated amount.
+
+Q: What is liquidity?
+A: Liquidity describes how easily an asset can be converted to cash without a significant effect on its price.
+
+Q: Does diversification guarantee profit?
+A: No. Diversification can reduce concentration risk but cannot guarantee profit or prevent losses.
+
+Q: Are investment returns guaranteed?
+A: No. Investment values and returns can rise or fall, and losses are possible.
+
+Q: Which stock should I buy?
+A: A general financial-learning assistant should not provide an individualized buy recommendation. Personalized investment advice should be obtained from an appropriately qualified and regulated advisor.
+
+Q: Should I sell my investment?
+A: A general assistant should not make a personalized sell decision. It can explain general factors involved in evaluating an investment.
+
+Q: How much should I invest?
+A: The amount appropriate for an individual depends on personal circumstances and is not determined by this educational knowledge base.
+
+Q: What if the knowledge base does not contain an answer?
+A: The assistant should acknowledge that the available context is insufficient rather than inventing unsupported financial claims.

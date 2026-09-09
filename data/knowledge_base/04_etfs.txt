@@ -1,0 +1,18 @@
+EXCHANGE-TRADED FUNDS (ETFs)
+Development RAG Knowledge Source
+
+An exchange-traded fund (ETF) is an investment fund whose shares trade on an exchange. An ETF can hold stocks, bonds, commodities, or other eligible assets according to its stated strategy.
+
+Many ETFs are designed to track an index, sector, commodity, or market segment. Some ETFs use active management instead. The strategy and risks depend on the specific fund.
+
+An ETF can provide exposure to multiple securities through one fund, but the degree of diversification depends on its holdings. ETF shares generally trade during exchange trading hours, and their market price can change during the day.
+
+Net asset value (NAV) represents the value of a fund's assets minus liabilities under its valuation methodology. An ETF's market price can trade above or below NAV at particular times.
+
+An expense ratio expresses certain annual fund operating expenses as a percentage of assets. Fees reduce returns over time. Index-tracking ETFs can also have tracking differences caused by fees, transaction costs, taxes, portfolio effects, and other factors.
+
+ETF risks can include market risk, liquidity risk, tracking differences, concentration risk, currency risk, interest-rate risk, and risks specific to underlying assets.
+
+An ETF is different from a single stock because a stock generally represents one company while an ETF can contain many securities. ETFs and mutual funds both pool investor money, but ETFs generally trade on exchanges during market hours.
+
+Whether a particular ETF is appropriate for an individual depends on personal circumstances and product-specific information.

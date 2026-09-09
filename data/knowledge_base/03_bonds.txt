@@ -1,0 +1,14 @@
+BONDS
+Development RAG Knowledge Source
+
+A bond is generally a debt instrument through which an issuer borrows money from investors under defined terms. Issuers can include governments, corporations, municipalities, and other organizations.
+
+Bond terms can specify principal, interest or coupon payments, payment schedules, maturity, and other conditions. At maturity, principal is generally repaid according to the bond terms, subject to the issuer meeting its obligations.
+
+Bond prices can change before maturity. In general, existing fixed-rate bond prices tend to move inversely to changes in market interest rates, although many factors affect actual prices.
+
+Credit risk is the possibility that an issuer fails to make required payments. Interest-rate risk is the possibility that changes in rates affect market value. Liquidity risk concerns the ability to sell quickly at a reasonable price. Inflation can reduce the purchasing power of future fixed payments.
+
+A bond mutual fund or bond ETF can hold many bonds. Investors in such funds have exposure to the fund portfolio and its risks rather than directly owning each underlying bond in the same way as a direct bondholder.
+
+Actual bond characteristics should be checked in official product documentation.

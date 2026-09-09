@@ -1,0 +1,16 @@
+DIVERSIFICATION
+Development RAG Knowledge Source
+
+Diversification means spreading investment exposure across different securities, asset classes, sectors, industries, regions, or other sources of risk.
+
+Concentration risk occurs when a large portion of exposure depends on one security, issuer, sector, geography, or other factor. Diversification can reduce the impact of a decline in one concentrated area.
+
+Diversification does not guarantee profit and cannot prevent losses. Broad market declines and economic shocks can affect many investments at the same time.
+
+Asset-class diversification can spread exposure among equities, bonds, cash-like instruments, and other categories. Sector diversification spreads exposure among industries. Geographic diversification spreads exposure among countries or regions but can introduce currency and country-specific risks.
+
+Correlation describes how two assets' returns tend to move relative to each other. Lower correlation can potentially improve diversification, although relationships can change over time.
+
+Rebalancing means adjusting a portfolio toward a chosen allocation after market movements change its weights. Rebalancing can involve costs or tax consequences depending on circumstances.
+
+Diversification is a risk-management concept, not a guarantee of a particular return.
