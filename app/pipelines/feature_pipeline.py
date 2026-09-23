@@ -17,6 +17,7 @@ from app.utils.city_tier import get_city_tier
 
 
 LOOKBACK_DAYS = 90
+FEATURE_VERSION = "v1"
 
 
 def _lesson_completion_rate(lessons):
@@ -266,6 +267,7 @@ def run_behaviour_feature_pipeline(full_refresh=False):
 
             for name, value in features.items():
                 setattr(existing, name, value)
+            existing.feature_version = FEATURE_VERSION
 
             updated_users += 1
 

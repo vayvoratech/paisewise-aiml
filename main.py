@@ -14,6 +14,11 @@ from routes import (
     jargon,
     paper_trade_coach,
     portfolio,
+    stock_discovery,
+    sip_coach,
+    lesson_personalization,
+    fraud_alerts,
+    sip_scenarios,
 )
 from app.api.fund_recommend import router as fund_recommend_router
 from app.api.languages import router as languages_router
@@ -122,6 +127,11 @@ app.include_router(fund_recommend.router)
 app.include_router(paper_trade_coach.router)
 app.include_router(fraud_check.router)
 app.include_router(languages_router)
+app.include_router(sip_coach.router)
+app.include_router(stock_discovery.router)
+app.include_router(lesson_personalization.router)
+app.include_router(fraud_alerts.router)
+app.include_router(sip_scenarios.router)
 
 
 @app.get("/")

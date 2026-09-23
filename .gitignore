@@ -21,3 +21,8 @@ mlflow.db
 
 *.backup
 fraud_model_v1.pkl
+
+# Local/generated project files
+airflow/airflow.cfg
+data/jargon_prompt_results.csv
+*.bak

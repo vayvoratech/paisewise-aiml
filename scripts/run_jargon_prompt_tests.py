@@ -1,5 +1,6 @@
 import argparse
 import csv
+import time
 from pathlib import Path
 
 from app.services.language_service import get_languages, get_language_name
@@ -15,13 +16,38 @@ PROMPTS = {
     "analogy": 'Explain "{term}" to a beginner Indian investor using one simple real-life analogy. Keep it below 100 words.',
     "bullets": 'Explain "{term}" to a beginner Indian investor using short bullet points. Keep it below 100 words.',
     "example": 'Explain "{term}" to a beginner Indian investor and include one practical investment example. Keep it below 100 words.',
+    "hindi": 'Explain "{term}" in simple Hindi for a beginner Indian investor. Keep it below 100 words.',
 }
 
 
 def load_terms(limit):
     with TERMS_FILE.open(encoding="utf-8", newline="") as file:
         rows = list(csv.DictReader(file))
+
     return rows[:limit]
+
+
+def generate_with_retry(prompt, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            return generate_portfolio_response(prompt)
+
+        except Exception as error:
+            error_text = str(error)
+
+            if "429" not in error_text and "RESOURCE_EXHAUSTED" not in error_text:
+                raise
+
+            wait_seconds = 45 * (attempt + 1)
+
+            print(
+                f"Rate limit reached. Waiting {wait_seconds} seconds "
+                f"before retry {attempt + 1}/{max_retries}..."
+            )
+
+            time.sleep(wait_seconds)
+
+    raise RuntimeError("Gemini quota/rate limit still exceeded after retries.")
 
 
 def run(limit=50, language="Hindi"):
@@ -37,9 +63,13 @@ def run(limit=50, language="Hindi"):
         for row in terms:
             for style, template in PROMPTS.items():
                 prompt = template.format(term=row["term"])
-                prompt += f"\nRespond only in {language}."
 
-                response = generate_portfolio_response(prompt)
+                if style != "hindi":
+                    prompt += f"\nRespond only in {language}."
+
+                print(f"Testing: {row['term']} | {style} | {language}")
+
+                response = generate_with_retry(prompt)
 
                 writer.writerow({
                     "term": row["term"],
@@ -48,10 +78,16 @@ def run(limit=50, language="Hindi"):
                     "response": response,
                 })
 
+                file.flush()
+
+                # Stay below the free-tier request-per-minute limit.
+                time.sleep(5)
+
     print(f"Saved prompt test results to {OUTPUT_FILE}")
     print(f"Terms tested: {len(terms)}")
     print(f"Language: {language}")
     print(f"Prompt styles: {len(PROMPTS)}")
+    print(f"Total requests: {len(terms) * len(PROMPTS)}")
 
 
 def run_all_languages(limit=1):
@@ -60,12 +96,15 @@ def run_all_languages(limit=1):
     for language in get_languages():
         name = get_language_name(language["code"])
         print(f"Testing {name} ({language['code']})")
+
         for row in terms:
             prompt = (
                 f'Explain "{row["term"]}" in simple words for a beginner Indian investor. '
                 f"Keep it below 100 words. Respond only in {name}."
             )
-            generate_portfolio_response(prompt)
+
+            generate_with_retry(prompt)
+            time.sleep(5)
 
     print(f"Completed multilingual smoke test for {len(get_languages())} languages.")
 

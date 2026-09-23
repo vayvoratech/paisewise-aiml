@@ -1,20 +1,16 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
+from app.pipelines.feature_pipeline import run_behaviour_feature_pipeline
 from services.feature_service import get_latest_features
 
 router = APIRouter()
 
 
-class FeatureValues(BaseModel):
-    quiz_attempts_total: int | None = None
-    quiz_pass_rate: float | None = None
-    avg_quiz_score: float | None = None
-
-
 class FeatureResponse(BaseModel):
     user_id: str
-    features: FeatureValues
+    features: dict
+    feature_version: str | None = None
     updated_at: str | None = None
 
 
@@ -26,7 +22,15 @@ def fetch_features(userId: str):
     return result
 
 
-@router.post("/ai/features/refresh/{userId}") #telling the actual path.....
+@router.post("/ai/features/refresh/{userId}")
 def refresh_features(userId: str):
-   
-    return {"status": "refresh_requested", "userId": userId}
+    # The existing pipeline is incremental and user-aware. Running it here
+    # recalculates users with new activity and keeps the same feature logic.
+    try:
+        updated = run_behaviour_feature_pipeline(full_refresh=False)
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=f"Feature refresh failed: {error}")
+    latest = get_latest_features(userId)
+    if latest is None:
+        raise HTTPException(status_code=404, detail="User features not found after refresh")
+    return {"status": "refreshed", "userId": userId, "updatedUsers": updated, **latest}

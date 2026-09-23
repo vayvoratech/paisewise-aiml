@@ -44,31 +44,23 @@ def test_portfolio_cache_miss():
 
 def test_portfolio_cache_hit():
 
-    cache_key = (
-        "portfolio_insight:"
-        "550e8400-e29b-41d4-a716-446655440000:en"
+    from services.portfolio_service import cache, _cache_key
+
+    cache_key = _cache_key(
+        PORTFOLIO_INPUT["user_id"],
+        "en",
+        PORTFOLIO_INPUT,
     )
 
     cache_value = "Test cached portfolio insight response"
 
-    from services.portfolio_service import cache
-
     cache.delete(cache_key)
+    cache.set(cache_key, cache_value, expiry=86400)
 
-    cache.set(
-        cache_key,
-        cache_value,
-        expiry=86400
-    )
-
-    result = get_portfolio_insight(
-        PORTFOLIO_INPUT,
-        "en"
-    )
+    result = get_portfolio_insight(PORTFOLIO_INPUT, "en")
 
     assert "insight" in result
     assert result["source"] == "cache"
-
 
 def test_portfolio_llm_failure_fallback(monkeypatch):
 

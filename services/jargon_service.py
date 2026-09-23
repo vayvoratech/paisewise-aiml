@@ -18,52 +18,116 @@ cache = RedisCache()
 llm_client = LLMClient()
 
 
+def _normalize_language(language):
+    value = (language or "en").strip().lower()
+
+    # Accept language codes directly.
+    if value in SUPPORTED_LANGUAGES:
+        return value
+
+    # Accept full language names such as "Kannada", "Telugu", etc.
+    for code, name in SUPPORTED_LANGUAGES.items():
+        if value == name.lower():
+            return code
+
+    # Keep existing fallback behavior for unsupported languages.
+    return "en"
+
+
+def _build_jargon_prompt(term, language):
+    language_name = SUPPORTED_LANGUAGES[language]
+
+    if language == "hi":
+        return JARGON_PROMPT_HINDI.format(
+            term=term,
+            language_name=language_name,
+            guardrails=FINANCIAL_GUARDRAILS,
+        )
+
+    # The existing English template contains "English" explicitly.
+    # Replace that instruction with the requested language.
+    prompt_template = JARGON_PROMPT_ENGLISH.replace(
+        "plain, beginner-friendly English",
+        f"plain, beginner-friendly {language_name}",
+    )
+
+    prompt = prompt_template.format(
+        term=term,
+        language_name=language_name,
+        guardrails=FINANCIAL_GUARDRAILS,
+    )
+
+    prompt += (
+        f"\nRespond completely in {language_name}. "
+        "Do not switch to English unless the requested language is English."
+    )
+
+    return prompt
+
+
 def get_jargon(term, language):
     term = term.strip()
-    language = (language or "en").strip().lower()
-    language_aliases = {"english": "en", "hindi": "hi", "telugu": "te", "marathi": "mr"}
-    language = language_aliases.get(language, language)
-    if language not in SUPPORTED_LANGUAGES:
-        language = "en"
+    language = _normalize_language(language)
+
     cache_key = f"jargon:{language}:{term.lower()}"
 
     try:
         cached = cache.get(cache_key)
     except Exception:
         cached = None
+
     if cached:
         return cached
 
-    prompt_template = JARGON_PROMPT_HINDI if language == "hi" else JARGON_PROMPT_ENGLISH
-    prompt = prompt_template.format(
-        term=term,
-        language_name=SUPPORTED_LANGUAGES[language],
-        guardrails=FINANCIAL_GUARDRAILS,
-    )
+    prompt = _build_jargon_prompt(term, language)
+
     started = time.monotonic()
+
     try:
         llm_response = llm_client.generate_response(prompt)
+
         filtered = check_content(llm_response)
+
         response = {
             "term": term,
             "language": language,
-            "explanation": filtered["message"] if filtered["blocked"] else filtered["content"],
+            "explanation": (
+                filtered["message"]
+                if filtered["blocked"]
+                else filtered["content"]
+            ),
         }
+
         token_usage = len(prompt.split()) + len(llm_response.split())
         cost = calculate_cost(token_usage)
         update_daily_cost(cost)
-        log_request(term, language, time.monotonic() - started, token_usage, cost)
+
+        log_request(
+            term,
+            language,
+            time.monotonic() - started,
+            token_usage,
+            cost,
+        )
+
     except Exception as error:
         sentry_sdk.capture_exception(error)
+
         try:
             response = get_fallback_definition(term, language)
+
         except Exception as fallback_error:
             sentry_sdk.capture_exception(fallback_error)
+
             response = {
                 "term": term,
                 "language": language,
-                "explanation": "This term is currently unavailable. Please try again later.",
+                "explanation": (
+                    "This term is currently unavailable. "
+                    "Please try again later."
+                ),
             }
 
     cache.set(cache_key, response, expiry=3600)
+
     return response

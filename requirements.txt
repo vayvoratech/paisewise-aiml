@@ -20,3 +20,6 @@ redis
 sentry-sdk
 kafka-python
 apscheduler
+chromadb
+sentence-transformers
+

@@ -66,6 +66,7 @@ class UserFeatures(Base):
     screens_visited = Column(Integer, default=0)
     lessons_started = Column(Integer, default=0)
     quizzes_taken = Column(Integer, default=0)
+    feature_version = Column(String(30), default="v1")
 
     created_at = Column(DateTime, server_default=func.now())
     updated_at = Column(
@@ -73,6 +74,15 @@ class UserFeatures(Base):
         server_default=func.now(),
         onupdate=func.now()
     )
+
+
+class SIPCoachReport(Base):
+    __tablename__ = "sip_coach_reports"
+
+    id = Column(BigInteger, primary_key=True)
+    user_id = Column(BigInteger, nullable=False)
+    report_text = Column(Text, nullable=False)
+    generated_at = Column(DateTime, server_default=func.now(), nullable=False)
 
 
 class JargonTerm(Base):

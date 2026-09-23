@@ -1,3 +1,4 @@
+import hashlib
 import json
 import logging
 import os
@@ -59,9 +60,28 @@ def _seconds_until_midnight() -> int:
     return max(1, int((tomorrow - now).total_seconds()))
 
 
-def _cache_key(user_id: str, language: str) -> str:
-    # Date is part of the key; language prevents cross-language responses.
-    return f"portfolio_insight:{user_id}:{date.today().isoformat()}:{language}"
+def _cache_key(
+    user_id: str,
+    language: str,
+    portfolio_input: dict,
+) -> str:
+    portfolio_data = json.dumps(
+        portfolio_input,
+        sort_keys=True,
+        default=str,
+    )
+
+    input_hash = hashlib.sha256(
+        portfolio_data.encode()
+    ).hexdigest()[:16]
+
+    return (
+        f"portfolio_insight:"
+        f"{user_id}:"
+        f"{date.today().isoformat()}:"
+        f"{language}:"
+        f"{input_hash}"
+    )
 
 
 def validate_insight_quality(response: str) -> bool:
@@ -80,15 +100,13 @@ def get_portfolio_insight(portfolio_input: dict, language: str):
     if not user_id:
         raise ValueError("user_id is required")
 
-    key = _cache_key(user_id, language)
+    key = _cache_key(
+        user_id,
+        language,
+        portfolio_input,
+    )
 
     cached = cache.get(key)
-
-    # Backward-compatible lookup for old cache entries.
-    if not cached:
-        cached = cache.get(
-            f"portfolio_insight:{user_id}:{language}"
-        )
 
     if cached:
         return {
