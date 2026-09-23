@@ -1,0 +1,10 @@
+{
+    "weights": {
+        "return_1y": 0.1709,
+        "return_3y": 0.1972,
+        "risk": 0.2282,
+        "sharpe_ratio": 0.2142,
+        "expense_ratio": 0.1896
+    },
+    "performance": 0.5479
+}

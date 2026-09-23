@@ -1,0 +1,16 @@
+ASSET ALLOCATION
+Development RAG Knowledge Source
+
+Asset allocation is the distribution of investments across categories such as equities, bonds, cash, and other assets.
+
+Asset allocation structures portfolio exposure across investments with different characteristics. A person's investment time horizon can influence how different assets may be considered, but the appropriate allocation is an individual decision.
+
+Risk tolerance describes how much uncertainty or loss an investor is willing or able to accept. A general-purpose assistant should not assume an individual's risk tolerance.
+
+Asset allocation and diversification are related but different. Asset allocation distributes exposure among asset classes, while diversification can also occur within an asset class.
+
+A portfolio's allocation can change as asset prices move. Rebalancing is the process of bringing the portfolio back toward a chosen allocation according to a defined approach.
+
+Strategic allocation generally establishes longer-term target exposures. Tactical allocation refers to shorter-term changes intended to respond to market views or conditions.
+
+A financial-learning assistant can explain asset-allocation concepts but should not prescribe an individual's target percentages or tell an individual exactly how to allocate money.

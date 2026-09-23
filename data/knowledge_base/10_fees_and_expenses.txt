@@ -1,0 +1,16 @@
+FEES AND EXPENSES
+Development RAG Knowledge Source
+
+Investment products can have costs and expenses. Recurring costs can affect long-term outcomes because money paid in fees is not available for investment.
+
+An expense ratio commonly expresses annual fund operating expenses as a percentage of fund assets.
+
+Funds may charge management fees and other operating expenses. Buying and selling securities can involve transaction-related costs. Some services can also have account, platform, advisory, custody, or other fees.
+
+For exchange-traded securities, the bid-ask spread is the difference between the price available from buyers and the price requested by sellers. It can represent a trading cost.
+
+Investment transactions and income may have tax consequences depending on the investor, product, jurisdiction, and applicable rules. Current tax treatment should be verified with authoritative sources.
+
+Product documentation should be reviewed to understand the complete fee structure rather than relying on a single headline number.
+
+Costs should be considered together with strategy, risks, services, and other characteristics. The assistant should not recommend a product solely because it has lower fees.

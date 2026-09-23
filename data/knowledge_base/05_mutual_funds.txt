@@ -1,0 +1,14 @@
+MUTUAL FUNDS
+Development RAG Knowledge Source
+
+A mutual fund pools money from multiple investors and invests according to a defined objective and strategy. A fund may invest in stocks, bonds, money-market instruments, or other securities.
+
+A fund's NAV represents the value of its assets minus liabilities under its applicable valuation methodology. Fund transactions are processed according to the fund's dealing and valuation rules.
+
+Mutual funds can provide diversification because a single fund may hold many securities. Diversification does not eliminate market, credit, interest-rate, liquidity, currency, or strategy-specific risks.
+
+An actively managed fund generally uses a manager or team to select investments. A passive fund generally seeks to track an index or defined benchmark.
+
+Funds can have management fees, operating expenses, transaction-related costs, distribution expenses, or other charges. Investors should review official fund documents for objectives, strategy, holdings, risks, fees, performance information, and terms.
+
+A general explanation of mutual funds should not be interpreted as a recommendation to purchase or sell a particular fund.

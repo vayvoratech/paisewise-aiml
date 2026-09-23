@@ -1,0 +1,6 @@
+fund_name,return_1y,return_3y,risk,sharpe_ratio,expense_ratio
+Fund A,12.5,14.2,8.2,1.25,0.50
+Fund B,15.1,13.8,9.5,1.18,0.65
+Fund C,10.2,11.9,6.8,1.31,0.40
+Fund D,18.4,16.2,12.1,1.10,0.75
+Fund E,13.8,14.9,7.5,1.27,0.55

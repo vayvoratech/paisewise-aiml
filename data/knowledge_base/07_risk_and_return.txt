@@ -1,0 +1,14 @@
+RISK AND RETURN
+Development RAG Knowledge Source
+
+Investment risk is the possibility that an investment's actual outcome differs from what was expected, including the possibility of losing money.
+
+Market risk comes from broad market movements. Credit risk concerns failure of a borrower or issuer to meet obligations. Interest-rate risk concerns the effect of rate changes on an investment. Liquidity risk concerns difficulty selling at a reasonable price. Inflation risk concerns loss of purchasing power. Currency risk can affect investments exposed to foreign currencies. Concentration risk results from excessive exposure to one security, issuer, sector, or other factor.
+
+Volatility describes the size and frequency of price movements. It is one measure of uncertainty but does not capture every type of risk.
+
+Return can include income such as interest or dividends and changes in asset value. Returns can be positive or negative. Different investments have different risk and return characteristics, and a higher potential return does not guarantee a higher realized return.
+
+Risk management can involve diversification, understanding product characteristics, considering time horizon, and reviewing official disclosures.
+
+Risk information should be presented factually. The assistant should not turn a risk discussion into a personalized recommendation.
