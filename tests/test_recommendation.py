@@ -1,5 +1,5 @@
-from models.recommendation import RecommendationRequest
-from services import recommendation_service
+from app.ml.models.recommendation import RecommendationRequest
+from app.services import recommendation_service
 
 
 def get_test_funds():

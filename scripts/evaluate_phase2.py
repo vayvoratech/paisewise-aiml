@@ -11,8 +11,8 @@ sys.path.insert(0, str(ROOT))
 from app.services.fund_recommendation import get_top_recommendations
 from app.services.lesson_personalization import build_user_learning_profile, generate_learning_path
 from app.services.fraud_detection import evaluate_fraud_event
-from services.sip_coach import coach_sip
-from services.stock_discovery import discover_stocks
+from app.services.sip_coach import coach_sip
+from app.services.stock_discovery import discover_stocks
 
 REPORT = ROOT / "reports" / "phase2_model_evaluation.md"
 

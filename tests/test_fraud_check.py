@@ -1,15 +1,21 @@
 from datetime import datetime, timezone
-from uuid import UUID
 
 from fastapi.testclient import TestClient
 
 from main import app
+from app.api import fraud_check as fraud_check_api
 
 
 client = TestClient(app)
 
 
-def test_fraud_check_endpoint():
+def test_fraud_check_endpoint(monkeypatch):
+
+    monkeypatch.setattr(
+        fraud_check_api,
+        "publish_compliance_alert",
+        lambda result: result,
+    )
 
     payload = {
         "orderId": "11111111-1111-1111-1111-111111111111",

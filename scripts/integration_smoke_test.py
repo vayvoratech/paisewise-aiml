@@ -36,8 +36,8 @@ def run_500_concurrent():
 
 
 def run_fallback_checks():
-    from services.notification_events import publish_sip_report_event
-    from utils.content_filter import check_content
+    from app.services.notification_events import publish_sip_report_event
+    from app.utils.content_filter import check_content
     return {
         "llm_fallback": "deterministic SIP coach available without LLM",
         "redis_fallback": "RedisCache treats failures as cache misses",

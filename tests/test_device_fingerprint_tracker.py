@@ -1,6 +1,6 @@
 from uuid import UUID, uuid4
 
-from services.device_fingerprint_tracker import (
+from app.services.device_fingerprint_tracker import (
     is_new_device,
     track_device,
 )

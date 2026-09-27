@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from services import recommendation_service
+from app.services import recommendation_service
 
 
 def test_recommendation_conversion_true(monkeypatch):

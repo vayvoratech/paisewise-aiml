@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 
 from main import app
-from services.jargon_service import llm_client
+from app.services.jargon_service import llm_client
 
 client = TestClient(app)
 
@@ -57,7 +57,7 @@ def test_jargon_endpoint_20_terms(monkeypatch):
 
 def test_jargon_endpoint_kannada(monkeypatch):
     monkeypatch.setattr(
-        "services.jargon_service.cache.get",
+        "app.services.jargon_service.cache.get",
         lambda key: None
     )
 
@@ -90,7 +90,7 @@ def test_jargon_endpoint_kannada(monkeypatch):
 
 def test_jargon_endpoint_telugu(monkeypatch):
     monkeypatch.setattr(
-        "services.jargon_service.cache.get",
+        "app.services.jargon_service.cache.get",
         lambda key: None
     )
 
@@ -123,7 +123,7 @@ def test_jargon_endpoint_telugu(monkeypatch):
 
 def test_jargon_endpoint_tamil(monkeypatch):
     monkeypatch.setattr(
-        "services.jargon_service.cache.get",
+        "app.services.jargon_service.cache.get",
         lambda key: None
     )
 

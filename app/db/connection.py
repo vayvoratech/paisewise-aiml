@@ -7,10 +7,9 @@ load_dotenv()
 
 
 def get_connection() -> psycopg.Connection:
-    return psycopg.connect(
-        host=os.getenv("POSTGRES_HOST", "localhost"),
-        port=int(os.getenv("POSTGRES_PORT", "5432")),
-        dbname=os.getenv("POSTGRES_DB", "vayvora"),
-        user=os.getenv("POSTGRES_USER", "postgres"),
-        password=os.getenv("POSTGRES_PASSWORD"),
-    )
+    database_url = os.getenv("DATABASE_URL")
+
+    if not database_url:
+        raise RuntimeError("DATABASE_URL is not set in the environment.")
+
+    return psycopg.connect(database_url)

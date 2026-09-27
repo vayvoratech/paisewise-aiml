@@ -8,7 +8,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from app.db.database import SessionLocal
 from app.services.fund_explanation import generate_fund_reason
 from app.services.fund_recommendation import get_top_recommendations
-
+from app.services.recommendation_service import record_recommendation_click
 from app.services.recommendation_weights import get_active_weights
 from app.services.language_service import get_language_name
 
@@ -16,8 +16,6 @@ router = APIRouter()
 
 
 class FundRecommendRequest(BaseModel):
-
-
     userId: str = Field(min_length=1)
     riskProfile: str = Field(min_length=1)
     investmentAmount: float = Field(gt=0)
@@ -27,8 +25,6 @@ class FundRecommendRequest(BaseModel):
 
 
 class KeyMetrics(BaseModel):
-
-
     riskLevel: Optional[str] = None
     category: Optional[str] = None
     return1Y: Optional[float] = None
@@ -39,7 +35,6 @@ class KeyMetrics(BaseModel):
 
 
 class RecommendedFund(BaseModel):
-
     fundName: str
     score: float
     reason: str
@@ -70,7 +65,6 @@ def recommend_funds(request: FundRecommendRequest):
     }
 
     if risk not in allowed_risk_profiles:
-
         raise HTTPException(
             status_code=400,
             detail=(
@@ -109,7 +103,6 @@ def recommend_funds(request: FundRecommendRequest):
 
         if not top_funds:
             raise HTTPException(
-                
                 status_code=404,
                 detail="No suitable mutual fund schemes passed the recommendation rules.",
             )
@@ -123,7 +116,6 @@ def recommend_funds(request: FundRecommendRequest):
                 fund_name=fund["scheme_name"],
                 risk_level=fund.get("risk_level"),
                 category=fund.get("category"),
-
                 user_risk=request.riskProfile,
                 investment_horizon=request.investmentHorizon,
                 user_goal=request.userGoal,
@@ -139,7 +131,6 @@ def recommend_funds(request: FundRecommendRequest):
                         "riskLevel": fund.get("risk_level"),
                         "category": fund.get("category"),
                         "return1Y": fund.get("returns_1y"),
-                        
                         "return3Y": fund.get("returns_3y"),
                         "return5Y": fund.get("returns_5y"),
                         "expenseRatio": fund.get("expense_ratio"),
@@ -151,7 +142,6 @@ def recommend_funds(request: FundRecommendRequest):
         return {"recommendedFunds": recommendations}
 
     except HTTPException:
-
         raise
     except SQLAlchemyError as error:
         print("Fund recommendation database error:", error)
@@ -160,7 +150,6 @@ def recommend_funds(request: FundRecommendRequest):
             detail="Unable to read mutual fund data.",
         )
     except Exception as error:
-
         print("Fund recommendation error:", error)
         raise HTTPException(
             status_code=500,
@@ -168,3 +157,31 @@ def recommend_funds(request: FundRecommendRequest):
         )
     finally:
         db.close()
+
+
+class RecommendationClickRequest(BaseModel):
+    userId: str = Field(min_length=1)
+    recommendationRunId: int
+    schemeCode: str = Field(min_length=1)
+
+
+@router.post("/ai/recommendation-click")
+def recommendation_click(request: RecommendationClickRequest):
+    try:
+        click_id = record_recommendation_click(
+            request.userId,
+            request.recommendationRunId,
+            request.schemeCode,
+        )
+
+        return {
+            "clickId": click_id,
+            "status": "recorded",
+        }
+
+    except Exception as error:
+        print("Recommendation click error:", error)
+        raise HTTPException(
+            status_code=500,
+            detail="Unable to record recommendation click.",
+        )

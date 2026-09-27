@@ -1,3 +1,4 @@
+import asyncio
 import os
 from typing import AsyncIterator
 
@@ -32,7 +33,8 @@ class GeminiProvider(LLMProvider):
 
         prompt = self._build_prompt(messages)
 
-        response = self.client.models.generate_content(
+        response = await asyncio.to_thread(
+            self.client.models.generate_content,
             model=self.model,
             contents=prompt,
         )
@@ -51,7 +53,8 @@ class GeminiProvider(LLMProvider):
 
         prompt = self._build_prompt(messages)
 
-        response = self.client.models.generate_content_stream(
+        response = await asyncio.to_thread(
+            self.client.models.generate_content_stream,
             model=self.model,
             contents=prompt,
         )

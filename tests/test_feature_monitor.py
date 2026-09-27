@@ -1,5 +1,5 @@
 #unit tests for monitoring logic
-from services.feature_monitor import calculate_shift
+from app.services.feature_monitor import calculate_shift
 
 
 def test_feature_shift_alert():

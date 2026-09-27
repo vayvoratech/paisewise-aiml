@@ -1,4 +1,4 @@
-from services.portfolio_service import (
+from app.services.portfolio_service import (
     get_portfolio_insight,
     llm_client
 )
@@ -23,7 +23,7 @@ PORTFOLIO_INPUT = {
 
 def test_portfolio_cache_miss():
 
-    from services.portfolio_service import cache
+    from app.services.portfolio_service import cache
 
     cache.delete(
         "portfolio_insight:550e8400-e29b-41d4-a716-446655440000:en"
@@ -44,7 +44,7 @@ def test_portfolio_cache_miss():
 
 def test_portfolio_cache_hit():
 
-    from services.portfolio_service import cache, _cache_key
+    from app.services.portfolio_service import cache, _cache_key
 
     cache_key = _cache_key(
         PORTFOLIO_INPUT["user_id"],

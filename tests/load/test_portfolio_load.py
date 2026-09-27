@@ -12,7 +12,7 @@ sys.path.append(
     )
 )
 
-from services.batch_insight_generator import generate_batch_insights
+from app.services.batch_insight_generator import generate_batch_insights
 
 def test_portfolio_batch_load():
 

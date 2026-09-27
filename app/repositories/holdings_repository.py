@@ -13,13 +13,11 @@ class HoldingsRepository:
                 id,
                 user_id,
                 symbol,
-                name,
-                emoji,
-                shares,
-                avg_price,
-                current_price,
-                note
-            FROM portfolio.holdings
+                company_name AS name,
+                quantity AS shares,
+                avg_buy_price AS avg_price,
+                NULL AS current_price
+            FROM public.portfolio_holdings
             WHERE user_id = %s
             ORDER BY symbol
         """
@@ -48,7 +46,7 @@ class HoldingsRepository:
     ) -> list[str]:
         query = """
             SELECT user_id
-            FROM portfolio.holdings
+            FROM public.portfolio_holdings
             GROUP BY user_id
             HAVING COUNT(*) > 2
         """

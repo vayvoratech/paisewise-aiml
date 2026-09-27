@@ -1,6 +1,6 @@
 import time
-from models.recommendation import RecommendationRequest
-from services import recommendation_service
+from app.ml.models.recommendation import RecommendationRequest
+from app.services import recommendation_service
 
 
 def test_recommendation_performance(monkeypatch):

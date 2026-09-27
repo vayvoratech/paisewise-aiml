@@ -1,4 +1,3 @@
-"""Monthly SIP coaching batch for active SIP users."""
 from datetime import datetime
 
 try:
@@ -12,9 +11,9 @@ except ImportError:  # keeps the module importable in environments without Airfl
 def generate_monthly_sip_reports():
     from app.db.database import SessionLocal
     from app.db.schema import User
-    from services.sip_coach import coach_sip
+    from app.services.sip_coach import coach_sip
     from sqlalchemy import text
-    from services.notification_events import publish_sip_report_event
+    from app.services.notification_events import publish_sip_report_event
 
     db = SessionLocal()
     try:

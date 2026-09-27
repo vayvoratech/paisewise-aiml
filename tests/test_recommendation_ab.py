@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from services.recommendation_ab import assign_recommendation_variant
+from app.services.recommendation_ab import assign_recommendation_variant
 
 
 def test_same_user_gets_same_variant():

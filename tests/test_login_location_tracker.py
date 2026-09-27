@@ -1,6 +1,6 @@
 from uuid import UUID, uuid4
 
-from services.login_location_tracker import track_login_location
+from app.services.login_location_tracker import track_login_location
 
 
 def test_first_login_location():

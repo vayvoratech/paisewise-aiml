@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from services import recommendation_refresh
+from app.services import recommendation_refresh
 
 
 USER_ID = UUID("11111111-1111-1111-1111-111111111111")

@@ -1,0 +1,6 @@
+Mutual fund category reference for financial education.
+
+Mutual fund schemes can be broadly grouped into equity, debt, hybrid, solution-oriented and other schemes such as index funds, ETFs and fund of funds. Equity schemes primarily invest in equities and can be volatile in the short term. Debt schemes primarily invest in fixed-income instruments. Hybrid schemes combine equity and debt. The exact scheme objective, portfolio limits, risks and costs should be checked in the scheme documents.
+
+Source: AMFI Investor Knowledge Centre, Categorization of Mutual Fund Schemes.
+https://www.amfiindia.com/investor/knowledge-center-info?zoneName=CategorizationOfMutualFundSchemes

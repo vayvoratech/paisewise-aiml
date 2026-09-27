@@ -36,8 +36,18 @@ def normalize_text(question: str) -> str:
     # Normalize apostrophes.
     text = text.replace("’", "'").replace("`", "'")
 
-    # Convert punctuation to spaces.
-    text = re.sub(r"[^a-z0-9\s']", " ", text)
+    # Convert punctuation to spaces while keeping Unicode
+    # letters, marks, and numbers for Indian languages.
+    text = "".join(
+        char
+        if (
+            unicodedata.category(char).startswith(("L", "M", "N"))
+            or char.isspace()
+            or char == "'"
+        )
+        else " "
+        for char in text
+    )
 
     # Normalize whitespace.
     text = re.sub(r"\s+", " ", text)

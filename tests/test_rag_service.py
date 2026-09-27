@@ -1,6 +1,10 @@
+import uuid
+
 import pytest
+import chromadb
 
 from app.services.rag.rag_service import RAGService
+from app.services.rag.chroma_vector_store import ChromaVectorStore
 
 
 class FakeEmbeddingService:
@@ -60,6 +64,14 @@ def create_service(
     loader=None,
     embedding_service=None,
 ):
+    client = chromadb.EphemeralClient()
+    collection_name = f"test_collection_{uuid.uuid4().hex}"
+
+    vector_store = ChromaVectorStore.__new__(ChromaVectorStore)
+    vector_store.collection = client.get_or_create_collection(
+        collection_name
+    )
+
     return RAGService(
         knowledge_base_path="unused",
         document_loader=(
@@ -69,6 +81,7 @@ def create_service(
             embedding_service
             or FakeEmbeddingService()
         ),
+        vector_store=vector_store,
     )
 
 

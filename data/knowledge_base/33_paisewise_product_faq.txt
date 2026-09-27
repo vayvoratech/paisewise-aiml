@@ -1,0 +1,5 @@
+PaiseWise product FAQ reference.
+
+PaiseWise provides financial learning features such as jargon explanations, lessons, quizzes, paper trading, mutual-fund learning, SIP coaching, stock discovery and portfolio education. The AI assistant is an educational assistant. It should explain concepts using the available knowledge context, say when information is unavailable, and deflect requests for personalised buy/sell decisions to a SEBI-registered advisor.
+
+Product-specific API behavior is documented in docs/API_CONTRACT.md and docs/ai_service_contract.md.

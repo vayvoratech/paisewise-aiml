@@ -1,20 +1,16 @@
 from typing import Any
 
-from app.repositories.holdings_repository import (
-    HoldingsRepository,
-)
+from app.repositories.holdings_repository import HoldingsRepository
 from app.schemas.portfolio_analytics import (
     HoldingAnalytics,
     PortfolioAnalyticsResponse,
 )
+from app.services.market_service import get_market
 
 
 class PortfolioAnalyticsService:
     """
-    Calculates numeric portfolio analytics from
-    the user's current holdings.
-
-    Database access is kept inside HoldingsRepository.
+    Calculates portfolio analytics from the user's holdings.
     """
 
     def __init__(
@@ -28,23 +24,39 @@ class PortfolioAnalyticsService:
 
     @staticmethod
     def _to_float(value: Any) -> float:
-        """
-        Safely convert database numeric values
-        such as Decimal/int/float into float.
-        """
         if value is None:
             return 0.0
 
         return float(value)
 
+    @staticmethod
+    def _get_current_price(
+        symbol: str,
+        current_price: Any,
+    ) -> float:
+        price = PortfolioAnalyticsService._to_float(
+            current_price
+        )
+
+        if price > 0:
+            return price
+
+        if not symbol:
+            return 0.0
+
+        try:
+            quote = get_market(symbol)
+            market_price = quote.get("price") if quote else None
+            return PortfolioAnalyticsService._to_float(
+                market_price
+            )
+        except Exception:
+            return 0.0
+
     def calculate(
         self,
         user_id: str,
     ) -> PortfolioAnalyticsResponse:
-        """
-        Calculate portfolio-level and
-        holding-level analytics.
-        """
 
         if not user_id or not user_id.strip():
             raise ValueError(
@@ -63,6 +75,11 @@ class PortfolioAnalyticsService:
         total_current_value = 0.0
 
         for holding in holdings:
+            symbol = str(
+                holding.get("symbol")
+                or ""
+            )
+
             shares = self._to_float(
                 holding.get("shares")
             )
@@ -71,28 +88,19 @@ class PortfolioAnalyticsService:
                 holding.get("avg_price")
             )
 
-            current_price = self._to_float(
-                holding.get("current_price")
+            current_price = self._get_current_price(
+                symbol,
+                holding.get("current_price"),
             )
 
-            invested_value = (
-                shares * avg_price
-            )
+            invested_value = shares * avg_price
+            current_value = shares * current_price
 
-            current_value = (
-                shares * current_price
-            )
-
-            pnl = (
-                current_value
-                - invested_value
-            )
+            pnl = current_value - invested_value
 
             if invested_value > 0:
                 pnl_percentage = (
-                    pnl
-                    / invested_value
-                    * 100
+                    pnl / invested_value * 100
                 )
             else:
                 pnl_percentage = 0.0
@@ -102,10 +110,7 @@ class PortfolioAnalyticsService:
 
             analytics.append(
                 HoldingAnalytics(
-                    symbol=str(
-                        holding.get("symbol")
-                        or ""
-                    ),
+                    symbol=symbol,
                     shares=shares,
                     avg_price=avg_price,
                     current_price=current_price,

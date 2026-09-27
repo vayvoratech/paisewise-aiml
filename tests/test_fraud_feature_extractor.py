@@ -1,8 +1,8 @@
 from datetime import datetime, timezone
 from uuid import UUID
 
-from models.fraud import OrderCreatedEvent
-from services.fraud_feature_extractor import extract_fraud_features
+from app.ml.models.fraud import OrderCreatedEvent
+from app.services.fraud_feature_extractor import extract_fraud_features
 
 
 def test_extract_fraud_features():

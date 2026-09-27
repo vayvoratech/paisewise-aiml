@@ -2,8 +2,8 @@ import time
 from datetime import datetime, timezone
 from uuid import UUID
 
-from models.fraud import OrderCreatedEvent
-from services.real_time_fraud_calculator import (
+from app.ml.models.fraud import OrderCreatedEvent
+from app.services.real_time_fraud_calculator import (
     calculate_real_time_fraud_features,
 )
 

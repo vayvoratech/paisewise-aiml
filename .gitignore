@@ -77,3 +77,7 @@ src/chroma_db/
 
 ai_quality_monitoring/evaluation_data.json
 llm_cost_management/cost_records.json
+
+# Generated ChromaDB runtime files
+data/chroma/
+data/chroma_old_3dim/

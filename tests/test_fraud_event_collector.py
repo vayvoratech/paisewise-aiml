@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from services.fraud_event_collector import process_order_event
+from app.services.fraud_event_collector import process_order_event
 
 
 def test_process_order_event_extracts_fraud_features():

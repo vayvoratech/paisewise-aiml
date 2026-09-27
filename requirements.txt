@@ -10,6 +10,7 @@ openpyxl
 google-genai
 mlflow
 pytest
+pytest-asyncio
 httpx
 apache-airflow
 pendulum
@@ -22,4 +23,6 @@ kafka-python
 apscheduler
 chromadb
 sentence-transformers
-
+xgboost
+vaderSentiment
+yfinance

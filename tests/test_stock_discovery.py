@@ -1,4 +1,4 @@
-from services.stock_discovery import discover_stocks
+from app.services.stock_discovery import discover_stocks
 
 
 def test_level_below_five_returns_no_stocks():

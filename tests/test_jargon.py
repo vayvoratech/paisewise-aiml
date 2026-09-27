@@ -1,4 +1,4 @@
-from services.jargon_service import (
+from app.services.jargon_service import (
     get_jargon,
     llm_client,
     _normalize_language,

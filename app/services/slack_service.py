@@ -59,3 +59,12 @@ def send_failure_message(error):
 
     except Exception as error:
         print("Slack notification error:", error)
+
+def send_retraining_message(model_name, metrics):
+    if not SLACK_WEBHOOK:
+        return
+    payload = {"text": f"PaiseWise {model_name} retrained. Metrics: {metrics}"}
+    try:
+        requests.post(SLACK_WEBHOOK, json=payload, timeout=10)
+    except Exception as error:
+        print("Slack notification error:", error)
