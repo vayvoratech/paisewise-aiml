@@ -1,7 +1,5 @@
 from datetime import date
 
-import yfinance as yf
-
 from app.services.benchmark_models import (
     BenchmarkPerformance,
 )
@@ -11,15 +9,6 @@ from app.services.market_data_provider import (
 
 
 class NSEMarketDataProvider(MarketDataProvider):
-    """
-    Market data provider backed by Yahoo Finance.
-
-    Yahoo Finance provides historical market data for
-    NSE indices. The provider remains behind the
-    MarketDataProvider abstraction so the data source
-    can be replaced later without changing the
-    comparison service.
-    """
 
     INDEX_SYMBOLS = {
         "NIFTY 50": "^NSEI",
@@ -62,6 +51,8 @@ class NSEMarketDataProvider(MarketDataProvider):
             )
 
         try:
+            import yfinance as yf
+
             data = yf.download(
                 ticker,
                 start=start_date.isoformat(),

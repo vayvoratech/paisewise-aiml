@@ -3,8 +3,6 @@ import json
 import os
 import time
 
-import mlflow
-
 from app.core.redis_cache import RedisCache
 from app.prompts.portfolio_prompt import create_prompt
 from app.services.llm_client import LLMClient
@@ -14,16 +12,6 @@ MLFLOW_TRACKING_URI = os.getenv(
     "MLFLOW_TRACKING_URI",
     "file:./mlruns",
 )
-
-try:
-    mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-    mlflow.set_experiment("Portfolio Insight")
-except Exception as error:
-    print(
-        "MLflow setup failed, continuing without tracking:",
-        error,
-    )
-    mlflow = None
 
 
 cache = RedisCache()
@@ -54,7 +42,7 @@ def _fallback_insight(language):
         ),
         "hi": (
             "अभी पोर्टफोलियो जानकारी तैयार नहीं हो सकी। "
-            "कृपया बाद में फिर प्रयास करें।"
+            "कृपया बाद में फिर प्रयास करें."
         ),
         "te": (
             "ప్రస్తుతం పోర్ట్‌ఫోలియో వివరాలను రూపొందించలేకపోయాను. "
@@ -83,59 +71,63 @@ def generate_insight(user, holdings, market, language):
     except Exception:
         return _fallback_insight(language)
 
-    if mlflow is not None:
-        try:
-            with mlflow.start_run(
-                run_name="Portfolio Insight"
-            ):
-                mlflow.log_param(
-                    "user_id",
-                    str(user.get("user_id", "")),
-                )
-                mlflow.log_param(
-                    "language",
-                    language,
-                )
-                mlflow.log_param(
+    try:
+        import mlflow
+
+        mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
+        mlflow.set_experiment("Portfolio Insight")
+
+        with mlflow.start_run(
+            run_name="Portfolio Insight"
+        ):
+            mlflow.log_param(
+                "user_id",
+                str(user.get("user_id", "")),
+            )
+            mlflow.log_param(
+                "language",
+                language,
+            )
+            mlflow.log_param(
+                "risk_profile",
+                user.get(
                     "risk_profile",
-                    user.get(
-                        "risk_profile",
-                        "",
-                    ),
-                )
-                mlflow.log_text(
-                    prompt,
-                    "prompt.txt",
-                )
-                mlflow.log_text(
-                    json.dumps(
-                        holdings,
-                        default=str,
-                    ),
-                    "holdings.json",
-                )
-                mlflow.log_text(
-                    str(market),
-                    "market.txt",
-                )
-                mlflow.log_metric(
-                    "execution_time",
-                    time.time() - start_time,
-                )
-                mlflow.log_metric(
-                    "prompt_length",
-                    len(prompt),
-                )
-                mlflow.log_metric(
-                    "response_length",
-                    len(result),
-                )
-                mlflow.log_text(
-                    result,
-                    "response.txt",
-                )
-        except Exception:
-            pass
+                    "",
+                ),
+            )
+            mlflow.log_text(
+                prompt,
+                "prompt.txt",
+            )
+            mlflow.log_text(
+                json.dumps(
+                    holdings,
+                    default=str,
+                ),
+                "holdings.json",
+            )
+            mlflow.log_text(
+                str(market),
+                "market.txt",
+            )
+            mlflow.log_metric(
+                "execution_time",
+                time.time() - start_time,
+            )
+            mlflow.log_metric(
+                "prompt_length",
+                len(prompt),
+            )
+            mlflow.log_metric(
+                "response_length",
+                len(result),
+            )
+            mlflow.log_text(
+                result,
+                "response.txt",
+            )
+    except Exception:
+        pass
 
     return result
 

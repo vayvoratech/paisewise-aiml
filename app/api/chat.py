@@ -31,15 +31,6 @@ llm_provider = GeminiProvider()
 
 
 # --------------------------------------------------
-# RAG
-# --------------------------------------------------
-
-rag_service = RAGService(
-    knowledge_base_path="data/knowledge_base",
-)
-
-
-# --------------------------------------------------
 # Prompt Builder
 # --------------------------------------------------
 
@@ -62,17 +53,32 @@ conversation_service = ConversationService(
 
 
 # --------------------------------------------------
-# Chat Service
+# RAG + Chat Service
 # --------------------------------------------------
 
-# ChatService does not access PostgreSQL.
+# RAG loads the SentenceTransformer model.
+# Keep it lazy so the model does not load while
+# FastAPI is importing the application.
 
-chat_service = ChatService(
-    llm_provider=llm_provider,
-    rag_service=rag_service,
-    prompt_builder=prompt_builder,
-    conversation_service=conversation_service,
-)
+chat_service = None
+
+
+def get_chat_service() -> ChatService:
+    global chat_service
+
+    if chat_service is None:
+        rag_service = RAGService(
+            knowledge_base_path="data/knowledge_base",
+        )
+
+        chat_service = ChatService(
+            llm_provider=llm_provider,
+            rag_service=rag_service,
+            prompt_builder=prompt_builder,
+            conversation_service=conversation_service,
+        )
+
+    return chat_service
 
 
 # --------------------------------------------------
@@ -110,7 +116,9 @@ async def chat(
     PostgreSQL is NOT used by ChatService.
     """
 
-    return await chat_service.process_chat(
+    service = get_chat_service()
+
+    return await service.process_chat(
         request
     )
 
@@ -131,8 +139,10 @@ async def stream_chat(
     Conversation history comes from Redis.
     """
 
+    service = get_chat_service()
+
     return StreamingResponse(
-        chat_service.stream_chat(request),
+        service.stream_chat(request),
         media_type="text/plain",
     )
 
