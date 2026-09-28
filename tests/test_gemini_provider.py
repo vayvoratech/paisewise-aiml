@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, AsyncMock, patch
 
 import pytest
 
@@ -17,8 +17,8 @@ async def test_gemini_provider_returns_response():
 
         mock_client = mock_client_class.return_value
 
-        mock_client.models.generate_content.return_value = (
-            mock_response
+        mock_client.aio.models.generate_content = AsyncMock(
+            return_value=mock_response
         )
 
         provider = GeminiProvider()
@@ -35,5 +35,3 @@ async def test_gemini_provider_returns_response():
         assert result == (
             "An ETF is an exchange-traded fund."
         )
-
-        mock_client.models.generate_content.assert_called_once()

@@ -1,0 +1,2825 @@
+{
+  "dataset_name": "fraud_development_dataset",
+  "dataset_version": "1.0.1",
+  "environment": "development",
+  "data_source": "synthetic",
+  "production_use": false,
+  "total_samples": 200,
+  "true_fraud_samples": 100,
+  "false_positive_samples": 100,
+  "feature_names": [
+    "shares",
+    "price_per_share",
+    "total_amount",
+    "side_buy",
+    "side_sell",
+    "order_type_market",
+    "order_type_limit"
+  ],
+  "label_mapping": {
+    "FALSE_POSITIVE": 0,
+    "TRUE_FRAUD": 1
+  },
+  "records": [
+    {
+      "case_id": "fdcca36e-59af-4fd0-9303-2d9c35a6b799",
+      "features": [
+        91.0,
+        4367.04,
+        397400.64,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "200a7379-b03a-435f-b61c-1776456a8558",
+      "features": [
+        10.0,
+        3475.68,
+        34756.8,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "d6950637-76d5-4130-bd2c-beb66bbc534f",
+      "features": [
+        78.0,
+        2988.38,
+        233093.64,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "b0c7290b-701c-4c60-aeed-b9727fc9a869",
+      "features": [
+        5.0,
+        2338.33,
+        11691.65,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "1766ee81-e003-4e1a-b76c-7eede773f90e",
+      "features": [
+        53.0,
+        4192.41,
+        222197.73,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "19178d57-46bb-4171-8313-6ca61b88151a",
+      "features": [
+        75.0,
+        4090.25,
+        306768.75,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "244b0681-a387-49c6-8a5e-847d9006a1e1",
+      "features": [
+        25.0,
+        3846.45,
+        96161.25,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "88d89de1-86b7-4a37-95c4-08f7bc021b3e",
+      "features": [
+        89.0,
+        3348.23,
+        297992.47,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "59922e52-c12b-4fc7-8ab3-d1a79a33bad0",
+      "features": [
+        79.0,
+        2160.59,
+        170686.61,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "02a4fdde-cf49-4e09-85ea-5a9fb540eb95",
+      "features": [
+        99.0,
+        3509.93,
+        347483.07,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "f5536af6-1473-41af-9fa1-91e2edcbefda",
+      "features": [
+        70.0,
+        2941.77,
+        205923.9,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "69ec9a41-96d2-4f56-b0c4-6b6415cac2a2",
+      "features": [
+        47.0,
+        818.86,
+        38486.42,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "a0ab3453-56aa-430b-90ed-86b2fbc2730c",
+      "features": [
+        67.0,
+        974.92,
+        65319.64,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "f539cefe-5ce6-44d0-bae4-714558909170",
+      "features": [
+        78.0,
+        2211.71,
+        172513.38,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "94f2454d-9d5b-430c-a4ca-ccbeddd5b64c",
+      "features": [
+        76.0,
+        1576.61,
+        119822.36,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "f1946ed7-c25f-419f-b223-6e4003670027",
+      "features": [
+        55.0,
+        4572.34,
+        251478.7,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "02baf64a-421e-4dd3-922a-874500f35d2b",
+      "features": [
+        66.0,
+        1913.83,
+        126312.78,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "cffac59a-c39a-4bd2-9e3c-8a6703a15802",
+      "features": [
+        71.0,
+        3571.72,
+        253592.12,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "9e754e12-34fc-4780-977e-b7f1cf4cbae5",
+      "features": [
+        23.0,
+        821.34,
+        18890.82,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "bad57f7e-4184-43b5-9911-24466dff4df9",
+      "features": [
+        78.0,
+        3209.08,
+        250308.24,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "60024089-28a8-41b6-af79-9920182c4bcb",
+      "features": [
+        77.0,
+        1607.97,
+        123813.69,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "b1d893d0-6ba6-429a-9651-00e5c7d30ca4",
+      "features": [
+        120.0,
+        2581.83,
+        309819.6,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "db7ca4b1-465d-472d-829c-64e594266d01",
+      "features": [
+        90.0,
+        1835.19,
+        165167.1,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "c140bba6-af08-443f-ac3a-a9196e9774ca",
+      "features": [
+        104.0,
+        2698.39,
+        280632.56,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "a4abe8f6-e0e2-4363-bc97-460e65e53bb5",
+      "features": [
+        90.0,
+        1014.75,
+        91327.5,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "1c0c2619-ff0f-4f55-90e9-978373532a75",
+      "features": [
+        100.0,
+        2976.75,
+        297675.0,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "577894cd-7267-49b0-a161-058b8dc3c414",
+      "features": [
+        64.0,
+        966.14,
+        61832.96,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "382c8b2a-ad0c-49c4-a9d6-bb0c815a0ef7",
+      "features": [
+        80.0,
+        3039.76,
+        243180.8,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "3f46b764-3bae-4816-953f-772c1ea587ee",
+      "features": [
+        20.0,
+        3011.33,
+        60226.6,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "836e9c51-f745-40cf-9ed9-a622931160e5",
+      "features": [
+        65.0,
+        805.82,
+        52378.3,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "f647fea5-4c20-47fa-9917-7d04b6e2580d",
+      "features": [
+        29.0,
+        1833.11,
+        53160.19,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "d1e8c0d0-4bca-4893-8b3d-b20120584c4b",
+      "features": [
+        85.0,
+        3734.23,
+        317409.55,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "0843b470-1130-48d6-91ba-b6670fe5f2eb",
+      "features": [
+        54.0,
+        1693.41,
+        91444.14,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "3d1349c8-7cfe-41da-bada-edfa9ab819e1",
+      "features": [
+        88.0,
+        986.44,
+        86806.72,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "d51973d1-efd1-4ef6-8522-c2c4faa13381",
+      "features": [
+        11.0,
+        1416.01,
+        15576.11,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "0290f46f-7961-43fc-9234-645c1b287139",
+      "features": [
+        66.0,
+        3383.67,
+        223322.22,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "cbc0de4f-38f1-4092-a8b7-87ef361fef40",
+      "features": [
+        27.0,
+        2617.25,
+        70665.75,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "d383e3e2-80aa-4bc6-926e-0913d4f90a32",
+      "features": [
+        94.0,
+        917.36,
+        86231.84,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "d21aed5b-9af4-4abb-be9d-1ec7d40bbf65",
+      "features": [
+        99.0,
+        1950.45,
+        193094.55,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "2d35e252-514e-4387-be9d-f01eee21a430",
+      "features": [
+        13.0,
+        4900.93,
+        63712.09,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "6e16b9e0-4504-4dd6-8506-f9117fa3886d",
+      "features": [
+        90.0,
+        4731.64,
+        425847.6,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "944d3bdc-b211-45d6-bcf2-df0c789c2130",
+      "features": [
+        94.0,
+        5496.05,
+        516628.7,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "958155ec-522e-4a13-82f4-9bbd6b399302",
+      "features": [
+        51.0,
+        3166.14,
+        161473.14,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "27431ca9-f968-4497-bf96-d480111e9fa0",
+      "features": [
+        73.0,
+        4432.14,
+        323546.22,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "fadeacaa-b3f7-4b5b-8f75-8e41915cd3d5",
+      "features": [
+        41.0,
+        3767.23,
+        154456.43,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "9fc2609f-e631-4737-8698-c8f0d90b61e9",
+      "features": [
+        25.0,
+        2541.76,
+        63544.0,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "055e056b-2a8f-43f0-ad40-063be265e0e8",
+      "features": [
+        12.0,
+        2699.08,
+        32388.96,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "8ca0ec97-f0ef-47b6-b887-08a22bebbf7b",
+      "features": [
+        22.0,
+        1609.82,
+        35416.04,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "579e3f8c-3e62-4f96-86a2-3c5f70be28ce",
+      "features": [
+        65.0,
+        2065.82,
+        134278.3,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "12564d16-ec19-463e-baac-0c79bea6489d",
+      "features": [
+        19.0,
+        4680.94,
+        88937.86,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "f16e9113-b1c8-4999-983f-d04ab70ebb35",
+      "features": [
+        77.0,
+        4771.07,
+        367372.39,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "f44ce74c-3878-4b24-9e68-e89185f685a9",
+      "features": [
+        106.0,
+        2578.89,
+        273362.34,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "8446927a-9adc-40c3-87f5-bc47c9a3bdb0",
+      "features": [
+        38.0,
+        4045.23,
+        153718.74,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "657a7229-557c-4ba5-9e8b-4b5962f9d275",
+      "features": [
+        95.0,
+        2462.26,
+        233914.7,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "1406c648-171e-4f3f-bad2-b3d5920a7fd1",
+      "features": [
+        40.0,
+        4467.34,
+        178693.6,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "25d335dd-4a5f-46d6-9090-869e2b04f358",
+      "features": [
+        28.0,
+        5891.69,
+        164967.32,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "2e9dfb01-a4a2-4380-9257-5041b8940bbd",
+      "features": [
+        71.0,
+        2531.69,
+        179749.99,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "60adc88d-9f23-4572-ae62-5094041b70b0",
+      "features": [
+        34.0,
+        2223.66,
+        75604.44,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "0de6540c-09eb-4dad-8cc2-2f36c293efe3",
+      "features": [
+        102.0,
+        4884.33,
+        498201.66,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "7b75d043-a444-4a48-ac24-54ed686cfd23",
+      "features": [
+        63.0,
+        3737.88,
+        235486.44,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "d7563daa-13d3-45d1-8c88-6829c2b15a6c",
+      "features": [
+        112.0,
+        1583.92,
+        177399.04,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "c3639996-98ec-40c8-b067-c2a52e9525e7",
+      "features": [
+        21.0,
+        2760.31,
+        57966.51,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "65debf6a-5800-458b-baee-da5568862319",
+      "features": [
+        23.0,
+        3466.87,
+        79738.01,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "a1e53847-9f39-4013-bb85-8adfc0522c68",
+      "features": [
+        90.0,
+        1701.4,
+        153126.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "e017ad3a-1711-4bec-bb2d-1a373813a8d4",
+      "features": [
+        95.0,
+        4655.69,
+        442290.55,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "6e80f92e-cd14-42d5-ab53-ef0e1f881aa5",
+      "features": [
+        98.0,
+        2507.54,
+        245738.92,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "58f005d6-6952-447a-b875-04460c52271c",
+      "features": [
+        55.0,
+        3870.31,
+        212867.05,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "1a605570-42db-4930-a88e-090a629a27cc",
+      "features": [
+        35.0,
+        1248.4,
+        43694.0,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "ef0d6f5f-868b-49c8-a1e9-bad4bd9cc3e7",
+      "features": [
+        93.0,
+        2167.57,
+        201584.01,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "41d66ddf-9a34-4738-b0a2-eafa04a9cf28",
+      "features": [
+        57.0,
+        1714.77,
+        97741.89,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "a3f11f99-dd91-4f08-804a-728620c7f3c5",
+      "features": [
+        86.0,
+        4430.88,
+        381055.68,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "ca463a52-145f-43a1-a61c-c4bc8e480818",
+      "features": [
+        89.0,
+        2404.12,
+        213966.68,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "9e3e3697-71b4-4a87-ac36-bbf391b085d0",
+      "features": [
+        18.0,
+        3545.15,
+        63812.7,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "c2517ec3-5744-4db5-bfe3-88f191c04264",
+      "features": [
+        32.0,
+        5931.79,
+        189817.28,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "7d7c3396-04e7-41b0-bb9f-c54a1968a609",
+      "features": [
+        87.0,
+        2676.0,
+        232812.0,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "dbbfb7a8-5dcc-4fe6-882a-ad69655f8f98",
+      "features": [
+        35.0,
+        3740.34,
+        130911.9,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "255c7d70-3be4-44bc-a3fb-76d37386f1ca",
+      "features": [
+        60.0,
+        1073.5,
+        64410.0,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "dbd367ed-8d59-4874-918a-8b62087c4f62",
+      "features": [
+        19.0,
+        4801.81,
+        91234.39,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "6e8ab17e-0fa9-4f63-8fcd-b288f9e4b786",
+      "features": [
+        85.0,
+        1592.82,
+        135389.7,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "362e7988-6971-4ecf-8822-ea0921374848",
+      "features": [
+        59.0,
+        833.37,
+        49168.83,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "6c6604c4-a323-450f-ba8d-fc5691153fc5",
+      "features": [
+        58.0,
+        3283.34,
+        190433.72,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "83712582-1de9-4985-af65-8a9fc2db2e27",
+      "features": [
+        97.0,
+        4143.22,
+        401892.34,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "066e1b37-3a07-4950-8909-3490d9a47892",
+      "features": [
+        110.0,
+        4911.1,
+        540221.0,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "595c3234-fcd6-4c28-925b-d8f59f80fbc0",
+      "features": [
+        92.0,
+        970.7,
+        89304.4,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "4868f89d-5cd0-4480-b7b2-a89f159d67e6",
+      "features": [
+        81.0,
+        1484.79,
+        120267.99,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "39438229-6744-402a-9267-86c2cbbca664",
+      "features": [
+        68.0,
+        2469.91,
+        167953.88,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "8c3d8e0f-1ee1-496f-bf38-4c38686bfb13",
+      "features": [
+        94.0,
+        1653.1,
+        155391.4,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "18a9f14a-f241-452d-be01-d9d07cbde0ab",
+      "features": [
+        70.0,
+        3901.02,
+        273071.4,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "296ef2f4-fb94-417e-9d9b-18731d8c422a",
+      "features": [
+        56.0,
+        4978.17,
+        278777.52,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "bf3192ee-2fdc-4cd1-8136-58f48e0cabd0",
+      "features": [
+        43.0,
+        563.67,
+        24237.81,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "307351e5-5f8e-4de3-8cba-91e2de10d0b9",
+      "features": [
+        40.0,
+        698.39,
+        27935.6,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "ff5808eb-a996-454a-8c09-ea06e6b27b17",
+      "features": [
+        38.0,
+        3883.0,
+        147554.0,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "eb86af77-877c-46a9-83ab-9e2769e6fb2f",
+      "features": [
+        69.0,
+        3024.08,
+        208661.52,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "ea989149-8a80-4394-a547-c05d9aeb6e00",
+      "features": [
+        77.0,
+        3246.49,
+        249979.73,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "e76c89c5-e790-41bb-9e18-2ebc0ac2d99b",
+      "features": [
+        44.0,
+        4947.86,
+        217705.84,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "bab4ae96-141a-4daa-b6fb-5f730b251487",
+      "features": [
+        92.0,
+        2399.72,
+        220774.24,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "4817026e-2960-44dc-8d4c-6222ad239948",
+      "features": [
+        70.0,
+        860.5,
+        60235.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "f5aa15f0-ccbb-4185-984e-75baedca2244",
+      "features": [
+        75.0,
+        2335.96,
+        175197.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "1653bfd4-d37b-4fc1-b122-af9959949c38",
+      "features": [
+        60.0,
+        2094.34,
+        125660.4,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "ba986314-558b-4390-9bac-7c623145accc",
+      "features": [
+        61.0,
+        4463.81,
+        272292.41,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "8705113e-49d7-4ab9-b038-206fa3f917b7",
+      "features": [
+        58.0,
+        2029.44,
+        117707.52,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "a56efa34-391f-47bb-9810-8bbdfc225a6a",
+      "features": [
+        34.0,
+        3437.09,
+        116861.06,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "0c8907f2-52d1-4009-96eb-2813369e1826",
+      "features": [
+        115.0,
+        1263.61,
+        145315.15,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "36393f71-d982-4728-9c15-b5b3f6e2e42b",
+      "features": [
+        93.0,
+        2729.61,
+        253853.73,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "058f1884-b946-4d83-b1a2-e934a8f6aa16",
+      "features": [
+        35.0,
+        4390.73,
+        153675.55,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "eb481968-8e44-486d-976c-ad81fe35022b",
+      "features": [
+        62.0,
+        4943.49,
+        306496.38,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "caab9e39-8375-432c-b1a3-0eb6705ac224",
+      "features": [
+        58.0,
+        3214.91,
+        186464.78,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "fa4416da-f156-4ee8-b6c4-09644c82d023",
+      "features": [
+        96.0,
+        4644.28,
+        445850.88,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "72855bc0-6014-42a4-bc33-4e5ed2f81cb8",
+      "features": [
+        81.0,
+        2684.37,
+        217433.97,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "7d09eca2-0014-442e-86be-8981851b5ccd",
+      "features": [
+        74.0,
+        2197.45,
+        162611.3,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "5da58a3c-cbd4-4da0-96e2-07fb5e3398c7",
+      "features": [
+        38.0,
+        1303.56,
+        49535.28,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "2a3f2f80-e874-4397-8f77-6cf1e55bbcc6",
+      "features": [
+        66.0,
+        1013.39,
+        66883.74,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "85280663-7e31-494a-9d26-b30d6e3d85d5",
+      "features": [
+        73.0,
+        3985.89,
+        290969.97,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "de630708-df59-410d-a862-901b954b6141",
+      "features": [
+        13.0,
+        4745.19,
+        61687.47,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "4123255a-ffbc-48da-80ca-3a326f9d69cf",
+      "features": [
+        32.0,
+        4609.11,
+        147491.52,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "5bdab4b7-32cd-43d5-aee6-a524be4fd562",
+      "features": [
+        13.0,
+        2366.91,
+        30769.83,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "14111899-a5ab-42be-90b8-3f6da2df3777",
+      "features": [
+        102.0,
+        4316.07,
+        440239.14,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "1a3e6f8d-908c-4c45-99a7-9cf7652a1c74",
+      "features": [
+        74.0,
+        3391.53,
+        250973.22,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "8380beb3-7b00-460e-80a6-124087a00934",
+      "features": [
+        39.0,
+        1879.8,
+        73312.2,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "1d317952-b9f1-491e-a44b-7fc1c8cb161e",
+      "features": [
+        61.0,
+        5278.07,
+        321962.27,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "2a12e99e-c9e8-4af1-bbcd-f4d84fa281ee",
+      "features": [
+        59.0,
+        4093.96,
+        241543.64,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "617e363e-ce49-4a37-bcef-86eb4a3ea7f1",
+      "features": [
+        60.0,
+        814.88,
+        48892.8,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "5c877ce5-d865-4aa0-9013-2cf0f62f152d",
+      "features": [
+        89.0,
+        4346.86,
+        386870.54,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "f0500dd8-2e80-43ab-a9c3-b917a04f425f",
+      "features": [
+        89.0,
+        1369.08,
+        121848.12,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "b652fd9e-c2ff-441a-bdfc-8d531fe5c46b",
+      "features": [
+        118.0,
+        5128.07,
+        605112.26,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "d2d8ad73-baa8-4cd9-8c6e-641289cb8211",
+      "features": [
+        64.0,
+        3557.83,
+        227701.12,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "09e86abe-89fa-4608-8850-76ad1fdec145",
+      "features": [
+        52.0,
+        4210.12,
+        218926.24,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "5a576878-c8d5-4fbb-a756-ae488ac6e8ac",
+      "features": [
+        86.0,
+        2965.72,
+        255051.92,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "b8974367-31f8-4575-a42a-608401a53038",
+      "features": [
+        90.0,
+        3404.75,
+        306427.5,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "44319a36-c255-4162-a2bd-46bf79d70ebf",
+      "features": [
+        71.0,
+        5510.58,
+        391251.18,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "68592cf2-41b4-42b6-9645-2a382a52eeae",
+      "features": [
+        64.0,
+        4251.65,
+        272105.6,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "a96c0440-ebe2-444c-a8b0-a90346e09fef",
+      "features": [
+        97.0,
+        3743.45,
+        363114.65,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "d6a4f78a-c407-4882-b96a-83219a2c30a3",
+      "features": [
+        85.0,
+        1449.61,
+        123216.85,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "2db5aefb-d7d0-4959-b872-696984a6a84c",
+      "features": [
+        74.0,
+        662.13,
+        48997.62,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "76af1d30-282d-4b56-ab7a-9e50dff12de2",
+      "features": [
+        97.0,
+        4514.09,
+        437866.73,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "25ea7f21-0ebc-4c78-bc72-b09010bdd16f",
+      "features": [
+        48.0,
+        1750.42,
+        84020.16,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "e4e579cb-3a7a-4347-8dfb-72c3f10c458b",
+      "features": [
+        76.0,
+        545.68,
+        41471.68,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "6aff1c07-5b89-4731-b972-f33dc88bd8bd",
+      "features": [
+        96.0,
+        1813.38,
+        174084.48,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "bf1ae0f2-aa0d-4ffe-95e4-e7bc5ba4c4f9",
+      "features": [
+        64.0,
+        4761.77,
+        304753.28,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "2dd151ab-dbaa-454d-a128-b373cc627a6a",
+      "features": [
+        45.0,
+        1530.16,
+        68857.2,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "359d13ee-b81e-4da6-9ae6-1e94af29981f",
+      "features": [
+        94.0,
+        5583.02,
+        524803.88,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "5cb870f5-b7cd-4cad-ac97-22e94113d5b4",
+      "features": [
+        69.0,
+        4606.83,
+        317871.27,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "c042d76d-1922-476f-8fea-101a07af5cf0",
+      "features": [
+        82.0,
+        3232.61,
+        265074.02,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "61fc2e45-bfdd-4a55-a8a1-99980addce79",
+      "features": [
+        56.0,
+        1597.93,
+        89484.08,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "8b2c99a2-d025-434f-a90d-b16fe32a839b",
+      "features": [
+        59.0,
+        3634.66,
+        214444.94,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "a0cd7047-8177-4326-9d25-dbc030ca6d03",
+      "features": [
+        65.0,
+        1500.95,
+        97561.75,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "24ceb00f-5bc0-4b82-bb21-30e83e800c48",
+      "features": [
+        83.0,
+        1973.09,
+        163766.47,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "00033951-e704-4dd1-a56d-ce600e9c4c19",
+      "features": [
+        18.0,
+        3486.15,
+        62750.7,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "2e69b933-855d-4658-90f6-d557faffb4db",
+      "features": [
+        42.0,
+        780.2,
+        32768.4,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "ef74d990-5dd4-41e5-a16f-a84722b29280",
+      "features": [
+        110.0,
+        2923.61,
+        321597.1,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "ff34c41e-7374-4f84-9be3-5717c55ea8e3",
+      "features": [
+        46.0,
+        3171.44,
+        145886.24,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "d7fc1d65-e9b1-44dc-9b17-85b5e8a43f69",
+      "features": [
+        84.0,
+        807.89,
+        67862.76,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "1e97bfd2-bdd7-4674-bfbc-b6ea5bdab03c",
+      "features": [
+        83.0,
+        2746.54,
+        227962.82,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "cdcc0ecc-cbc7-4b75-9ceb-f2164944df07",
+      "features": [
+        65.0,
+        2839.26,
+        184551.9,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "99afe619-2f92-4970-be85-40fc8ad79c3d",
+      "features": [
+        93.0,
+        2642.42,
+        245745.06,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "f269cc93-af79-46b3-8713-2d44c121c7c1",
+      "features": [
+        76.0,
+        4478.61,
+        340374.36,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "6ba18451-429f-4740-84e3-82a5c765e564",
+      "features": [
+        33.0,
+        3425.65,
+        113046.45,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "0b021cf5-72ad-4b3a-9290-9bdca13c2ab6",
+      "features": [
+        9.0,
+        634.09,
+        5706.81,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "454ca568-f085-4644-8532-0e2a271fe934",
+      "features": [
+        49.0,
+        4905.85,
+        240386.65,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "14a41a1b-23d5-40fe-a407-e76948fa07fd",
+      "features": [
+        53.0,
+        1752.15,
+        92863.95,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "de36c8db-73e1-4dc2-8bed-02761712cf7b",
+      "features": [
+        31.0,
+        3729.25,
+        115606.75,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "daa82530-5d2b-465a-aff4-76a79ca5d4c4",
+      "features": [
+        15.0,
+        2616.38,
+        39245.7,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "9244d1b7-cfcf-473d-9d1a-554576a1b6df",
+      "features": [
+        14.0,
+        541.92,
+        7586.88,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "683379ed-5b98-429a-9f58-f10700c194a0",
+      "features": [
+        50.0,
+        2748.48,
+        137424.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "a451c2a6-be36-4209-959d-93ef3c8b7825",
+      "features": [
+        18.0,
+        4427.24,
+        79690.32,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "a568a9af-dc5c-4001-86d1-e4f3ebde0a5e",
+      "features": [
+        77.0,
+        4021.86,
+        309683.22,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "cb1ad118-d2bf-44c7-a761-e08ad23bb4a2",
+      "features": [
+        36.0,
+        2162.87,
+        77863.32,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "a69fbc6a-e350-4a83-971f-5991cdca27b0",
+      "features": [
+        35.0,
+        1282.16,
+        44875.6,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "826eabb6-910d-45d9-8fd6-4143d20dc0c9",
+      "features": [
+        85.0,
+        3090.52,
+        262694.2,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "1dc84204-f44b-4daf-be00-2972c0b6337a",
+      "features": [
+        66.0,
+        1874.21,
+        123697.86,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "ac5818c8-e927-43f7-af1e-051139431fe5",
+      "features": [
+        79.0,
+        4283.34,
+        338383.86,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "fc53219c-084f-4b07-b631-34cfec84a111",
+      "features": [
+        29.0,
+        3976.59,
+        115321.11,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "87fc8d18-6420-47b4-84ae-9699b552ba09",
+      "features": [
+        98.0,
+        2026.86,
+        198632.28,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "e510e81b-72b2-4f97-bace-8d6c7dd9f0d6",
+      "features": [
+        17.0,
+        727.65,
+        12370.05,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "e7b5e01b-b8bb-476b-83b2-e7c796eaa3ed",
+      "features": [
+        63.0,
+        896.27,
+        56465.01,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "ed319c6a-ec31-4e96-be56-05e50654f998",
+      "features": [
+        64.0,
+        1366.63,
+        87464.32,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "981e8094-2465-440a-ac76-df1412d7700e",
+      "features": [
+        35.0,
+        2984.31,
+        104450.85,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "4b5053f2-8566-4240-98fb-9aa6ba404f9e",
+      "features": [
+        8.0,
+        4206.42,
+        33651.36,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "812b1c2e-1dd3-40d1-8781-aaee3d34008a",
+      "features": [
+        74.0,
+        3665.93,
+        271278.82,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "014aea75-fefb-4390-942e-fc2c2bb4923b",
+      "features": [
+        85.0,
+        764.93,
+        65019.05,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "b798c241-4793-4a7c-a6a9-66ddd2be3356",
+      "features": [
+        43.0,
+        4208.8,
+        180978.4,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "303bf734-9d97-4a8a-a9a6-4810410af9a7",
+      "features": [
+        35.0,
+        3527.58,
+        123465.3,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "9af9c7c6-8590-46dc-956f-6897ee330c13",
+      "features": [
+        31.0,
+        2434.5,
+        75469.5,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "57bf6b3f-5215-4583-89bc-9ceb46bf0eb1",
+      "features": [
+        81.0,
+        1307.12,
+        105876.72,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "fa4ce37a-a5ec-489a-b1fe-09eee90dcd35",
+      "features": [
+        73.0,
+        3781.07,
+        276018.11,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "93208e01-1a83-4290-b828-408c6b8a2228",
+      "features": [
+        18.0,
+        3184.57,
+        57322.26,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "e3234f66-b1dc-47d9-97fb-981652d7910a",
+      "features": [
+        34.0,
+        4399.18,
+        149572.12,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "8ae15bb4-579d-46a9-a45e-98bc19ddc745",
+      "features": [
+        82.0,
+        1690.34,
+        138607.88,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "34005168-07c7-47f1-bac9-73bdab59a8b9",
+      "features": [
+        39.0,
+        5552.58,
+        216550.62,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "96a7fa1b-087d-4dd1-9151-1e7d16a8f2eb",
+      "features": [
+        51.0,
+        3301.85,
+        168394.35,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "f89c9d9a-c180-41a1-8e7e-ad2dff11e40f",
+      "features": [
+        101.0,
+        743.77,
+        75120.77,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "b7e4b04a-2234-4eaf-ba6f-8ab4e4f3dd48",
+      "features": [
+        21.0,
+        4913.25,
+        103178.25,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "c8c9774c-fbf5-48d2-b73e-9996ac7e93ad",
+      "features": [
+        82.0,
+        2023.53,
+        165929.46,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "65becb89-fdc8-461c-b82c-15dbbc5afd38",
+      "features": [
+        79.0,
+        4427.94,
+        349807.26,
+        1.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "61a3a531-184a-4a71-aacf-065784c170f6",
+      "features": [
+        19.0,
+        2950.53,
+        56060.07,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "71bf479f-8005-477b-9652-3c87e0f615b7",
+      "features": [
+        61.0,
+        948.7,
+        57870.7,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "3562471a-7431-4eb1-b3f8-6f4b03168351",
+      "features": [
+        87.0,
+        2030.79,
+        176678.73,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "e325cec8-93b8-4700-ae25-6a3f69261996",
+      "features": [
+        39.0,
+        2461.26,
+        95989.14,
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    },
+    {
+      "case_id": "de4812fe-2b4b-4520-82c7-56f079de66b2",
+      "features": [
+        53.0,
+        3181.5,
+        168619.5,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 1,
+      "reviewer_decision": "TRUE_FRAUD"
+    },
+    {
+      "case_id": "01bba96b-2977-45cb-aa86-725402f99daa",
+      "features": [
+        57.0,
+        696.41,
+        39695.37,
+        0.0,
+        1.0,
+        0.0,
+        1.0
+      ],
+      "fraud_label": 0,
+      "reviewer_decision": "FALSE_POSITIVE"
+    }
+  ]
+}

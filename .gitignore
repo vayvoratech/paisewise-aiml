@@ -1,0 +1,17 @@
+.env
+.pytest_cache/
+__pycache__/
+*.pyc
+
+# Logs
+logs/
+
+# MLflow
+mlruns/
+mlflow.db
+
+# Artifacts
+artifacts/
+
+# Virtual environment
+proj/

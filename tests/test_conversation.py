@@ -1,6 +1,5 @@
 import json
-from unittest.mock import MagicMock
-
+from unittest.mock import AsyncMock, MagicMock
 import pytest
 
 from app.services.conversation_service import (
@@ -12,7 +11,8 @@ from app.services.conversation_service import (
 
 @pytest.fixture
 def redis_mock():
-    return MagicMock()
+    mock = AsyncMock()
+    return mock
 
 
 @pytest.fixture
@@ -20,9 +20,9 @@ def service(redis_mock):
     return ConversationService(redis_mock)
 
 
-# ---------------------------------------------------------
+# =========================================================
 # KEY CREATION
-# ---------------------------------------------------------
+# =========================================================
 
 def test_build_key():
     key = ConversationService.build_key(
@@ -57,31 +57,33 @@ def test_invalid_session_id(session_id):
         )
 
 
-# ---------------------------------------------------------
+# =========================================================
 # EMPTY HISTORY
-# ---------------------------------------------------------
+# =========================================================
 
-def test_empty_history(service, redis_mock):
+@pytest.mark.anyio
+async def test_empty_history(service, redis_mock):
 
     redis_mock.get.return_value = None
 
-    history = service.get_history(
+    history = await service.get_history(
         "user1",
         "session1",
     )
 
     assert history == []
 
-    redis_mock.get.assert_called_once_with(
+    redis_mock.get.assert_awaited_once_with(
         "chat:user1:session1"
     )
 
 
-# ---------------------------------------------------------
+# =========================================================
 # EXISTING HISTORY
-# ---------------------------------------------------------
+# =========================================================
 
-def test_get_existing_history(service, redis_mock):
+@pytest.mark.anyio
+async def test_get_existing_history(service, redis_mock):
 
     stored_history = [
         {
@@ -98,7 +100,7 @@ def test_get_existing_history(service, redis_mock):
         stored_history
     )
 
-    history = service.get_history(
+    history = await service.get_history(
         "user1",
         "session1",
     )
@@ -106,11 +108,15 @@ def test_get_existing_history(service, redis_mock):
     assert history == stored_history
 
 
-# ---------------------------------------------------------
+# =========================================================
 # REDIS BYTE RESPONSE
-# ---------------------------------------------------------
+# =========================================================
 
-def test_get_history_from_bytes(service, redis_mock):
+@pytest.mark.anyio
+async def test_get_history_from_bytes(
+    service,
+    redis_mock,
+):
 
     history = [
         {
@@ -123,7 +129,7 @@ def test_get_history_from_bytes(service, redis_mock):
         history
     ).encode("utf-8")
 
-    result = service.get_history(
+    result = await service.get_history(
         "user1",
         "session1",
     )
@@ -131,15 +137,19 @@ def test_get_history_from_bytes(service, redis_mock):
     assert result == history
 
 
-# ---------------------------------------------------------
+# =========================================================
 # ADD MESSAGE
-# ---------------------------------------------------------
+# =========================================================
 
-def test_add_message(service, redis_mock):
+@pytest.mark.anyio
+async def test_add_message(
+    service,
+    redis_mock,
+):
 
     redis_mock.get.return_value = None
 
-    history = service.add_message(
+    history = await service.add_message(
         user_id="user1",
         session_id="session1",
         role="user",
@@ -153,7 +163,7 @@ def test_add_message(service, redis_mock):
         }
     ]
 
-    redis_mock.set.assert_called_once()
+    redis_mock.set.assert_awaited_once()
 
     args, kwargs = redis_mock.set.call_args
 
@@ -161,29 +171,30 @@ def test_add_message(service, redis_mock):
     assert kwargs["ex"] == CHAT_TTL_SECONDS
 
 
-# ---------------------------------------------------------
+# =========================================================
 # TTL MUST BE 4 HOURS
-# ---------------------------------------------------------
+# =========================================================
 
 def test_chat_ttl_is_four_hours():
 
     assert CHAT_TTL_SECONDS == 14400
 
 
-# ---------------------------------------------------------
+# =========================================================
 # MAXIMUM CONTEXT = 10
-# ---------------------------------------------------------
+# =========================================================
 
 def test_max_messages_is_ten():
 
     assert MAX_MESSAGES == 10
 
 
-# ---------------------------------------------------------
+# =========================================================
 # TRIM HISTORY
-# ---------------------------------------------------------
+# =========================================================
 
-def test_history_keeps_latest_ten(
+@pytest.mark.anyio
+async def test_history_keeps_latest_ten(
     service,
     redis_mock,
 ):
@@ -200,7 +211,7 @@ def test_history_keeps_latest_ten(
         old_history
     )
 
-    history = service.add_message(
+    history = await service.add_message(
         user_id="user1",
         session_id="session1",
         role="assistant",
@@ -209,18 +220,19 @@ def test_history_keeps_latest_ten(
 
     assert len(history) == 10
 
-    # Oldest message should be removed.
+    # Oldest message removed
     assert history[0]["content"] == "message 1"
 
-    # Newest message should remain.
+    # Newest message retained
     assert history[-1]["content"] == "message 10"
 
 
-# ---------------------------------------------------------
+# =========================================================
 # MESSAGE ORDER
-# ---------------------------------------------------------
+# =========================================================
 
-def test_message_order_is_preserved(
+@pytest.mark.anyio
+async def test_message_order_is_preserved(
     service,
     redis_mock,
 ):
@@ -240,7 +252,7 @@ def test_message_order_is_preserved(
         old_history
     )
 
-    history = service.add_message(
+    history = await service.add_message(
         "user1",
         "session1",
         "user",
@@ -252,30 +264,32 @@ def test_message_order_is_preserved(
     assert history[2]["content"] == "third"
 
 
-# ---------------------------------------------------------
+# =========================================================
 # CLEAR HISTORY
-# ---------------------------------------------------------
+# =========================================================
 
-def test_clear_history(
+@pytest.mark.anyio
+async def test_clear_history(
     service,
     redis_mock,
 ):
 
-    service.clear_history(
+    await service.clear_history(
         "user1",
         "session1",
     )
 
-    redis_mock.delete.assert_called_once_with(
+    redis_mock.delete.assert_awaited_once_with(
         "chat:user1:session1"
     )
 
 
-# ---------------------------------------------------------
+# =========================================================
 # INVALID REDIS DATA
-# ---------------------------------------------------------
+# =========================================================
 
-def test_invalid_json_in_redis(
+@pytest.mark.anyio
+async def test_invalid_json_in_redis(
     service,
     redis_mock,
 ):
@@ -283,13 +297,14 @@ def test_invalid_json_in_redis(
     redis_mock.get.return_value = "not-valid-json"
 
     with pytest.raises(ValueError):
-        service.get_history(
+        await service.get_history(
             "user1",
             "session1",
         )
 
 
-def test_non_list_history(
+@pytest.mark.anyio
+async def test_non_list_history(
     service,
     redis_mock,
 ):
@@ -299,20 +314,22 @@ def test_non_list_history(
     )
 
     with pytest.raises(ValueError):
-        service.get_history(
+        await service.get_history(
             "user1",
             "session1",
         )
 
 
-# ---------------------------------------------------------
+# =========================================================
 # INVALID MESSAGE INPUT
-# ---------------------------------------------------------
+# =========================================================
 
-def test_invalid_role_type(service):
+@pytest.mark.anyio
+async def test_invalid_role_type(service):
 
     with pytest.raises(TypeError):
-        service.add_message(
+
+        await service.add_message(
             "user1",
             "session1",
             123,
@@ -320,10 +337,12 @@ def test_invalid_role_type(service):
         )
 
 
-def test_invalid_content_type(service):
+@pytest.mark.anyio
+async def test_invalid_content_type(service):
 
     with pytest.raises(TypeError):
-        service.add_message(
+
+        await service.add_message(
             "user1",
             "session1",
             "user",
@@ -331,10 +350,12 @@ def test_invalid_content_type(service):
         )
 
 
-def test_empty_role(service):
+@pytest.mark.anyio
+async def test_empty_role(service):
 
     with pytest.raises(ValueError):
-        service.add_message(
+
+        await service.add_message(
             "user1",
             "session1",
             "",

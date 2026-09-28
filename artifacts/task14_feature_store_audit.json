@@ -1,0 +1,17 @@
+{
+  "audit": "task14_user_features_integrity",
+  "created_at": "2026-09-26T05:03:36.938415+00:00",
+  "status": "failed",
+  "sample_size": 1,
+  "required_sample_size": 100,
+  "population_size": 1,
+  "sampling_percentage_used": 100,
+  "issues_by_field": {},
+  "failure_reasons": [
+    "Only 1 row(s) were available; 100 are required."
+  ],
+  "accuracy_status": "not_measured",
+  "accuracy_limit": "This checks record integrity and value ranges. It does not compare feature values with source event records.",
+  "sampling_method": "PostgreSQL TABLESAMPLE SYSTEM; random page-based sample.",
+  "user_identifiers_written": false
+}

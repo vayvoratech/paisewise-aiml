@@ -1,0 +1,30 @@
+7.6 MODEL RETRAINING SCHEDULE
+
+1. Topic Detection / Classification
+   Frequency: Monthly
+   Trigger: Significant change in user question categories
+
+2. Churn Score Model
+   Frequency: Weekly
+   Trigger: Changes in user engagement and churn patterns
+
+3. News Sentiment Model
+   Frequency: Weekly
+   Trigger: Changes in news and language patterns
+
+4. RAG Embedding Model
+   Frequency: Monthly
+   Trigger: Significant knowledge-base updates
+
+5. Portfolio / Financial Insight Model
+   Frequency: Monthly
+   Trigger: Significant changes in financial data and insight requirements
+
+Before deployment of every retrained model:
+
+- Compare new metrics with previous version
+- Register the new version in MLflow
+- Run shadow deployment
+- Monitor anomalous outputs
+- Roll back if anomaly rate exceeds 5%
+- Send retraining notification to Slack

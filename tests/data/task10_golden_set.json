@@ -1,0 +1,99 @@
+{
+  "dataset_name": "task10_pre_deployment_golden_set",
+  "version": "1.1",
+  "status": "pre_deployment",
+  "description": "Representative evaluation cases created before beta deployment. These are not real customer feedback.",
+  "cases": [
+    {
+      "id": "TC001",
+      "theme": "answer_relevance",
+      "question": "What is an ETF?",
+      "expected_behavior": "Explain what an ETF is directly using available financial knowledge.",
+      "required_terms": ["ETF", "fund"],
+      "forbidden_terms": []
+    },
+    {
+      "id": "TC002",
+      "theme": "topic_understanding",
+      "question": "What is the difference between a stock and a bond?",
+      "expected_behavior": "Identify the question as a financial product/general education question and answer it.",
+      "required_terms": ["stock", "bond"],
+      "forbidden_terms": []
+    },
+    {
+      "id": "TC003",
+      "theme": "rag_relevance",
+      "question": "What does diversification mean?",
+      "expected_behavior": "Use relevant retrieved financial knowledge and avoid unrelated context.",
+      "required_terms": ["diversification"],
+      "forbidden_terms": []
+    },
+    {
+      "id": "TC004",
+      "theme": "explanation_clarity",
+      "question": "Explain compound interest in simple terms.",
+      "expected_behavior": "Provide a clear plain-language explanation suitable for a financial learner.",
+      "required_terms": ["compound", "interest"],
+      "forbidden_terms": []
+    },
+    {
+      "id": "TC005",
+      "theme": "response_conciseness",
+      "question": "What is a mutual fund?",
+      "expected_behavior": "Give a concise explanation without unnecessary repetition.",
+      "required_terms": ["mutual", "fund"],
+      "forbidden_terms": []
+    },
+    {
+      "id": "TC006",
+      "theme": "personalization",
+      "question": "Based on my profile, explain what risk tolerance means.",
+      "expected_behavior": "Use available user context only when relevant and never invent missing profile information.",
+      "required_terms": ["risk", "tolerance"],
+      "forbidden_terms": ["guaranteed"],
+      "personalization_requirements": {
+        "requires_available_context": true
+      }
+    },
+    {
+      "id": "TC007",
+      "theme": "conversation_continuity",
+      "question": "How does that compare with the investment we discussed earlier?",
+      "expected_behavior": "Use relevant previous conversation context when available and avoid confusing unrelated context.",
+      "required_terms": ["compare"],
+      "forbidden_terms": []
+    },
+    {
+      "id": "TC008",
+      "theme": "insufficient_knowledge",
+      "question": "What will the price of a specific stock be next month?",
+      "expected_behavior": "Do not invent unsupported information or present an uncertain future price as fact.",
+      "required_terms": [],
+      "forbidden_terms": ["will be", "guaranteed"]
+    },
+    {
+      "id": "TC009",
+      "theme": "news_sentiment",
+      "question": "Classify the sentiment of a supplied financial news article.",
+      "expected_behavior": "Return a valid positive, negative, or neutral classification based on the supplied article.",
+      "required_terms": [],
+      "forbidden_terms": [],
+      "classification_requirements": {
+        "allowed_values": [
+          "positive",
+          "negative",
+          "neutral"
+        ],
+        "exactly_one": true
+      }
+    },
+    {
+      "id": "TC010",
+      "theme": "risk_factor_explainability",
+      "question": "Explain the factors affecting this portfolio's health score.",
+      "expected_behavior": "Explain relevant supplied portfolio factors without inventing data or giving personalized investment recommendations.",
+      "required_terms": ["portfolio"],
+      "forbidden_terms": ["guaranteed"]
+    }
+  ]
+}

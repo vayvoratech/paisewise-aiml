@@ -1,5 +1,6 @@
 from app.schemas.chat import UserContext
 from app.services.rag.vector_store import SearchResult
+from app.services.ai_prompt_service import AIPromptService
 
 
 SYSTEM_PROMPT = """
@@ -26,6 +27,13 @@ class PromptBuilder:
     Builds grounded prompts from retrieved RAG context
     and user profile context.
 
+    The existing SYSTEM_PROMPT remains the default so
+    existing callers continue to work without requiring
+    PostgreSQL.
+
+    When an AIPromptService is explicitly supplied,
+    the active database-backed prompt is used instead.
+
     User profile information is supplied by the calling
     application or retrieved from the session context.
 
@@ -37,6 +45,8 @@ class PromptBuilder:
         self,
         max_context_chunks: int = 5,
         max_context_characters: int = 12000,
+        prompt_service: AIPromptService | None = None,
+        prompt_key: str = "chat_system_prompt",
     ):
         if max_context_chunks <= 0:
             raise ValueError(
@@ -48,13 +58,26 @@ class PromptBuilder:
                 "max_context_characters must be greater than 0"
             )
 
-        self.max_context_chunks = (
-            max_context_chunks
-        )
+        if not isinstance(prompt_key, str):
+            raise TypeError(
+                "prompt_key must be a string"
+            )
 
-        self.max_context_characters = (
-            max_context_characters
-        )
+        if not prompt_key.strip():
+            raise ValueError(
+                "prompt_key cannot be empty"
+            )
+
+        self.max_context_chunks = max_context_chunks
+        self.max_context_characters = max_context_characters
+
+        # Optional DB-backed prompt service.
+        #
+        # If this is None, the existing SYSTEM_PROMPT
+        # continues to be used exactly as before.
+        self.prompt_service = prompt_service
+
+        self.prompt_key = prompt_key.strip()
 
     def build(
         self,
@@ -65,8 +88,11 @@ class PromptBuilder:
         """
         Build the final grounded prompt.
 
-        User profile is prepended before the RAG context
-        and user question.
+        The existing prompt-building behavior is preserved.
+
+        If a prompt service is configured, the active prompt
+        is retrieved from the database at runtime.
+        Otherwise, the existing SYSTEM_PROMPT is used.
         """
 
         if not isinstance(question, str):
@@ -78,6 +104,21 @@ class PromptBuilder:
             raise ValueError(
                 "question cannot be empty"
             )
+
+        # --------------------------------------------------
+        # System prompt
+        # --------------------------------------------------
+
+        system_prompt = SYSTEM_PROMPT
+
+        if self.prompt_service is not None:
+            active_prompt = (
+                self.prompt_service.get_active_prompt(
+                    self.prompt_key
+                )
+            )
+
+            system_prompt = active_prompt.prompt_text
 
         # --------------------------------------------------
         # RAG context
@@ -173,7 +214,7 @@ class PromptBuilder:
 
         return (
             f"SYSTEM INSTRUCTIONS:\n"
-            f"{SYSTEM_PROMPT}\n\n"
+            f"{system_prompt}\n\n"
             f"USER PROFILE:\n"
             f"{user_profile}\n\n"
             f"KNOWLEDGE CONTEXT:\n"

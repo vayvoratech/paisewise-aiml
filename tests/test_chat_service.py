@@ -116,6 +116,7 @@ def create_chat_service(
     """
 
     llm_provider = MagicMock()
+    llm_provider.model = "test-model"
 
     llm_provider.generate = AsyncMock(
         return_value=llm_response
@@ -136,11 +137,15 @@ def create_chat_service(
         )
     )
 
+    replay_service = MagicMock()
+    replay_service.record_request.return_value = None
+
     service = ChatService(
         llm_provider=llm_provider,
         rag_service=rag_service,
         prompt_builder=prompt_builder,
         conversation_service=conversation_service,
+        replay_service=replay_service,
     )
 
     return (

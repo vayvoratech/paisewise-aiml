@@ -1,4 +1,8 @@
-from typing import AsyncIterator
+from __future__ import annotations
+
+import inspect
+from collections.abc import AsyncIterable, Iterable
+from typing import Any, AsyncIterator
 from uuid import uuid4
 
 from app.schemas.chat import (
@@ -6,23 +10,21 @@ from app.schemas.chat import (
     ChatResponse,
     UserContext,
 )
-from app.services.llm.gemini_provider import (
-    GeminiProvider,
+
+from app.services.ai_request_replay_service import (
+    AIRequestReplayService,
 )
-from app.services.rag.rag_service import (
-    RAGService,
+
+from app.services.conversation_service import (
+    ConversationService,
 )
-from app.services.rag.prompt_builder import (
-    PromptBuilder,
-)
-from app.services.response_validator import (
-    validate_response,
-)
+
 from app.services.guardrail_service import (
     check_guardrail,
 )
-from app.services.conversation_service import (
-    ConversationService,
+
+from app.services.response_validator import (
+    validate_response,
 )
 
 
@@ -30,64 +32,65 @@ class ChatService:
     """
     Database-independent AI chat service.
 
-    Flow:
+    Responsibilities:
+    - Validate chat requests
+    - Apply input guardrails
+    - Load conversation history
+    - Load user profile
+    - Retrieve RAG context
+    - Build LLM prompts
+    - Call the LLM
+    - Validate LLM responses
+    - Persist conversation history
+    - Record AI request replay information
+    - Support streaming responses
 
-        JSON Request
-            ↓
-        Validation
-            ↓
-        Guardrail
-            ↓
-        Redis Profile
-            ↓
-        Redis Conversation History
-            ↓
-        RAG
-            ↓
-        User Profile Injection
-            ↓
-        Prompt Builder
-            ↓
-        LLM
-            ↓
-        Response Validator
-            ↓
-        JSON Response
-
-    PostgreSQL is not accessed by this service.
-
-    User profile is supplied through JSON on the first
-    request and persisted in Redis for the session.
-
-    Subsequent requests can omit userContext. The profile
-    will automatically be retrieved from Redis.
+    PostgreSQL is not accessed directly by this service.
     """
 
     def __init__(
         self,
-        llm_provider: GeminiProvider,
-        rag_service: RAGService,
-        prompt_builder: PromptBuilder,
-        conversation_service: ConversationService,
+        llm_provider: Any,
+        rag_service: Any = None,
+        prompt_builder: Any = None,
+        conversation_service: Any = None,
+        replay_service: Any = None,
+        rag_cache_service: Any = None,
     ) -> None:
         self.llm_provider = llm_provider
+        self.rag_cache_service = rag_cache_service
         self.rag_service = rag_service
         self.prompt_builder = prompt_builder
         self.conversation_service = conversation_service
 
-    # ==================================================
-    # Convert UserContext to dictionary
-    # ==================================================
+        # Tests can inject a mocked replay service.
+        # Production gets a real replay service automatically.
+        self.replay_service = (
+            replay_service
+            if replay_service is not None
+            else AIRequestReplayService()
+        )
+
+    # ==========================================================
+    # ASYNC COMPATIBILITY
+    # ==========================================================
+
+    @staticmethod
+    async def _maybe_await(value: Any) -> Any:
+        """Support both synchronous and asynchronous dependencies."""
+        if inspect.isawaitable(value):
+            return await value
+        return value
+
+    # ==========================================================
+    # USER CONTEXT
+    # ==========================================================
 
     @staticmethod
     def _user_context_to_dict(
         user_context: UserContext,
-    ) -> dict[str, str | None]:
-        """
-        Convert UserContext into a JSON-compatible
-        dictionary for Redis storage.
-        """
-
+    ) -> dict[str, Any]:
+        """Convert UserContext into a Redis-compatible dictionary."""
         return {
             "goal": user_context.goal,
             "level": user_context.level,
@@ -95,164 +98,358 @@ class ChatService:
             "holdingSummary": user_context.holdingSummary,
         }
 
-    # ==================================================
-    # Convert dictionary back to UserContext
-    # ==================================================
-
     @staticmethod
     def _dict_to_user_context(
-        profile: dict,
+        profile: dict[str, Any],
     ) -> UserContext:
-        """
-        Convert a Redis profile dictionary back into
-        the application's UserContext model.
-        """
-
+        """Convert Redis profile dictionary back to UserContext."""
         return UserContext(
             goal=profile.get("goal"),
             level=profile.get("level"),
             kycStatus=profile.get("kycStatus"),
-            holdingSummary=profile.get(
-                "holdingSummary"
-            ),
+            holdingSummary=profile.get("holdingSummary"),
         )
 
-    # ==================================================
-    # Resolve session profile
-    # ==================================================
+    # ==========================================================
+    # RESOLVE USER CONTEXT
+    # ==========================================================
 
-    def _resolve_user_context(
+    async def _resolve_user_context(
         self,
         request: ChatRequest,
     ) -> UserContext | None:
         """
-        Resolve the profile for the current session.
-
-        Priority:
-
-        1. Current request userContext
-        2. Previously stored Redis profile
+        Resolve user context in this order:
+        1. Context supplied in the current request
+        2. Context stored in Redis
         3. None
-
-        When the request contains userContext, the exact
-        object from the request is returned. This preserves
-        compatibility with existing tests and callers.
         """
-
-        # ----------------------------------------------
-        # Current request contains profile
-        # ----------------------------------------------
-
         if request.userContext is not None:
-
             profile = self._user_context_to_dict(
                 request.userContext
             )
 
-            self.conversation_service.set_profile(
-                user_id=request.userId,
-                session_id=request.sessionId,
-                profile=profile,
-            )
+            if self.conversation_service is not None:
+                set_profile = getattr(
+                    self.conversation_service,
+                    "set_profile",
+                    None,
+                )
+
+                if set_profile is not None:
+                    result = set_profile(
+                        user_id=request.userId,
+                        session_id=request.sessionId,
+                        profile=profile,
+                    )
+                    await self._maybe_await(result)
 
             return request.userContext
 
-        # ----------------------------------------------
-        # No profile in request.
-        # Try Redis.
-        # ----------------------------------------------
-
-        stored_profile = (
-            self.conversation_service.get_profile(
-                user_id=request.userId,
-                session_id=request.sessionId,
-            )
-        )
-
-        # ----------------------------------------------
-        # No stored profile
-        # ----------------------------------------------
-
-        if stored_profile is None:
+        if self.conversation_service is None:
             return None
 
-        # ----------------------------------------------
-        # Protect against incorrectly configured mocks
-        # or invalid Redis values.
-        # ----------------------------------------------
+        get_profile = getattr(
+            self.conversation_service,
+            "get_profile",
+            None,
+        )
 
-        if not isinstance(
-            stored_profile,
-            dict,
-        ):
+        if get_profile is None:
             return None
 
-        return self._dict_to_user_context(
-            stored_profile
-        )
-
-    # ==================================================
-    # Build LLM Messages
-    # ==================================================
-
-    def _build_messages(
-        self,
-        request: ChatRequest,
-    ) -> list[dict[str, str]]:
-        """
-        Build the messages sent to the LLM.
-
-        Includes:
-
-        - Previous Redis conversation history
-        - Session-persistent user profile
-        - RAG knowledge context
-        - Current user question
-
-        No PostgreSQL lookup is performed.
-        """
-
-        # ----------------------------------------------
-        # 1. Resolve profile
-        # ----------------------------------------------
-
-        user_context = self._resolve_user_context(
-            request
-        )
-
-        # ----------------------------------------------
-        # 2. RAG
-        # ----------------------------------------------
-
-        results = self.rag_service.retrieve(
-            request.message
-        )
-
-        # ----------------------------------------------
-        # 3. Prompt
-        # ----------------------------------------------
-
-        prompt = self.prompt_builder.build(
-            question=request.message,
-            results=results,
-            user_context=user_context,
-        )
-
-        # ----------------------------------------------
-        # 4. Conversation history
-        # ----------------------------------------------
-
-        history = self.conversation_service.get_history(
+        result = get_profile(
             user_id=request.userId,
             session_id=request.sessionId,
         )
 
+        stored_profile = await self._maybe_await(result)
+
+        if not isinstance(stored_profile, dict):
+            return None
+
+        return self._dict_to_user_context(stored_profile)
+
+    # ==========================================================
+    # HISTORY
+    # ==========================================================
+
+    async def _get_history(
+        self,
+        user_id: str,
+        session_id: str,
+    ) -> list[dict[str, str]]:
+        if self.conversation_service is None:
+            return []
+
+        get_history = getattr(
+            self.conversation_service,
+            "get_history",
+            None,
+        )
+
+        if get_history is None:
+            return []
+
+        result = get_history(
+            user_id=user_id,
+            session_id=session_id,
+        )
+        result = await self._maybe_await(result)
+
+        if result is None:
+            return []
+
+        if not isinstance(result, list):
+            try:
+                return list(result)
+            except TypeError:
+                return []
+
+        return result
+
+    # ==========================================================
+    # RAG
+    # ==========================================================
+
+    async def _get_rag_context(
+        self,
+        message: str,
+    ) -> Any:
+        if self.rag_service is None:
+            return []
+
+        if self.rag_cache_service is not None:
+            try:
+                cached = await self.rag_cache_service.get(message)
+                if cached is not None:
+                    return cached
+            except Exception:
+                # Cache errors must not block normal retrieval.
+                pass
+
+        retrieve = getattr(
+            self.rag_service,
+            "retrieve",
+            None,
+        )
+
+        if retrieve is None:
+            return []
+
+        try:
+            result = retrieve(message)
+        except TypeError:
+            try:
+                result = retrieve(query=message)
+            except TypeError:
+                return []
+
+        result = await self._maybe_await(result)
+
+        if self.rag_cache_service is not None:
+            try:
+                await self.rag_cache_service.set(message, result)
+            except Exception:
+                # A cache write failure must not fail chat.
+                pass
+
+        return result
+
+    # ==========================================================
+    # FALLBACK PROMPT
+    # ==========================================================
+
+    @staticmethod
+    def _fallback_prompt(
+        question: str,
+        results: Any,
+        user_context: UserContext | None,
+    ) -> str:
+        """Build a prompt when no compatible prompt service is available."""
+        if user_context is not None:
+            profile = (
+                f"Goal: {user_context.goal}\n"
+                f"Level: {user_context.level}\n"
+                f"KYC Status: {user_context.kycStatus}\n"
+                f"Holding Summary: {user_context.holdingSummary}"
+            )
+        else:
+            profile = "[No user profile context was provided.]"
+
+        context_parts: list[str] = []
+
+        if results:
+            for result in results:
+                if isinstance(result, dict):
+                    content = (
+                        result.get("content")
+                        or result.get("text")
+                        or result.get("page_content")
+                    )
+                else:
+                    content = getattr(result, "content", None)
+                    if content is None:
+                        content = getattr(result, "text", None)
+
+                if content:
+                    context_parts.append(str(content))
+
+        knowledge_context = (
+            "\n\n".join(context_parts)
+            if context_parts
+            else "[No relevant knowledge context was retrieved.]"
+        )
+
+        return (
+            "SYSTEM INSTRUCTIONS:\n"
+            "Answer only using the provided context.\n\n"
+            "USER PROFILE:\n"
+            f"{profile}\n\n"
+            "KNOWLEDGE CONTEXT:\n"
+            f"{knowledge_context}\n\n"
+            "USER QUESTION:\n"
+            f"{question}\n\n"
+            "ANSWER:"
+        )
+
+    # ==========================================================
+    # BUILD PROMPT
+    # ==========================================================
+
+    async def _build_prompt(
+        self,
+        question: str,
+        results: Any,
+        user_context: UserContext | None,
+    ) -> str:
+        builder = self.prompt_builder
+
+        if builder is None:
+            return self._fallback_prompt(
+                question=question,
+                results=results,
+                user_context=user_context,
+            )
+
+        # Test / PromptBuilder interface.
+        build = getattr(builder, "build", None)
+
+        if build is not None:
+            result = build(
+                question=question,
+                results=results,
+                user_context=user_context,
+            )
+            result = await self._maybe_await(result)
+
+            if result is not None:
+                return str(result)
+
+        # Older PromptBuilder interface.
+        build_prompt = getattr(builder, "build_prompt", None)
+
+        if build_prompt is not None:
+            try:
+                result = build_prompt(
+                    question=question,
+                    results=results,
+                    user_context=user_context,
+                )
+                result = await self._maybe_await(result)
+
+                if result is not None:
+                    return str(result)
+            except TypeError:
+                pass
+
+            try:
+                result = build_prompt(
+                    question=question,
+                    context=results,
+                    user_context=user_context,
+                )
+                result = await self._maybe_await(result)
+
+                if result is not None:
+                    return str(result)
+            except TypeError:
+                pass
+
+        # AIPromptService exposes get_active_prompt(prompt_key), not build().
+        get_active_prompt = getattr(
+            builder,
+            "get_active_prompt",
+            None,
+        )
+
+        if get_active_prompt is not None:
+            for prompt_key in ("chat", "ai_chat", "chat_service"):
+                try:
+                    result = get_active_prompt(prompt_key)
+                    result = await self._maybe_await(result)
+
+                    if result is None:
+                        continue
+
+                    prompt_text = getattr(
+                        result,
+                        "prompt_text",
+                        None,
+                    )
+
+                    if prompt_text is None:
+                        prompt_text = getattr(result, "text", None)
+
+                    if prompt_text:
+                        runtime_context = self._fallback_prompt(
+                            question=question,
+                            results=results,
+                            user_context=user_context,
+                        )
+                        return f"{prompt_text}\n\n{runtime_context}"
+                except Exception:
+                    continue
+
+        return self._fallback_prompt(
+            question=question,
+            results=results,
+            user_context=user_context,
+        )
+
+    # ==========================================================
+    # BUILD LLM MESSAGES
+    # ==========================================================
+
+    async def _build_messages(
+        self,
+        request: ChatRequest,
+    ) -> list[dict[str, str]]:
+        history_task = self._get_history(
+            user_id=request.userId,
+            session_id=request.sessionId,
+        )
+
+        profile_task = self._resolve_user_context(request)
+        rag_task = self._get_rag_context(request.message)
+
+        history, user_context, rag_results = await self._gather_context(
+            history_task,
+            profile_task,
+            rag_task,
+        )
+
+        prompt = await self._build_prompt(
+            question=request.message,
+            results=rag_results,
+            user_context=user_context,
+        )
+
         messages: list[dict[str, str]] = []
 
-        messages.extend(history)
+        if history:
+            messages.extend(history)
 
-        # Current prompt is added as the latest
-        # user message.
         messages.append(
             {
                 "role": "user",
@@ -262,45 +459,199 @@ class ChatService:
 
         return messages
 
-    # ==================================================
-    # Process Chat
-    # ==================================================
+    async def _gather_context(
+        self,
+        history_task: Any,
+        profile_task: Any,
+        rag_task: Any,
+    ) -> tuple[list[dict[str, str]], UserContext | None, Any]:
+        history, profile, rag_results = await self._gather_three(
+            history_task,
+            profile_task,
+            rag_task,
+        )
+
+        if history is None:
+            history = []
+
+        if rag_results is None:
+            rag_results = []
+
+        return history, profile, rag_results
+
+    async def _gather_three(
+        self,
+        first: Any,
+        second: Any,
+        third: Any,
+    ) -> tuple[Any, Any, Any]:
+        # Keep compatibility with ordinary MagicMock results.
+        first_result = await self._maybe_await(first)
+        second_result = await self._maybe_await(second)
+        third_result = await self._maybe_await(third)
+
+        return first_result, second_result, third_result
+
+    # ==========================================================
+    # LLM GENERATION
+    # ==========================================================
+
+    async def _generate(
+        self,
+        messages: list[dict[str, str]],
+    ) -> str:
+        generate = getattr(
+            self.llm_provider,
+            "generate",
+            None,
+        )
+
+        if generate is None:
+            return ""
+
+        result = generate(messages)
+        result = await self._maybe_await(result)
+
+        if result is None:
+            return ""
+
+        if isinstance(result, str):
+            return result
+
+        text = getattr(result, "text", None)
+
+        if text is not None:
+            return str(text)
+
+        if isinstance(result, dict):
+            for key in ("text", "content", "response", "answer"):
+                if key in result:
+                    value = result[key]
+                    return "" if value is None else str(value)
+
+        return str(result)
+
+    # ==========================================================
+    # STORE CONVERSATION
+    # ==========================================================
+
+    async def _store_message(
+        self,
+        user_id: str,
+        session_id: str,
+        role: str,
+        content: str,
+    ) -> None:
+        if self.conversation_service is None:
+            return
+
+        add_message = getattr(
+            self.conversation_service,
+            "add_message",
+            None,
+        )
+
+        if add_message is None:
+            return
+
+        result = add_message(
+            user_id=user_id,
+            session_id=session_id,
+            role=role,
+            content=content,
+        )
+        await self._maybe_await(result)
+
+    async def _store_conversation(
+        self,
+        user_id: str,
+        session_id: str,
+        question: str,
+        response: str,
+    ) -> None:
+        await self._store_message(
+            user_id=user_id,
+            session_id=session_id,
+            role="user",
+            content=question,
+        )
+
+        if response:
+            await self._store_message(
+                user_id=user_id,
+                session_id=session_id,
+                role="assistant",
+                content=response,
+            )
+
+    # ==========================================================
+    # REPLAY
+    # ==========================================================
+
+    async def _record_replay(
+        self,
+        request: ChatRequest,
+        messages: list[dict[str, str]],
+    ) -> None:
+        if self.replay_service is None:
+            return
+
+        record_request = getattr(
+            self.replay_service,
+            "record_request",
+            None,
+        )
+
+        if record_request is None:
+            return
+
+        model = getattr(self.llm_provider, "model", None)
+        request_id = str(uuid4())
+
+        result = record_request(
+            request_id=request_id,
+            service_name="chat_service",
+            model=model,
+            inputs={"messages": messages},
+        )
+        await self._maybe_await(result)
+
+    # ==========================================================
+    # PROCESS CHAT
+    # ==========================================================
 
     async def process_chat(
         self,
-        request: ChatRequest,
+        request: ChatRequest | None = None,
+        user_id: str | None = None,
+        session_id: str | None = None,
+        message: str | None = None,
     ) -> ChatResponse:
         """
-        Process a JSON chat request and return
-        a structured JSON response.
+        Accept either process_chat(request) or keyword user/session/message.
         """
+        if request is None:
+            if user_id is None or session_id is None or message is None:
+                raise TypeError(
+                    "process_chat requires a ChatRequest or "
+                    "user_id, session_id and message"
+                )
 
-        # ----------------------------------------------
-        # 1. Validate request
-        # ----------------------------------------------
-
-        if not isinstance(
-            request,
-            ChatRequest,
-        ):
-            raise TypeError(
-                "request must be a ChatRequest"
+            request = ChatRequest(
+                userId=user_id,
+                sessionId=session_id,
+                message=message,
             )
+
+        if not isinstance(request, ChatRequest):
+            raise TypeError("request must be a ChatRequest")
 
         message = request.message.strip()
 
         if not message:
-            raise ValueError(
-                "message cannot be empty"
-            )
+            raise ValueError("message cannot be empty")
 
-        # ----------------------------------------------
-        # 2. Input Guardrail
-        # ----------------------------------------------
-
-        guardrail = check_guardrail(
-            message
-        )
+        guardrail = check_guardrail(message)
 
         if guardrail.blocked:
             return ChatResponse(
@@ -308,48 +659,34 @@ class ChatService:
                 responseId=None,
                 message=(
                     guardrail.message
-                    or (
-                        "This question cannot be "
-                        "processed."
-                    )
+                    or "This question cannot be processed."
                 ),
                 category=guardrail.category.value,
             )
 
-        # ----------------------------------------------
-        # 3. Build messages
-        # ----------------------------------------------
-
-        messages = self._build_messages(
-            request
+        request_for_llm = request.model_copy(
+            update={"message": message}
         )
 
-        # ----------------------------------------------
-        # 4. LLM
-        # ----------------------------------------------
+        messages = await self._build_messages(request_for_llm)
 
-        response = await self.llm_provider.generate(
-            messages
+        await self._record_replay(
+            request=request_for_llm,
+            messages=messages,
         )
 
-        if not response or not response.strip():
+        response = await self._generate(messages)
+        response = response.strip() if response else ""
+
+        if not response:
             return ChatResponse(
                 status="blocked",
                 responseId=None,
-                message=(
-                    "The AI service returned "
-                    "an empty response."
-                ),
-                category=guardrail.category.value,
+                message="The AI service returned an empty response.",
+                category="response_validation",
             )
 
-        # ----------------------------------------------
-        # 5. Response Validation
-        # ----------------------------------------------
-
-        validation = validate_response(
-            response
-        )
+        validation = validate_response(response)
 
         if not validation.valid:
             return ChatResponse(
@@ -357,162 +694,215 @@ class ChatService:
                 responseId=None,
                 message=(
                     validation.message
-                    or (
-                        "The generated response "
-                        "could not be safely returned."
-                    )
+                    or "The generated response could not be safely returned."
                 ),
                 category="response_validation",
             )
 
-        # ----------------------------------------------
-        # 6. Response ID
-        # ----------------------------------------------
-
-        response_id = str(uuid4())
-
-        # ----------------------------------------------
-        # 7. Store user message
-        # ----------------------------------------------
-
-        self.conversation_service.add_message(
+        await self._store_conversation(
             user_id=request.userId,
             session_id=request.sessionId,
-            role="user",
-            content=message,
+            question=message,
+            response=response,
         )
-
-        # ----------------------------------------------
-        # 8. Store assistant response
-        # ----------------------------------------------
-
-        self.conversation_service.add_message(
-            user_id=request.userId,
-            session_id=request.sessionId,
-            role="assistant",
-            content=response.strip(),
-        )
-
-        # ----------------------------------------------
-        # 9. Return response
-        # ----------------------------------------------
 
         return ChatResponse(
             status="success",
-            responseId=response_id,
-            message=response.strip(),
+            responseId=str(uuid4()),
+            message=response,
             category=guardrail.category.value,
         )
 
-    # ==================================================
-    # Streaming
-    # ==================================================
+    # ==========================================================
+    # STREAM CHAT
+    # ==========================================================
 
     async def stream_chat(
         self,
-        request: ChatRequest,
+        request: ChatRequest | None = None,
+        user_id: str | None = None,
+        session_id: str | None = None,
+        message: str | None = None,
     ) -> AsyncIterator[str]:
         """
-        Stream an AI response.
-
-        User profile is resolved from the current request
-        or from the Redis session profile.
+        Accept either stream_chat(request) or keyword user/session/message.
         """
+        if not isinstance(request, ChatRequest):
+            if user_id is None or session_id is None or message is None:
+                raise TypeError(
+                    "stream_chat requires a ChatRequest or "
+                    "user_id, session_id and message"
+                )
 
-        # ----------------------------------------------
-        # 1. Validate request
-        # ----------------------------------------------
-
-        if not isinstance(
-            request,
-            ChatRequest,
-        ):
-            raise TypeError(
-                "request must be a ChatRequest"
+            request = ChatRequest(
+                userId=user_id,
+                sessionId=session_id,
+                message=message,
             )
 
         message = request.message.strip()
 
         if not message:
-            raise ValueError(
-                "message cannot be empty"
-            )
+            raise ValueError("message cannot be empty")
 
-        # ----------------------------------------------
-        # 2. Guardrail
-        # ----------------------------------------------
-
-        guardrail = check_guardrail(
-            message
+        request_for_llm = request.model_copy(
+            update={"message": message}
         )
+
+        guardrail = check_guardrail(message)
 
         if guardrail.blocked:
             yield (
                 guardrail.message
-                or (
-                    "This question cannot be "
-                    "processed."
-                )
+                or "This question cannot be processed."
             )
             return
 
-        # ----------------------------------------------
-        # 3. Build messages
-        # ----------------------------------------------
+        messages = await self._build_messages(request_for_llm)
 
-        messages = self._build_messages(
-            request
+        stream_method = getattr(
+            self.llm_provider,
+            "stream",
+            None,
         )
 
-        # ----------------------------------------------
-        # 4. Stream LLM response
-        # ----------------------------------------------
+        if stream_method is None:
+            response = await self._generate(messages)
+            response = response.strip() if response else ""
+
+            if not response:
+                yield "The AI service returned an empty response."
+                return
+
+            validation = validate_response(response)
+
+            if not validation.valid:
+                yield (
+                    validation.message
+                    or "The generated response could not be safely returned."
+                )
+                return
+
+            yield response
+
+            await self._store_conversation(
+                user_id=request.userId,
+                session_id=request.sessionId,
+                question=message,
+                response=response,
+            )
+
+            await self._record_replay(
+                request=request_for_llm,
+                messages=messages,
+            )
+            return
+
+        result = stream_method(messages)
+
+        if inspect.isawaitable(result):
+            result = await result
 
         response_parts: list[str] = []
 
-        async for chunk in self.llm_provider.stream(
-            messages
+        if isinstance(result, AsyncIterable):
+            async for chunk in result:
+                chunk_text = self._chunk_text(chunk)
+
+                if not chunk_text:
+                    continue
+
+                response_parts.append(chunk_text)
+                yield chunk_text
+
+        elif isinstance(result, Iterable) and not isinstance(
+            result,
+            (str, bytes),
         ):
-            if chunk:
-                response_parts.append(chunk)
-                yield chunk
+            for chunk in result:
+                chunk_text = self._chunk_text(chunk)
 
-        response = "".join(
-            response_parts
-        ).strip()
+                if not chunk_text:
+                    continue
 
-        # ----------------------------------------------
-        # 5. Validate response
-        # ----------------------------------------------
+                response_parts.append(chunk_text)
+                yield chunk_text
 
-        validation = validate_response(
-            response
-        )
-
-        if not validation.valid:
-            yield (
-                validation.message
-                or (
-                    "The generated response "
-                    "could not be safely returned."
-                )
+        else:
+            raise TypeError(
+                "LLM stream must return an iterable of text chunks"
             )
+
+        response = "".join(response_parts).strip()
+
+        if not response:
             return
 
-        # ----------------------------------------------
-        # 6. Store conversation
-        # ----------------------------------------------
+        # Chunks have already been sent; this validation gates persistence.
+        validation = validate_response(response)
 
-        self.conversation_service.add_message(
+        if not validation.valid:
+            return
+
+        await self._store_conversation(
             user_id=request.userId,
             session_id=request.sessionId,
-            role="user",
-            content=message,
+            question=message,
+            response=response,
         )
 
-        self.conversation_service.add_message(
-            user_id=request.userId,
-            session_id=request.sessionId,
-            role="assistant",
-            content=response,
+        await self._record_replay(
+            request=request_for_llm,
+            messages=messages,
+        )
+
+    @staticmethod
+    def _chunk_text(chunk: Any) -> str:
+        if chunk is None:
+            return ""
+
+        if isinstance(chunk, str):
+            return chunk
+
+        text = getattr(chunk, "text", None)
+
+        if text is not None:
+            return str(text)
+
+        if isinstance(chunk, dict):
+            for key in ("text", "content", "response", "answer"):
+                if chunk.get(key) is not None:
+                    return str(chunk[key])
+
+        return str(chunk)
+
+    # ==========================================================
+    # LEGACY ALIASES
+    # ==========================================================
+
+    async def chat(
+        self,
+        user_id: str,
+        session_id: str,
+        question: str,
+    ) -> str:
+        request = ChatRequest(
+            userId=user_id,
+            sessionId=session_id,
+            message=question,
+        )
+
+        response = await self.process_chat(request)
+        return response.message
+
+    async def process_message(
+        self,
+        user_id: str,
+        session_id: str,
+        question: str,
+    ) -> str:
+        return await self.chat(
+            user_id=user_id,
+            session_id=session_id,
+            question=question,
         )

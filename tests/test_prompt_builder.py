@@ -1,4 +1,7 @@
 import pytest
+from unittest.mock import MagicMock
+
+from app.services.ai_prompt_service import AIPrompt
 
 from app.services.rag.prompt_builder import (
     SYSTEM_PROMPT,
@@ -385,3 +388,29 @@ def test_prompt_strips_question_whitespace():
     )
 
     assert "USER QUESTION:\nWhat is an ETF?" in prompt
+def test_build_prompt_uses_active_database_prompt():
+    prompt_service = MagicMock()
+
+    prompt_service.get_active_prompt.return_value = AIPrompt(
+        prompt_key="chat_system_prompt",
+        version=1,
+        prompt_text="DATABASE HOTFIX PROMPT",
+        is_active=True,
+    )
+
+    builder = PromptBuilder(
+        prompt_service=prompt_service,
+        prompt_key="chat_system_prompt",
+    )
+
+    prompt = builder.build(
+        question="What is an ETF?",
+        results=[],
+    )
+
+    assert "DATABASE HOTFIX PROMPT" in prompt
+    assert SYSTEM_PROMPT not in prompt
+
+    prompt_service.get_active_prompt.assert_called_once_with(
+        "chat_system_prompt"
+    )

@@ -1,0 +1,2 @@
+ALTER TABLE llm_usage
+ADD COLUMN latency_ms DOUBLE PRECISION;

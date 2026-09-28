@@ -1,0 +1,8 @@
+{
+  "dataset_name": "task10_beta_questions",
+  "version": "1.0",
+  "status": "awaiting_beta_data",
+  "source": "beta_user",
+  "description": "Schema-compatible dataset for real beta-user questions. No real beta-user questions have been added yet.",
+  "records": []
+}

@@ -1,7 +1,7 @@
 import json
 from typing import Any
 
-import redis
+import redis.asyncio as redis
 
 
 MAX_MESSAGES = 10
@@ -10,8 +10,8 @@ CHAT_TTL_SECONDS = 14_400  # 4 hours
 
 class ConversationService:
     """
-    Handles short-lived conversation history and
-    user profile context using Redis.
+    Handles temporary conversation history and user profile
+    using asynchronous Redis.
 
     Redis keys:
 
@@ -19,23 +19,17 @@ class ConversationService:
             -> latest 10 conversation messages
 
         chat:{user_id}:{session_id}:profile
-            -> user profile for the session
+            -> user profile
 
-    Both conversation history and profile have
-    a 4-hour TTL.
-
-    PostgreSQL is not used here.
+    Both use a 4-hour TTL.
     """
 
-    def __init__(
-        self,
-        redis_client: redis.Redis,
-    ) -> None:
+    def __init__(self, redis_client: redis.Redis) -> None:
         self.redis = redis_client
 
-    # --------------------------------------------------
-    # Build conversation Redis key
-    # --------------------------------------------------
+    # ==========================================================
+    # KEY BUILDERS
+    # ==========================================================
 
     @staticmethod
     def build_key(
@@ -43,24 +37,19 @@ class ConversationService:
         session_id: str,
     ) -> str:
 
-        if not user_id or not user_id.strip():
-            raise ValueError(
-                "user_id cannot be empty"
-            )
+        if not isinstance(user_id, str):
+            raise TypeError("user_id must be a string")
 
-        if not session_id or not session_id.strip():
-            raise ValueError(
-                "session_id cannot be empty"
-            )
+        if not isinstance(session_id, str):
+            raise TypeError("session_id must be a string")
 
-        return (
-            f"chat:{user_id.strip()}:"
-            f"{session_id.strip()}"
-        )
+        if not user_id.strip():
+            raise ValueError("user_id cannot be empty")
 
-    # --------------------------------------------------
-    # Build profile Redis key
-    # --------------------------------------------------
+        if not session_id.strip():
+            raise ValueError("session_id cannot be empty")
+
+        return f"chat:{user_id.strip()}:{session_id.strip()}"
 
     @staticmethod
     def build_profile_key(
@@ -68,16 +57,17 @@ class ConversationService:
         session_id: str,
     ) -> str:
 
-        base_key = ConversationService.build_key(
-            user_id=user_id,
-            session_id=session_id,
+        return (
+            ConversationService.build_key(
+                user_id=user_id,
+                session_id=session_id,
+            )
+            + ":profile"
         )
 
-        return f"{base_key}:profile"
-
-    # --------------------------------------------------
-    # Validate message
-    # --------------------------------------------------
+    # ==========================================================
+    # MESSAGE VALIDATION
+    # ==========================================================
 
     @staticmethod
     def _validate_message(
@@ -99,46 +89,40 @@ class ConversationService:
                 "message must contain content"
             )
 
-        if not isinstance(
-            message["role"],
-            str,
-        ):
+        role = message["role"]
+        content = message["content"]
+
+        if not isinstance(role, str):
             raise TypeError(
                 "message role must be a string"
             )
 
-        if not isinstance(
-            message["content"],
-            str,
-        ):
+        if not isinstance(content, str):
             raise TypeError(
                 "message content must be a string"
             )
 
-        if not message["role"].strip():
+        if not role.strip():
             raise ValueError(
                 "message role cannot be empty"
             )
 
-        if message["role"] not in {
-            "user",
-            "assistant",
-        }:
+        if role not in {"user", "assistant"}:
             raise ValueError(
                 "message role must be "
                 "'user' or 'assistant'"
             )
 
-        if not message["content"].strip():
+        if not content.strip():
             raise ValueError(
                 "message content cannot be empty"
             )
 
-    # --------------------------------------------------
-    # Get conversation history
-    # --------------------------------------------------
+    # ==========================================================
+    # GET HISTORY
+    # ==========================================================
 
-    def get_history(
+    async def get_history(
         self,
         user_id: str,
         session_id: str,
@@ -149,7 +133,7 @@ class ConversationService:
             session_id=session_id,
         )
 
-        raw = self.redis.get(key)
+        raw = await self.redis.get(key)
 
         if raw is None:
             return []
@@ -157,12 +141,15 @@ class ConversationService:
         if isinstance(raw, bytes):
             raw = raw.decode("utf-8")
 
+        if not isinstance(raw, str):
+            raise ValueError(
+                "Invalid conversation data in Redis"
+            )
+
         try:
             history = json.loads(raw)
-        except (
-            TypeError,
-            json.JSONDecodeError,
-        ) as exc:
+
+        except json.JSONDecodeError as exc:
             raise ValueError(
                 "Invalid conversation data in Redis"
             ) from exc
@@ -172,11 +159,10 @@ class ConversationService:
                 "Conversation history must be a list"
             )
 
-        validated_history: list[
-            dict[str, str]
-        ] = []
+        validated_history: list[dict[str, str]] = []
 
         for message in history:
+
             self._validate_message(message)
 
             validated_history.append(
@@ -188,11 +174,11 @@ class ConversationService:
 
         return validated_history[-MAX_MESSAGES:]
 
-    # --------------------------------------------------
-    # Add conversation message
-    # --------------------------------------------------
+    # ==========================================================
+    # ADD MESSAGE
+    # ==========================================================
 
-    def add_message(
+    async def add_message(
         self,
         user_id: str,
         session_id: str,
@@ -212,17 +198,22 @@ class ConversationService:
             session_id=session_id,
         )
 
-        history = self.get_history(
+        history = await self.get_history(
             user_id=user_id,
             session_id=session_id,
         )
 
-        history.append(message)
+        history.append(
+            {
+                "role": role,
+                "content": content,
+            }
+        )
 
-        # Keep only the latest 10 messages.
+        # Keep only latest 10 messages.
         history = history[-MAX_MESSAGES:]
 
-        self.redis.set(
+        await self.redis.set(
             key,
             json.dumps(history),
             ex=CHAT_TTL_SECONDS,
@@ -230,23 +221,16 @@ class ConversationService:
 
         return history
 
-    # --------------------------------------------------
-    # Store user profile
-    # --------------------------------------------------
+    # ==========================================================
+    # SET PROFILE
+    # ==========================================================
 
-    def set_profile(
+    async def set_profile(
         self,
         user_id: str,
         session_id: str,
         profile: dict[str, Any],
     ) -> None:
-        """
-        Store user profile for the current session.
-
-        Profile is stored separately from conversation
-        history and therefore does not consume one of
-        the 10 conversation-message slots.
-        """
 
         if not isinstance(profile, dict):
             raise TypeError(
@@ -258,33 +242,28 @@ class ConversationService:
             session_id=session_id,
         )
 
-        self.redis.set(
+        await self.redis.set(
             key,
             json.dumps(profile),
             ex=CHAT_TTL_SECONDS,
         )
 
-    # --------------------------------------------------
-    # Get user profile
-    # --------------------------------------------------
+    # ==========================================================
+    # GET PROFILE
+    # ==========================================================
 
-    def get_profile(
+    async def get_profile(
         self,
         user_id: str,
         session_id: str,
     ) -> dict[str, Any] | None:
-        """
-        Retrieve the user profile for the session.
-
-        Returns None when no profile exists.
-        """
 
         key = self.build_profile_key(
             user_id=user_id,
             session_id=session_id,
         )
 
-        raw = self.redis.get(key)
+        raw = await self.redis.get(key)
 
         if raw is None:
             return None
@@ -292,12 +271,15 @@ class ConversationService:
         if isinstance(raw, bytes):
             raw = raw.decode("utf-8")
 
+        if not isinstance(raw, str):
+            raise ValueError(
+                "Invalid user profile data in Redis"
+            )
+
         try:
             profile = json.loads(raw)
-        except (
-            TypeError,
-            json.JSONDecodeError,
-        ) as exc:
+
+        except json.JSONDecodeError as exc:
             raise ValueError(
                 "Invalid user profile data in Redis"
             ) from exc
@@ -309,11 +291,11 @@ class ConversationService:
 
         return profile
 
-    # --------------------------------------------------
-    # Clear profile
-    # --------------------------------------------------
+    # ==========================================================
+    # CLEAR PROFILE
+    # ==========================================================
 
-    def clear_profile(
+    async def clear_profile(
         self,
         user_id: str,
         session_id: str,
@@ -324,13 +306,13 @@ class ConversationService:
             session_id=session_id,
         )
 
-        self.redis.delete(key)
+        await self.redis.delete(key)
 
-    # --------------------------------------------------
-    # Clear conversation history
-    # --------------------------------------------------
+    # ==========================================================
+    # CLEAR HISTORY
+    # ==========================================================
 
-    def clear_history(
+    async def clear_history(
         self,
         user_id: str,
         session_id: str,
@@ -341,21 +323,17 @@ class ConversationService:
             session_id=session_id,
         )
 
-        self.redis.delete(key)
+        await self.redis.delete(key)
 
-    # --------------------------------------------------
-    # Clear complete session
-    # --------------------------------------------------
+    # ==========================================================
+    # CLEAR SESSION
+    # ==========================================================
 
-    def clear_session(
+    async def clear_session(
         self,
         user_id: str,
         session_id: str,
     ) -> None:
-        """
-        Clear both conversation history and
-        user profile for the session.
-        """
 
         history_key = self.build_key(
             user_id=user_id,
@@ -367,7 +345,20 @@ class ConversationService:
             session_id=session_id,
         )
 
-        self.redis.delete(
+        await self.redis.delete(
             history_key,
             profile_key,
         )
+
+    # ==========================================================
+    # HEALTH CHECK
+    # ==========================================================
+
+    async def ping(self) -> bool:
+
+        try:
+            result = await self.redis.ping()
+            return bool(result)
+
+        except Exception:
+            return False
