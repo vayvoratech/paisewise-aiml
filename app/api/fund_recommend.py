@@ -8,9 +8,10 @@ from sqlalchemy.exc import SQLAlchemyError
 from app.db.database import SessionLocal
 from app.services.fund_explanation import generate_fund_reason
 from app.services.fund_recommendation import get_top_recommendations
-from app.services.recommendation_service import record_recommendation_click
+from app.services.recommendation_service import create_recommendation_run, record_recommendation_click
 from app.services.recommendation_weights import get_active_weights
 from app.services.language_service import get_language_name
+from app.services.recommendation_ab import assign_recommendation_variant
 
 router = APIRouter()
 
@@ -35,6 +36,7 @@ class KeyMetrics(BaseModel):
 
 
 class RecommendedFund(BaseModel):
+    schemeCode: str
     fundName: str
     score: float
     reason: str
@@ -42,6 +44,7 @@ class RecommendedFund(BaseModel):
 
 
 class FundRecommendResponse(BaseModel):
+    recommendationRunId: int
     recommendedFunds: List[RecommendedFund]
 
 
@@ -107,6 +110,12 @@ def recommend_funds(request: FundRecommendRequest):
                 detail="No suitable mutual fund schemes passed the recommendation rules.",
             )
 
+        variant = assign_recommendation_variant(request.userId)
+        run_id = create_recommendation_run(
+            request.userId,
+            variant,
+        )
+
         recommendations = []
 
         for item in top_funds:
@@ -124,6 +133,7 @@ def recommend_funds(request: FundRecommendRequest):
 
             recommendations.append(
                 {
+                    "schemeCode": str(fund["scheme_code"]),
                     "fundName": fund["scheme_name"],
                     "score": item["score"],
                     "reason": reason,
@@ -139,7 +149,10 @@ def recommend_funds(request: FundRecommendRequest):
                 }
             )
 
-        return {"recommendedFunds": recommendations}
+        return {
+            "recommendationRunId": run_id,
+            "recommendedFunds": recommendations,
+        }
 
     except HTTPException:
         raise
