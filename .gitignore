@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Python
 __pycache__/
 *.py[cod]
@@ -81,3 +82,22 @@ llm_cost_management/cost_records.json
 # Generated ChromaDB runtime files
 data/chroma/
 data/chroma_old_3dim/
+=======
+.env
+.pytest_cache/
+__pycache__/
+*.pyc
+
+# Logs
+logs/
+
+# MLflow
+mlruns/
+mlflow.db
+
+# Artifacts
+artifacts/
+
+# Virtual environment
+proj/
+>>>>>>> srikanth_paise_wise_aiml

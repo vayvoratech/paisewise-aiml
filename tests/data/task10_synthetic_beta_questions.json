@@ -1,0 +1,309 @@
+{
+  "dataset_name": "task10_synthetic_beta_questions",
+  "version": "1.0",
+  "status": "synthetic_pre_deployment",
+  "source": "synthetic_pre_deployment",
+  "description": "Synthetic beta-style questions for pre-deployment validation. These questions are representative test scenarios and are not real beta-user feedback.",
+  "records": [
+    {
+      "id": "SYN001",
+      "case_id": "TC001",
+      "theme": "answer_relevance",
+      "question": "What is an ETF and how does it work?",
+      "feedback": "down",
+      "category": "answer_relevance",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should answer the question more directly."
+    },
+    {
+      "id": "SYN002",
+      "case_id": "TC001",
+      "theme": "answer_relevance",
+      "question": "Can you explain ETFs in simple terms?",
+      "feedback": "down",
+      "category": "answer_relevance",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should answer the question more directly."
+    },
+    {
+      "id": "SYN003",
+      "case_id": "TC001",
+      "theme": "answer_relevance",
+      "question": "What does an exchange-traded fund actually do?",
+      "feedback": "down",
+      "category": "answer_relevance",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should answer the question more directly."
+    },
+    {
+      "id": "SYN004",
+      "case_id": "TC002",
+      "theme": "topic_understanding",
+      "question": "What is the difference between stocks and bonds?",
+      "feedback": "down",
+      "category": "topic_understanding",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should demonstrate clearer understanding of the requested topic."
+    },
+    {
+      "id": "SYN005",
+      "case_id": "TC002",
+      "theme": "topic_understanding",
+      "question": "How are stocks different from bonds?",
+      "feedback": "down",
+      "category": "topic_understanding",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should demonstrate clearer understanding of the requested topic."
+    },
+    {
+      "id": "SYN006",
+      "case_id": "TC002",
+      "theme": "topic_understanding",
+      "question": "Explain stocks and bonds to a beginner.",
+      "feedback": "down",
+      "category": "topic_understanding",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should demonstrate clearer understanding of the requested topic."
+    },
+    {
+      "id": "SYN007",
+      "case_id": "TC003",
+      "theme": "rag_relevance",
+      "question": "Based on the provided investment information, what does diversification mean?",
+      "feedback": "down",
+      "category": "rag_relevance",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should use information relevant to the provided context."
+    },
+    {
+      "id": "SYN008",
+      "case_id": "TC003",
+      "theme": "rag_relevance",
+      "question": "Using the available investment information, explain diversification.",
+      "feedback": "down",
+      "category": "rag_relevance",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should use information relevant to the provided context."
+    },
+    {
+      "id": "SYN009",
+      "case_id": "TC003",
+      "theme": "rag_relevance",
+      "question": "What diversification strategy is described in the information provided?",
+      "feedback": "down",
+      "category": "rag_relevance",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should use information relevant to the provided context."
+    },
+    {
+      "id": "SYN010",
+      "case_id": "TC004",
+      "theme": "explanation_clarity",
+      "question": "Explain compound interest like I am a beginner.",
+      "feedback": "down",
+      "category": "explanation_clarity",
+      "source": "simulated_pre_deployment",
+      "comment": "The explanation should be easier for a beginner to understand."
+    },
+    {
+      "id": "SYN011",
+      "case_id": "TC004",
+      "theme": "explanation_clarity",
+      "question": "Can you explain compound interest with a simple example?",
+      "feedback": "down",
+      "category": "explanation_clarity",
+      "source": "simulated_pre_deployment",
+      "comment": "The explanation should be easier for a beginner to understand."
+    },
+    {
+      "id": "SYN012",
+      "case_id": "TC004",
+      "theme": "explanation_clarity",
+      "question": "I don't understand compound interest. Can you explain it simply?",
+      "feedback": "down",
+      "category": "explanation_clarity",
+      "source": "simulated_pre_deployment",
+      "comment": "The explanation should be easier for a beginner to understand."
+    },
+    {
+      "id": "SYN013",
+      "case_id": "TC005",
+      "theme": "response_conciseness",
+      "question": "Give me the key points about mutual funds in three bullets.",
+      "feedback": "down",
+      "category": "response_conciseness",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should provide the requested information more concisely."
+    },
+    {
+      "id": "SYN014",
+      "case_id": "TC005",
+      "theme": "response_conciseness",
+      "question": "Briefly explain how mutual funds work.",
+      "feedback": "down",
+      "category": "response_conciseness",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should provide the requested information more concisely."
+    },
+    {
+      "id": "SYN015",
+      "case_id": "TC005",
+      "theme": "response_conciseness",
+      "question": "What are the main things I should know about mutual funds?",
+      "feedback": "down",
+      "category": "response_conciseness",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should provide the requested information more concisely."
+    },
+    {
+      "id": "SYN016",
+      "case_id": "TC006",
+      "theme": "personalization",
+      "question": "Based on my moderate risk profile, what does risk tolerance mean?",
+      "feedback": "down",
+      "category": "personalization",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should use the available user context appropriately."
+    },
+    {
+      "id": "SYN017",
+      "case_id": "TC006",
+      "theme": "personalization",
+      "question": "How should I think about risk if my risk tolerance is moderate?",
+      "feedback": "down",
+      "category": "personalization",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should use the available user context appropriately."
+    },
+    {
+      "id": "SYN018",
+      "case_id": "TC006",
+      "theme": "personalization",
+      "question": "What does my moderate risk tolerance mean for investment decisions?",
+      "feedback": "down",
+      "category": "personalization",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should use the available user context appropriately."
+    },
+    {
+      "id": "SYN019",
+      "case_id": "TC007",
+      "theme": "conversation_continuity",
+      "question": "How does this compare with the investment we discussed earlier?",
+      "feedback": "down",
+      "category": "conversation_continuity",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should use relevant information from the earlier conversation."
+    },
+    {
+      "id": "SYN020",
+      "case_id": "TC007",
+      "theme": "conversation_continuity",
+      "question": "What about the second option you mentioned before?",
+      "feedback": "down",
+      "category": "conversation_continuity",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should use relevant information from the earlier conversation."
+    },
+    {
+      "id": "SYN021",
+      "case_id": "TC007",
+      "theme": "conversation_continuity",
+      "question": "Can you compare this with the option from our earlier discussion?",
+      "feedback": "down",
+      "category": "conversation_continuity",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should use relevant information from the earlier conversation."
+    },
+    {
+      "id": "SYN022",
+      "case_id": "TC008",
+      "theme": "insufficient_knowledge",
+      "question": "What will this stock's exact price be tomorrow?",
+      "feedback": "down",
+      "category": "insufficient_knowledge",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should clearly acknowledge when the requested information cannot be known with certainty."
+    },
+    {
+      "id": "SYN023",
+      "case_id": "TC008",
+      "theme": "insufficient_knowledge",
+      "question": "Can you guarantee that this stock will increase next month?",
+      "feedback": "down",
+      "category": "insufficient_knowledge",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should clearly acknowledge when the requested information cannot be known with certainty."
+    },
+    {
+      "id": "SYN024",
+      "case_id": "TC008",
+      "theme": "insufficient_knowledge",
+      "question": "Tell me the exact future price of this stock.",
+      "feedback": "down",
+      "category": "insufficient_knowledge",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should clearly acknowledge when the requested information cannot be known with certainty."
+    },
+    {
+      "id": "SYN025",
+      "case_id": "TC009",
+      "theme": "news_sentiment",
+      "question": "Is this financial news positive, negative, or neutral?",
+      "feedback": "down",
+      "category": "news_sentiment",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should provide exactly one appropriate sentiment classification."
+    },
+    {
+      "id": "SYN026",
+      "case_id": "TC009",
+      "theme": "news_sentiment",
+      "question": "Classify the sentiment of this financial article.",
+      "feedback": "down",
+      "category": "news_sentiment",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should provide exactly one appropriate sentiment classification."
+    },
+    {
+      "id": "SYN027",
+      "case_id": "TC009",
+      "theme": "news_sentiment",
+      "question": "What is the sentiment expressed in this investment news?",
+      "feedback": "down",
+      "category": "news_sentiment",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should provide exactly one appropriate sentiment classification."
+    },
+    {
+      "id": "SYN028",
+      "case_id": "TC010",
+      "theme": "risk_factor_explainability",
+      "question": "What factors should I consider when checking my portfolio health?",
+      "feedback": "down",
+      "category": "risk_factor_explainability",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should clearly explain the relevant portfolio risk factors."
+    },
+    {
+      "id": "SYN029",
+      "case_id": "TC010",
+      "theme": "risk_factor_explainability",
+      "question": "What are the main risks I should check in my portfolio?",
+      "feedback": "down",
+      "category": "risk_factor_explainability",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should clearly explain the relevant portfolio risk factors."
+    },
+    {
+      "id": "SYN030",
+      "case_id": "TC010",
+      "theme": "risk_factor_explainability",
+      "question": "How can I evaluate the risk factors in my portfolio?",
+      "feedback": "down",
+      "category": "risk_factor_explainability",
+      "source": "simulated_pre_deployment",
+      "comment": "The response should clearly explain the relevant portfolio risk factors."
+    }
+  ]
+}

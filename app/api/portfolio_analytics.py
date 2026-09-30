@@ -9,6 +9,9 @@ from app.services.portfolio_analytics_service import (
 from app.services.portfolio_health_service import (
     PortfolioHealthService,
 )
+from app.services.market_context_service import (
+    MarketContextService,
+)
 from app.services.llm.gemini_provider import (
     GeminiProvider,
 )
@@ -27,7 +30,6 @@ router = APIRouter(
 async def get_portfolio_analytics(
     userId: str,
 ) -> PortfolioAnalyticsResponse:
-
     try:
         # ------------------------------------------
         # 1. Calculate numeric portfolio analytics
@@ -50,7 +52,23 @@ async def get_portfolio_analytics(
         )
 
         # ------------------------------------------
-        # 3. Generate LLM health report
+        # 3. Get structured market context
+        # ------------------------------------------
+
+        market_context_service = (
+            MarketContextService()
+        )
+
+        market_context = (
+            await market_context_service.get_market_context()
+        )
+
+        market_context_data = (
+            market_context.model_dump()
+        )
+
+        # ------------------------------------------
+        # 4. Generate LLM health report
         # ------------------------------------------
 
         llm_provider = GeminiProvider()
@@ -63,12 +81,13 @@ async def get_portfolio_analytics(
 
         health_report = (
             await health_service.generate_report(
-                analytics_data
+                analytics=analytics_data,
+                market_context=market_context_data,
             )
         )
 
         # ------------------------------------------
-        # 4. Return analytics + health report
+        # 5. Return analytics + health report
         # ------------------------------------------
 
         analytics.healthReport = health_report

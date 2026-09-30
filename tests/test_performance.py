@@ -23,74 +23,42 @@ def create_service():
     - RAG
     - PromptBuilder
     - LLM
-
-    This test therefore measures ChatService
-    concurrency rather than external service latency.
+    - AI request replay
     """
-
-    # --------------------------------------------------
-    # LLM provider
-    # --------------------------------------------------
 
     llm_provider = MagicMock()
 
     async def fake_generate(messages):
-        """
-        Simulate a fast asynchronous LLM response.
-        """
-
+        """Simulate a fast asynchronous LLM response."""
         await asyncio.sleep(0.01)
-
-        return (
-            "An ETF is an exchange-traded fund."
-        )
+        return "An ETF is an exchange-traded fund."
 
     llm_provider.generate = AsyncMock(
         side_effect=fake_generate
     )
 
-    # --------------------------------------------------
-    # RAG service
-    # --------------------------------------------------
-
     rag_service = MagicMock()
-
     rag_service.retrieve.return_value = []
 
-    # --------------------------------------------------
-    # Prompt builder
-    # --------------------------------------------------
-
     prompt_builder = MagicMock()
-
     prompt_builder.build.return_value = (
-        "Answer using the available "
-        "financial knowledge."
+        "Answer using the available financial knowledge."
     )
 
-    # --------------------------------------------------
-    # Conversation service / Redis
-    # --------------------------------------------------
-
-    # Redis is mocked.
-    #
-    # No real Redis server is required for this test.
-
     conversation_service = MagicMock()
-
     conversation_service.get_history.return_value = []
-
     conversation_service.add_message.return_value = []
 
-    # --------------------------------------------------
-    # Chat service
-    # --------------------------------------------------
+    # Prevent the real replay service from connecting to PostgreSQL.
+    replay_service = MagicMock()
+    replay_service.record_request.return_value = None
 
     return ChatService(
         llm_provider=llm_provider,
         rag_service=rag_service,
         prompt_builder=prompt_builder,
         conversation_service=conversation_service,
+        replay_service=replay_service,
     )
 
 
@@ -98,13 +66,8 @@ def create_service():
 # Helper
 # =========================================================
 
-def create_request(
-    user_number: int,
-) -> ChatRequest:
-    """
-    Create a unique chat request.
-    """
-
+def create_request(user_number: int) -> ChatRequest:
+    """Create a unique chat request."""
     return ChatRequest(
         userId=f"user_{user_number}",
         sessionId=f"session_{user_number}",
@@ -118,7 +81,6 @@ def create_request(
 
 @pytest.mark.anyio
 async def test_concurrent_chat_requests_complete():
-
     service = create_service()
 
     requests = [
@@ -137,12 +99,8 @@ async def test_concurrent_chat_requests_complete():
 
     for response in responses:
         assert response.status == "success"
-
         assert response.responseId is not None
-
-        assert response.message == (
-            "An ETF is an exchange-traded fund."
-        )
+        assert response.message == "An ETF is an exchange-traded fund."
 
 
 # =========================================================
@@ -151,7 +109,6 @@ async def test_concurrent_chat_requests_complete():
 
 @pytest.mark.anyio
 async def test_100_concurrent_chat_sessions():
-
     service = create_service()
 
     requests = [
@@ -168,36 +125,18 @@ async def test_100_concurrent_chat_sessions():
         ]
     )
 
-    elapsed_time = (
-        time.perf_counter() - start_time
-    )
-
-    # --------------------------------------------------
-    # Verify all sessions completed
-    # --------------------------------------------------
+    elapsed_time = time.perf_counter() - start_time
 
     assert len(responses) == 100
 
     for response in responses:
         assert response.status == "success"
-
         assert response.responseId is not None
-
-        assert response.message == (
-            "An ETF is an exchange-traded fund."
-        )
-
-    # --------------------------------------------------
-    # Task 3 requirement
-    #
-    # 100 concurrent sessions must complete
-    # within 8 seconds.
-    # --------------------------------------------------
+        assert response.message == "An ETF is an exchange-traded fund."
 
     assert elapsed_time < 8.0, (
-        f"100 concurrent sessions took "
-        f"{elapsed_time:.2f} seconds; "
-        f"required < 8 seconds."
+        f"100 concurrent sessions took {elapsed_time:.2f} seconds; "
+        "required < 8 seconds."
     )
 
 
@@ -207,7 +146,6 @@ async def test_100_concurrent_chat_sessions():
 
 @pytest.mark.anyio
 async def test_100_sessions_are_processed_concurrently():
-
     service = create_service()
 
     requests = [
@@ -224,19 +162,10 @@ async def test_100_sessions_are_processed_concurrently():
         ]
     )
 
-    elapsed_time = (
-        time.perf_counter() - start_time
-    )
+    elapsed_time = time.perf_counter() - start_time
 
     # Each mocked LLM call sleeps for only 0.01 seconds.
-    #
-    # If all 100 calls were processed sequentially,
-    # the test would take approximately 1 second just
-    # for the mocked LLM calls.
-    #
-    # Concurrent execution should remain close to the
-    # latency of a single request.
-
+    # Concurrent execution should remain close to one request's latency.
     assert elapsed_time < 8.0
 
 
@@ -246,7 +175,6 @@ async def test_100_sessions_are_processed_concurrently():
 
 @pytest.mark.anyio
 async def test_concurrent_sessions_use_independent_context():
-
     service = create_service()
 
     requests = [
@@ -270,25 +198,8 @@ async def test_concurrent_sessions_use_independent_context():
     for response in responses:
         assert response.status == "success"
 
-    # The conversation service should be accessed
-    # independently for every request.
-
-    assert (
-        service.conversation_service
-        .get_history.call_count
-        == 100
-    )
-
-    # Each successful response stores:
-    #
-    # 1. user message
-    # 2. assistant message
-    #
-    assert (
-        service.conversation_service
-        .add_message.call_count
-        == 200
-    )
+    assert service.conversation_service.get_history.call_count == 100
+    assert service.conversation_service.add_message.call_count == 200
 
 
 # =========================================================
@@ -297,7 +208,6 @@ async def test_concurrent_sessions_use_independent_context():
 
 @pytest.mark.anyio
 async def test_performance_test_does_not_require_real_redis():
-
     service = create_service()
 
     request = ChatRequest(
@@ -306,9 +216,7 @@ async def test_performance_test_does_not_require_real_redis():
         message="What is an ETF?",
     )
 
-    response = await service.process_chat(
-        request
-    )
+    response = await service.process_chat(request)
 
     assert response.status == "success"
 
@@ -317,11 +225,7 @@ async def test_performance_test_does_not_require_real_redis():
         session_id="performance_session",
     )
 
-    assert (
-        service.conversation_service
-        .add_message.call_count
-        == 2
-    )
+    assert service.conversation_service.add_message.call_count == 2
 
 
 # =========================================================
@@ -330,7 +234,6 @@ async def test_performance_test_does_not_require_real_redis():
 
 @pytest.mark.anyio
 async def test_performance_chat_is_database_independent():
-
     service = create_service()
 
     request = ChatRequest(
@@ -339,31 +242,15 @@ async def test_performance_chat_is_database_independent():
         message="What is an ETF?",
     )
 
-    response = await service.process_chat(
-        request
-    )
+    response = await service.process_chat(request)
 
     assert response.status == "success"
-
     assert response.message
-
     assert response.responseId is not None
 
-    # ChatService receives only mocked:
-    #
-    # - LLM
-    # - RAG
-    # - PromptBuilder
-    # - ConversationService
-    #
-    # No PostgreSQL repository is supplied.
-
     service.llm_provider.generate.assert_called_once()
-
     service.rag_service.retrieve.assert_called_once()
-
     service.prompt_builder.build.assert_called_once()
-
     service.conversation_service.get_history.assert_called_once()
 
 
@@ -373,7 +260,6 @@ async def test_performance_chat_is_database_independent():
 
 @pytest.mark.anyio
 async def test_llm_handles_100_concurrent_requests():
-
     service = create_service()
 
     requests = [
@@ -388,10 +274,7 @@ async def test_llm_handles_100_concurrent_requests():
         ]
     )
 
-    assert (
-        service.llm_provider.generate.call_count
-        == 100
-    )
+    assert service.llm_provider.generate.call_count == 100
 
 
 # =========================================================
@@ -400,7 +283,6 @@ async def test_llm_handles_100_concurrent_requests():
 
 @pytest.mark.anyio
 async def test_100_concurrent_responses_are_successful():
-
     service = create_service()
 
     requests = [
@@ -430,7 +312,6 @@ async def test_100_concurrent_responses_are_successful():
 
 @pytest.mark.anyio
 async def test_100_concurrent_responses_have_unique_ids():
-
     service = create_service()
 
     requests = [
@@ -450,11 +331,6 @@ async def test_100_concurrent_responses_have_unique_ids():
         for response in responses
     ]
 
-    assert all(
-        response_id is not None
-        for response_id in response_ids
-    )
-
+    assert all(response_id is not None for response_id in response_ids)
     assert len(response_ids) == 100
-
     assert len(set(response_ids)) == 100

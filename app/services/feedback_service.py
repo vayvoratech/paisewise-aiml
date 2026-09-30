@@ -1,8 +1,7 @@
 from typing import Any
 
-from app.repositories.feedback_repository import (
-    FeedbackRepository,
-)
+from app.repositories.feedback_repository import FeedbackRepository
+from app.services.slack_notification_service import SlackNotificationService
 
 
 class FeedbackService:
@@ -23,12 +22,14 @@ class FeedbackService:
     def __init__(
         self,
         feedback_repository: FeedbackRepository | None = None,
+        slack_service: SlackNotificationService | None = None,
     ) -> None:
-
         self.feedback_repository = (
             feedback_repository
             or FeedbackRepository()
         )
+
+        self.slack_service = slack_service
 
     # --------------------------------------------------
     # Submit feedback
@@ -86,6 +87,7 @@ class FeedbackService:
                 "feedback must be 'up' or 'down'"
             )
 
+        # Existing feedback persistence
         self.feedback_repository.create_feedback(
             response_id=response_id.strip(),
             user_id=user_id.strip(),
@@ -93,6 +95,26 @@ class FeedbackService:
             feedback=feedback,
         )
 
+        # --------------------------------------------------
+        # Task 10.3 - Automatic negative feedback alert
+        # --------------------------------------------------
+
+        if (
+            feedback == "down"
+            and self.slack_service is not None
+        ):
+            self.slack_service.notify(
+                (
+                    "⚠️ AI Feedback Alert\n\n"
+                    f"Response ID: {response_id.strip()}\n"
+                    f"User ID: {user_id.strip()}\n"
+                    f"Category: {category.strip()}\n"
+                    "Feedback: thumbs down\n"
+                    "Action: Review during the feedback improvement cycle."
+                )
+            )
+
+        # Existing response remains unchanged
         return {
             "status": "success",
             "message": (

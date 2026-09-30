@@ -1,0 +1,99 @@
+{
+  "dataset_name": "task10_simulated_feedback",
+  "version": "1.0",
+  "status": "pre_deployment",
+  "source": "simulated_pre_deployment",
+  "description": "Synthetic feedback records created for pre-deployment Task 10 validation. These records are not real beta-user feedback.",
+  "records": [
+    {
+      "id": "FB001",
+      "case_id": "TC001",
+      "theme": "answer_relevance",
+      "feedback": "down",
+      "category": "answer_relevance",
+      "comment": "The response should answer the ETF question more directly.",
+      "source": "simulated_pre_deployment"
+    },
+    {
+      "id": "FB002",
+      "case_id": "TC002",
+      "theme": "topic_understanding",
+      "feedback": "down",
+      "category": "topic_understanding",
+      "comment": "The response should clearly distinguish stocks from bonds.",
+      "source": "simulated_pre_deployment"
+    },
+    {
+      "id": "FB003",
+      "case_id": "TC003",
+      "theme": "rag_relevance",
+      "feedback": "down",
+      "category": "rag_relevance",
+      "comment": "Retrieved information should stay relevant to diversification.",
+      "source": "simulated_pre_deployment"
+    },
+    {
+      "id": "FB004",
+      "case_id": "TC004",
+      "theme": "explanation_clarity",
+      "feedback": "down",
+      "category": "explanation_clarity",
+      "comment": "The explanation should use simpler language.",
+      "source": "simulated_pre_deployment"
+    },
+    {
+      "id": "FB005",
+      "case_id": "TC005",
+      "theme": "response_conciseness",
+      "feedback": "down",
+      "category": "response_conciseness",
+      "comment": "The answer should avoid unnecessary repetition.",
+      "source": "simulated_pre_deployment"
+    },
+    {
+      "id": "FB006",
+      "case_id": "TC006",
+      "theme": "personalization",
+      "feedback": "down",
+      "category": "personalization",
+      "comment": "Personalized answers must use only available profile context.",
+      "source": "simulated_pre_deployment"
+    },
+    {
+      "id": "FB007",
+      "case_id": "TC007",
+      "theme": "conversation_continuity",
+      "feedback": "down",
+      "category": "conversation_continuity",
+      "comment": "The response should use relevant earlier conversation context.",
+      "source": "simulated_pre_deployment"
+    },
+    {
+      "id": "FB008",
+      "case_id": "TC008",
+      "theme": "insufficient_knowledge",
+      "feedback": "down",
+      "category": "insufficient_knowledge",
+      "comment": "The system should not present an uncertain future price as a fact.",
+      "source": "simulated_pre_deployment"
+    },
+    {
+      "id": "FB009",
+      "case_id": "TC009",
+      "theme": "news_sentiment",
+      "feedback": "down",
+      "category": "news_sentiment",
+      "comment": "Sentiment classification should return exactly one supported classification.",
+      "source": "simulated_pre_deployment"
+    },
+    {
+      "id": "FB010",
+      "case_id": "TC010",
+      "theme": "risk_factor_explainability",
+      "feedback": "down",
+      "category": "risk_factor_explainability",
+      "comment": "The portfolio health explanation should identify the relevant factors without inventing data.",
+      "source": "simulated_pre_deployment"
+    }
+  ]
+}
